@@ -1,0 +1,16 @@
+/bin/
+.gradle
+.gradle/*
+.settings
+.settings/*
+.classpath
+.project
+*.iml
+*.ipr
+*.iws
+out
+out/*
+
+demos
+jsdemo
+zooExplore

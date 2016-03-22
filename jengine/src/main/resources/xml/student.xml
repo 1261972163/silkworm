@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--<!DOCTYPE note SYSTEM "Note.dtd">-->
+<Students>
+    <Student>
+        <ID>01</ID>
+        <Name>name1</Name>
+        <Sex>男</Sex>
+    </Student>
+    <Student>
+        <ID>02</ID>
+        <Name>name2</Name>
+        <Sex>女</Sex>
+    </Student>
+</Students>

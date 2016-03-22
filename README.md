@@ -1,2 +1,7 @@
 # silkworm
-some exercises
+
+some exercises:
+
+* jengine
+* designpattern
+
