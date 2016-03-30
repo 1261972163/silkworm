@@ -1,6 +1,5 @@
 package com.jengine.plugin;
 
-import com.jengine.java.io.FileService;
 import org.junit.Test;
 
 /**
@@ -10,13 +9,8 @@ public class MongoFileServiceTest {
 
     @Test
     public void connectTest() {
-        String databaseName = "resumedb";
-        String host = "127.0.0.1";
-        String port = "27017";
-        String username = "test";//”√ªß√˚(api key);
-        String password = "test123";//√‹¬Î(secret key)
-        String table = "test";
-        FileService fs = new MongoFileService(databaseName, host, port, username, password, table);
+
+//        FileService fs = new MongoFileService(databaseName, host, port, username, password, table);
 
     }
 }

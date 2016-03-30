@@ -1,6 +1,6 @@
 package com.jengine.java.util;
 
-import com.jengine.feature.serialize.User;
+import com.jengine.feature.serialize.XMLTestObject;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ public class CollectionTest {
 
 	@Test
 	public void test() {
-		List<User> list = new ArrayList<User>();
+		List<XMLTestObject> list = new ArrayList<XMLTestObject>();
 		for(int i=10; i>0; i--) {
-			User user = new User();
+			XMLTestObject user = new XMLTestObject();
 			user.setName("test" + i);
 			user.setAge(i);
 			user.setSex(true);
@@ -22,15 +22,15 @@ public class CollectionTest {
 		}
 		
 		if(list!=null && list.size()>0) {
-	        Collections.sort(list, new Comparator<User>() {
+	        Collections.sort(list, new Comparator<XMLTestObject>() {
 	            @Override
-	            public int compare(User o1, User o2) {
+	            public int compare(XMLTestObject o1, XMLTestObject o2) {
                     return o1.getName().compareTo(o2.getName());
 	            }
 	        });
         }
 		
-		for(User user : list) {
+		for(XMLTestObject user : list) {
 			System.out.println(user.getName());
 		}
 	}

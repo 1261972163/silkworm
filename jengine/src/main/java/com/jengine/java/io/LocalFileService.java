@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * Created by nouuid on 2015/5/7.
  */
-public class LocalFileService implements FileService {
+public class LocalFileService {
 
     private String rootPath;
 
@@ -13,7 +13,6 @@ public class LocalFileService implements FileService {
         this.rootPath = rootPath == null ? "/opt/ftp/" : rootPath;
     }
 
-    @Override
     public boolean save(String filename, byte[] fileData) {
         boolean flag = true;
         String filePath = rootPath + filename; //文件地址
@@ -38,7 +37,6 @@ public class LocalFileService implements FileService {
         return flag;
     }
 
-    @Override
     public boolean remove(String filename) {
         boolean flag = false;
         String filePath = rootPath + filename; //文件地址
@@ -50,7 +48,6 @@ public class LocalFileService implements FileService {
         return flag;
     }
 
-    @Override
     public ByteArrayOutputStream get(String filename) {
         String filePath = rootPath + filename;
         BufferedInputStream in = null;

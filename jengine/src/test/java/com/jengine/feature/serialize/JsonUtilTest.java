@@ -1,9 +1,8 @@
 package com.jengine.feature.serialize;
 
+import com.jengine.feature.serialize.json.JsonUtil;
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.jengine.feature.serialize.json.JsonUtil;
 
 /**
  * Created by nouuid on 2015/5/7.
@@ -11,13 +10,63 @@ import com.jengine.feature.serialize.json.JsonUtil;
 public class JsonUtilTest {
 
     @Test
-    public void formJson() {
-        String intput = "IFt7InJlZkNvZGUiOiIyMDE1MDMxMTEwMjYiLCJjcmVhdGVUaW1lIjoxNDI2MDQwODEyMDAwLCJwYXJjZWxUb3RhbE51bSI6MH0seyJyZWZDb2RlIjoiMjAxNTAzMzExNDI0IiwiY3JlYXRlVGltZSI6MTQyNzc4MzA1NDAwMCwicGFyY2VsVG90YWxOdW0iOjB9XQ==";
-        String output = "[{\"refCode\":\"201503111026\",\"createTime\":1426040812000,\"parcelTotalNum\":0},{\"refCode\":\"201503311424\",\"createTime\":1427783054000,\"parcelTotalNum\":0}]";
-        String s = " {\"arg1\":\"" + intput + "\"}";
-        Body body = JsonUtil.formJson(Body.class, s);
-        String result = new String(body.getArg1());
+    public void byteTest() {
+        JsonUtilTestBody body = new JsonUtilTestBody();
+        body.setArg1("1".getBytes());
+        body.setArg2(2);
+        body.setArg3("3");
+        byte[] bytes = JsonUtil.toByteJson(body);
 
-        Assert.assertEquals(result.trim(), output.trim());
+        JsonUtilTestBody body2 = JsonUtil.formByteJson(JsonUtilTestBody.class, bytes);
+        Assert.assertArrayEquals(body.getArg1(), body2.getArg1());
+        Assert.assertEquals(body.getArg2(), body2.getArg2());
+        Assert.assertEquals(body.getArg3(), body2.getArg3());
     }
+
+    @Test
+    public void stringTest() {
+        JsonUtilTestBody body = new JsonUtilTestBody();
+        body.setArg1("1".getBytes());
+        body.setArg2(2);
+        body.setArg3("3");
+        String string = JsonUtil.toJson(body);
+
+        JsonUtilTestBody body2 = JsonUtil.formJson(JsonUtilTestBody.class, string);
+        Assert.assertArrayEquals(body.getArg1(), body2.getArg1());
+        Assert.assertEquals(body.getArg2(), body2.getArg2());
+        Assert.assertEquals(body.getArg3(), body2.getArg3());
+    }
+}
+
+class JsonUtilTestBody {
+
+    byte arg1[];
+    int arg2;
+    String arg3;
+
+    public byte[] getArg1() {
+        return arg1;
+    }
+
+    public void setArg1(byte[] arg1) {
+        this.arg1 = arg1;
+    }
+
+    public int getArg2() {
+        return arg2;
+    }
+
+    public void setArg2(int arg2) {
+        this.arg2 = arg2;
+    }
+
+    public String getArg3() {
+        return arg3;
+    }
+
+    public void setArg3(String arg3) {
+        this.arg3 = arg3;
+    }
+
+
 }

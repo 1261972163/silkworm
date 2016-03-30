@@ -1,14 +1,14 @@
 package com.jengine.feature.serialize;
 
 import com.jengine.feature.serialize.xml.DOM4JReader;
+import com.jengine.feature.serialize.xml.DOMReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Element;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
-import com.jengine.feature.serialize.xml.DOMReader;
 
 import java.io.File;
 import java.util.Iterator;
@@ -19,23 +19,18 @@ import java.util.Iterator;
 public class XMLTest {
 
     public static final Log logger = LogFactory.getLog(XMLTest.class);
+    File file = null;
 
-    @Test
-    public void test() {
+    @Before
+    public void before() {
         String filepath = XMLTest.class.getResource("/").getPath() + "xml/student.xml";
         logger.info("filepath: " + filepath);
-
-        File file = new File(filepath);
-        domReaderTest(file);
-        dom4jReaderTest(file);
-        dom4jReaderTest(file);
-        jdomReaderTest(file);
-        saxReaderTest(file);
-
+        file = new File(filepath);
     }
 
-    public void domReaderTest(File file) {
-        logger.info("-----------------domReaderTest start-------------------");
+    @Test
+    public void domReaderTest() {
+        logger.info("starting.");
         DOMReader domReader = new DOMReader();
         Document doc = domReader.getDocument(file);
         String tagName = "Student";
@@ -43,16 +38,17 @@ public class XMLTest {
 
         long starttime = System.currentTimeMillis();
         for(int i=0; i < nodeList.getLength(); i++) {
-            System.out.print("��ţ�"+ doc.getElementsByTagName("ID").item(i).getFirstChild().getNodeValue());
-            System.out.print(" ������"+ doc.getElementsByTagName("Name").item(i).getFirstChild().getNodeValue());
-            System.out.println(" �Ա�"+ doc.getElementsByTagName("Sex").item(i).getFirstChild().getNodeValue());
+            System.out.print("ID:"+ doc.getElementsByTagName("ID").item(i).getFirstChild().getNodeValue() + " ");
+            System.out.print("Name:"+ doc.getElementsByTagName("Name").item(i).getFirstChild().getNodeValue() + " ");
+            System.out.println("Sex:"+ doc.getElementsByTagName("Sex").item(i).getFirstChild().getNodeValue());
         }
-        logger.info("domReaderTest run costs��" + (System.currentTimeMillis() - starttime) + "ms");
-        logger.info("-----------------domReaderTest end-------------------");
+        logger.info("domReaderTest run costs " + (System.currentTimeMillis() - starttime) + "ms");
+        logger.info("finished.");
     }
 
-    public void dom4jReaderTest(File file) {
-        logger.info("-----------------dom4jReaderTest start-------------------");
+    @Test
+    public void dom4jReaderTest() {
+        logger.info("starting.");
         DOM4JReader dom4JReader = new DOM4JReader(file);
         String elementName = "Student";
         Iterator iterator = dom4JReader.getEelementIterator(elementName);
@@ -63,22 +59,49 @@ public class XMLTest {
             Element foo;
             while (iterator.hasNext()) {
                 foo = (Element) iterator.next();
-                System.out.print("��ţ�"+ foo.elementText("ID"));
-                System.out.print(" ������"+ foo.elementText("Name"));
-                System.out.println(" �Ա�"+ foo.elementText("Sex"));
+                System.out.print(foo.elementText("ID") + " ");
+                System.out.print(foo.elementText("Name") + " ");
+                System.out.println(foo.elementText("Sex"));
             }
         } catch (Exception e) {
             logger.info("", e);
         }
-        logger.info("domReaderTest run costs��" + (System.currentTimeMillis() - starttime) + "ms");
-        logger.info("-----------------dom4jReaderTest end-------------------");
+        logger.info("domReaderTest run costs " + (System.currentTimeMillis() - starttime) + "ms");
+        logger.info("finished.");
     }
 
-    public void jdomReaderTest(File file) {
+    @Test
+    public void jdomReaderTest() {
 
     }
 
-    public void saxReaderTest(File file) {
+    @Test
+    public void saxReaderTest() {
 
+    }
+}
+
+class XMLTestObject {
+    private String name;
+    private Boolean sex;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public Boolean getSex() {
+        return sex;
+    }
+    public void setSex(Boolean sex) {
+        this.sex = sex;
+    }
+    public int getAge() {
+        return age;
+    }
+    public void setAge(int age) {
+        this.age = age;
     }
 }
