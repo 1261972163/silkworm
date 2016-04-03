@@ -1,6 +1,4 @@
 package com.jengine.java.util;
-
-import com.jengine.feature.serialize.XMLTestObject;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,9 +10,9 @@ public class CollectionTest {
 
 	@Test
 	public void test() {
-		List<XMLTestObject> list = new ArrayList<XMLTestObject>();
+		List<CollectionTestObject> list = new ArrayList<CollectionTestObject>();
 		for(int i=10; i>0; i--) {
-			XMLTestObject user = new XMLTestObject();
+			CollectionTestObject user = new CollectionTestObject();
 			user.setName("test" + i);
 			user.setAge(i);
 			user.setSex(true);
@@ -22,16 +20,41 @@ public class CollectionTest {
 		}
 		
 		if(list!=null && list.size()>0) {
-	        Collections.sort(list, new Comparator<XMLTestObject>() {
+	        Collections.sort(list, new Comparator<CollectionTestObject>() {
 	            @Override
-	            public int compare(XMLTestObject o1, XMLTestObject o2) {
+	            public int compare(CollectionTestObject o1, CollectionTestObject o2) {
                     return o1.getName().compareTo(o2.getName());
 	            }
 	        });
         }
 		
-		for(XMLTestObject user : list) {
+		for(CollectionTestObject user : list) {
 			System.out.println(user.getName());
 		}
+	}
+}
+
+class CollectionTestObject {
+	private String name;
+	private Boolean sex;
+	private int age;
+
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Boolean getSex() {
+		return sex;
+	}
+	public void setSex(Boolean sex) {
+		this.sex = sex;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
 	}
 }
