@@ -1,6 +1,7 @@
 package com.jengine.feature.concurrent.threadCommunication;
 
 import com.jengine.feature.concurrent.ConcurrentTest;
+import com.jengine.feature.concurrent.threadCommunication.waitNotify.*;
 import junit.framework.Assert;
 import org.junit.Test;
 
@@ -76,5 +77,26 @@ public class WaitNotifyTest extends ConcurrentTest {
         ProducerConsumerRunner producerConsumerRunner = new ProducerConsumerRunner();
         producerConsumerRunner.stackProtendedDeath();
         Thread.sleep(30*60*1000);
+    }
+
+    @Test
+    public void PipeInputOutputRunnerByteStreamTest() throws Exception {
+        PipeInputOutputRunner pipeInputOutputRunner = new PipeInputOutputRunner();
+        pipeInputOutputRunner.pipeByteStreamTest();
+        Thread.sleep(10*1000);
+    }
+
+    @Test
+    public void PipeInputOutputRunnerCharacterStreamTest() throws Exception {
+        PipeInputOutputRunner pipeInputOutputRunner = new PipeInputOutputRunner();
+        pipeInputOutputRunner.pipeCharacterStreamTest();
+        Thread.sleep(10*1000);
+    }
+
+    @Test
+    public void crossPrintTest() throws Exception {
+        CrossPrintRunner crossPrintRunner = new CrossPrintRunner();
+        crossPrintRunner.test();
+        Thread.sleep(10*1000);
     }
 }
