@@ -10,6 +10,7 @@
 *.iws
 out
 out/*
+*.log
 
 demos
 jsdemo
