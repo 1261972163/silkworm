@@ -11,6 +11,10 @@
 out
 out/*
 *.log
+.idea
+.idea/*
+target
+target/*
 
 demos
 jsdemo
