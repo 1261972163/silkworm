@@ -1,0 +1,9 @@
+{"namespace": "com.jengine.feature.serialize.avro",
+ "type": "record",
+ "name": "AvroUser",
+ "fields": [
+     {"name": "name", "type": "string"},
+     {"name": "favorite_number",  "type": ["int", "null"]},
+     {"name": "favorite_color", "type": ["string", "null"]}
+ ]
+}
