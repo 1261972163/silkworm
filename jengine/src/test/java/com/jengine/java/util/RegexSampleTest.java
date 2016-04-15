@@ -18,4 +18,5 @@ public class RegexSampleTest {
         String expected = "this/is/a/test";
         Assert.assertEquals(expected, regexSample.replaceDotWithSlash(inputStr));
     }
+
 }

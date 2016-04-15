@@ -7,26 +7,48 @@ import org.junit.Test;
  * Created by nouuid on 4/9/16.
  */
 public class SingletonPatternTest extends ConcurrentTest{
+    SingletonRunner lazyLoadRunner = new SingletonRunner();
 
     @Test
-    public void hungryLoadTest() throws InterruptedException {
-        HungryLoadRunner hungryLoadRunner = new HungryLoadRunner();
-        hungryLoadRunner.test();
+    public void hungryLoadSingletonTest() throws InterruptedException {
+        lazyLoadRunner.hungryLoadSingletonTest();
         Thread.sleep(10*1000);
     }
 
     @Test
-    public void lazyLoadTest() throws InterruptedException {
-        LazyLoadRunner lazyLoadRunner = new LazyLoadRunner();
-        lazyLoadRunner.test();
+    public void LazyLoadSingletonTest() throws InterruptedException {
+        lazyLoadRunner.LazyLoadSingletonTest();
         Thread.sleep(10*1000);
     }
 
     @Test
-    public void lazyLoadTest2() throws InterruptedException {
-        LazyLoadRunner lazyLoadRunner = new LazyLoadRunner();
-        lazyLoadRunner.test2();
+    public void lazyLoadDCLSingletonTest() throws InterruptedException {
+        lazyLoadRunner.lazyLoadDCLSingletonTest();
         Thread.sleep(10*1000);
+    }
+
+    @Test
+    public void staticInnerClassSingletonSeralizableMultiInstanceTest() throws InterruptedException {
+        lazyLoadRunner.staticInnerClassSingletonSeralizableMultiInstanceTest();
+        Thread.sleep(30*1000);
+    }
+
+    @Test
+    public void staticInnerClassSingletonSeralizableOneInstanceTest() throws InterruptedException {
+        lazyLoadRunner.staticInnerClassSingletonSeralizableOneInstanceTest();
+        Thread.sleep(30*1000);
+    }
+
+    @Test
+    public void staticBlockSingletonTest() throws InterruptedException {
+        lazyLoadRunner.staticBlockSingletonTest();
+        Thread.sleep(30 * 1000);
+    }
+
+    @Test
+    public void enumSingletonTest() throws InterruptedException {
+        lazyLoadRunner.enumSingletonTest();
+        Thread.sleep(30 * 1000);
     }
 
 }
