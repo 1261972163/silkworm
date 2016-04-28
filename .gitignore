@@ -11,6 +11,7 @@
 out
 out/*
 *.log
+*.log.*
 .idea
 .idea/*
 target

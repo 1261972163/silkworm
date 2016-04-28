@@ -88,7 +88,7 @@ public class ClassValidator {
                 isInt(clazz) || isLong(clazz) || isFloat(clazz) || isDouble(clazz);
     }
 
-    public static boolean isWrapClass(Class<?> clazz) { //是否为基础类型包装类
+    public static boolean isWrapClass(Class<?> clazz) {
         return isWrapBoolean(clazz) || isWrapByte(clazz) || isWrapChar(clazz) || isWrapShort(clazz) ||
                 isWrapInt(clazz) || isWrapLong(clazz) || isWrapFloat(clazz) || isWrapDouble(clazz);
     }
