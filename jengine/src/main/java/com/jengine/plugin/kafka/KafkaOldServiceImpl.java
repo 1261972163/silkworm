@@ -32,8 +32,13 @@ public class KafkaOldServiceImpl implements KafkaOldService {
     }
 
     @Override
-    public void send(KeyedMessage<String, String> msg) {
-        producer.send(msg);
+    public void send(KeyedMessage<String, String> keyedMessage) {
+        producer.send(keyedMessage);
+    }
+
+    @Override
+    public void send(List<KeyedMessage<String, String>> keyedMessages) {
+        producer.send(keyedMessages);
     }
 
     @Override
