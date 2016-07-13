@@ -83,6 +83,14 @@
             <version>0.9.0.1</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.39</version>
+        </dependency>
+
+
         <!-- avro -->
         <dependency>
             <groupId>org.apache.avro</groupId>
