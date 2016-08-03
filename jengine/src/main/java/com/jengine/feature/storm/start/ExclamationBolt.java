@@ -13,6 +13,8 @@ import java.util.Map;
 /**
  * @author nouuid
  * @description
+ * 这里定义了一个map，用来统计名字出现的次数，另外名字修改后会打印到控制台信息中。
+ * 统计计算部分都在execute接口中实现，较复杂的情况下，可以拆分为多个Bolt来分别执行不同的计算部分。
  * @date 8/3/16
  */
 public class ExclamationBolt extends BaseRichBolt {

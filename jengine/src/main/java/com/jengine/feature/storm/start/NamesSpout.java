@@ -14,6 +14,10 @@ import java.util.Random;
 /**
  * @author nouuid
  * @description
+ * 首先，自定义的Spout需要继承Storm的相关Spout的接口，例如BaseRichSpout或者IRichSpout等。
+ * 其次，在open函数中，实现资源的初始化等操作，这里没有特殊操作，只将流获取绑定到本身Collector上即可。
+ * 第三，声明输出流的格式，即 declareOutputFields函数。
+ * 最后，实现流的生成操作nextTuple函数，这里在人名中随机选择一个，并通过emit进行发送，Bolt接收到这个人名，并进行下一步的处理。
  * @date 8/3/16
  */
 public class NamesSpout extends BaseRichSpout {

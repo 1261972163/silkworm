@@ -3,6 +3,7 @@ package com.jengine.plugin.kafka;
 import kafka.consumer.KafkaStream;
 import kafka.producer.KeyedMessage;
 
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -14,7 +15,8 @@ public interface KafkaOldService {
     public void initProducer(Properties producerProps);
     public void initConsumer(Properties consumerProps);
 
-    public void send(KeyedMessage<String, String> msg);
+    public void send(KeyedMessage<String, String> keyedMessage);
+    public void send(List<KeyedMessage<String, String>> keyedMessages);
     public KafkaStream<byte[], byte[]> poll(String topic);
 
     public void closeProducer();

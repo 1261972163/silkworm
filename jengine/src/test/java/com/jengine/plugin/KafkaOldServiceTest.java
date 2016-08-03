@@ -19,9 +19,9 @@ public class KafkaOldServiceTest {
 
     private void initProducer() {
         Properties producerProps = new Properties();
-        producerProps.put("zookeeper.connect", "10.8.73.187:2181/kafka");
+        producerProps.put("zookeeper.connect", "silkworm-test-zookeeper:2181/kafka");
         producerProps.put("zk.connectiontimeout.ms", "1000000");
-        producerProps.put("metadata.broker.list", "xingng-test-kafka01.800best.com:9092,xingng-test-kafka02.800best.com:9092,xingng-test-kafka03.800best.com:9092,xingng-test-kafka04.800best.com:9092");
+        producerProps.put("metadata.broker.list", "silkworm-test-kafka01:9092,silkworm-test-kafka02:9092,silkworm-test-kafka03:9092,silkworm-test-kafka04:9092");
         producerProps.put("serializer.class", "kafka.serializer.StringEncoder");
         producerProps.put("key.serializer.class", "kafka.serializer.StringEncoder");
         kafkaOldService.initProducer(producerProps);
@@ -29,8 +29,8 @@ public class KafkaOldServiceTest {
 
     private void initConsumer() {
         Properties consumerProps = new Properties();
-        consumerProps.put("zookeeper.connect", "10.8.73.187:2181/kafka");
-        consumerProps.put("metadata.broker.list", "xingng-test-kafka01.800best.com:9092,xingng-test-kafka02.800best.com:9092,xingng-test-kafka03.800best.com:9092,xingng-test-kafka04.800best.com:9092");
+        consumerProps.put("zookeeper.connect", "silkworm-test-zookeeper:2181/kafka");
+        consumerProps.put("metadata.broker.list", "silkworm-test-kafka01:9092,silkworm-test-kafka02:9092,silkworm-test-kafka03:9092,silkworm-test-kafka04:9092");
         consumerProps.put("group.id", "test");
         consumerProps.put("serializer.class", "org.apache.kafka.common.serialization.StringDeserializer");
         consumerProps.put("key.serializer.class", "org.apache.kafka.common.serialization.StringDeserializer");
