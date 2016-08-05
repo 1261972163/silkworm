@@ -3,8 +3,8 @@ package com.jengine.java.lang;
 import org.junit.Test;
 
 /**
- * Éè¼Æ4¸öÏß³Ì£¬ÆäÖÐÁ½¸öÏß³ÌÃ¿´Î¶ÔjÔö¼Ó1£¬ÁíÍâÁ½¸öÏß³Ì¶ÔjÃ¿´Î¼õÉÙ1¡£Ð´³ö³ÌÐò¡£ ÒÔÏÂ³ÌÐòÊ¹ÓÃÄÚ²¿ÀàÊµÏÖÏß³Ì£¬¶ÔjÔö¼õµÄÊ±ºòÃ»ÓÐ¿¼ÂÇË³ÐòÎÊÌâ¡£
- * @author bl07637
+ * ï¿½ï¿½ï¿½4ï¿½ï¿½ï¿½ß³Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½Ã¿ï¿½Î¶ï¿½jï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½jÃ¿ï¿½Î¼ï¿½ï¿½ï¿½1ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â³ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ß³Ì£ï¿½ï¿½ï¿½jï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ã»ï¿½Ð¿ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½â¡£
+ * @author nouuid
  *
  */
 public class ThreadTest1 {

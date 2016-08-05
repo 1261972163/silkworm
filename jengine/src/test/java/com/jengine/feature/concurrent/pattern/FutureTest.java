@@ -1,7 +1,7 @@
 package com.jengine.feature.concurrent.pattern;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 6/28/2016
  * @description
  */

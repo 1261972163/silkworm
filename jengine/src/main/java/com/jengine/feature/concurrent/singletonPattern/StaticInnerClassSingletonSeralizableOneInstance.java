@@ -4,7 +4,7 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/15/2016
  * @description
  * seralizable object has one instance

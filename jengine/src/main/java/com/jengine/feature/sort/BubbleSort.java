@@ -1,7 +1,7 @@
 package com.jengine.feature.sort;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/21/2016
  * @description bubble sort
  */

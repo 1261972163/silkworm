@@ -1,7 +1,7 @@
 package com.jengine.feature.concurrent.threadCommunication.threadLocal;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/5/2016
  * @description
  *

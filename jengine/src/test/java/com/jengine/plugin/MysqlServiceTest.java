@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 6/30/2016
  * @description
  */

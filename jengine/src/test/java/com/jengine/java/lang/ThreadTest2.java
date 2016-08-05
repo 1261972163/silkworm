@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * synchronized���Զ��ͷ�������Lockһ��Ҫ�����Ա�ֹ��ͷţ����ұ�����finally�Ӿ����ͷš�
  * Lock���и�ǿ��Ĺ��ܣ����磬����tryLock�������Է�������ʽȥ������
  * 
- * @author bl07637
+ * @author nouuid
  *
  */
 

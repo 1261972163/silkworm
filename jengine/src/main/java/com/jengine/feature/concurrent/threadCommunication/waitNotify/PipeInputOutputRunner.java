@@ -3,7 +3,7 @@ package com.jengine.feature.concurrent.threadCommunication.waitNotify;
 import java.io.*;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/5/2016
  * @description
  */

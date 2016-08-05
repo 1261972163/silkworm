@@ -3,7 +3,7 @@ package com.jengine.java.lang;
 import org.junit.Test;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 2/29/2016
  * @description
  */

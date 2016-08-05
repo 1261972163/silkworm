@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.io.Serializable;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/28/2016
  * @description
  */

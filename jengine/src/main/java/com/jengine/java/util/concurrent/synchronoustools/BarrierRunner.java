@@ -5,7 +5,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/29/2016
  * @description
  * A synchronization aid that allows a set of threads to all wait for

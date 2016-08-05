@@ -3,7 +3,7 @@ package com.jengine.feature.concurrent.dataShare.volatileVariable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/1/2016
  * @description
  */

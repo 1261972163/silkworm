@@ -4,7 +4,7 @@ import com.jengine.feature.concurrent.ConcurrentTest;
 import com.jengine.feature.concurrent.dataShare.volatileVariable.*;
 import org.junit.Test;
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/1/2016
  * @description
  */

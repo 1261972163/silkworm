@@ -1,7 +1,7 @@
 package com.jengine.feature.concurrent.dataShare.synBlock;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/30/2016
  * @description
  */

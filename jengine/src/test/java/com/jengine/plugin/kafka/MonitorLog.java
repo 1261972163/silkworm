@@ -1,7 +1,7 @@
 package com.jengine.plugin.kafka;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 5/30/2016
  * @description
  */

@@ -3,7 +3,7 @@ package com.jengine.feature.discovery;
 import java.util.List;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/18/2016
  * @description
  * use bindingName to bind to a list of hosts

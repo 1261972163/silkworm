@@ -5,7 +5,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/7/2016
  * @description
  * awaitUninterruptibly()

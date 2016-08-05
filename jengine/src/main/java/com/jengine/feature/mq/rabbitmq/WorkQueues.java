@@ -1,7 +1,7 @@
 package com.jengine.feature.mq.rabbitmq;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/13/2016
  * @description
  */

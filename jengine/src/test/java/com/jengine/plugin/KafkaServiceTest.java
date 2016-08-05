@@ -9,7 +9,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import java.util.Properties;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/26/2016
  * @description
  */

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/12/2016
  * @description
  * If a consumer dies (its channel is closed, connection is closed, or TCP connection is lost) without sending an ack,

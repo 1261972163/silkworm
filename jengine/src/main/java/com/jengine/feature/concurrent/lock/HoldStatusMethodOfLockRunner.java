@@ -5,7 +5,7 @@ import junit.framework.Assert;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/7/2016
  * @description
  * lock.isFair(): is this lock a fair lock

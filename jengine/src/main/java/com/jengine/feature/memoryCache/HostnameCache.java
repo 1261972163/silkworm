@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/18/2016
  * @description
  */

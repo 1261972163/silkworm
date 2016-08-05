@@ -1,7 +1,7 @@
 package com.jengine.feature.concurrent.dataShare.volatileVariable;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/1/2016
  * @description
  */

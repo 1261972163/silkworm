@@ -3,7 +3,7 @@ package com.jengine.feature.concurrent.threadCommunication.threadLocal;
 import java.util.Date;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/5/2016
  * @description
  */

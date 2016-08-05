@@ -3,7 +3,7 @@ package com.jengine.feature.concurrent.singletonPattern;
 import java.io.Serializable;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/15/2016
  * @description
  * seralizable object has multi instance

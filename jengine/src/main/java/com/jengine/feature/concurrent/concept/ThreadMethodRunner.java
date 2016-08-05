@@ -3,7 +3,7 @@ package com.jengine.feature.concurrent.concept;
 import java.util.Random;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/11/2016
  * @description
  */

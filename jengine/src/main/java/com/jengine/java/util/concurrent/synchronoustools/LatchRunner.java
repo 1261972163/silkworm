@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/29/2016
  * @description
  * test time cost that n threads concurrently execute a task

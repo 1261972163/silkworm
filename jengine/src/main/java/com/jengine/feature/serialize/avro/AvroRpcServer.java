@@ -8,7 +8,7 @@ import org.apache.avro.ipc.HttpServer;
 import org.apache.avro.ipc.generic.GenericResponder;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/14/2016
  * @description
  */

@@ -3,7 +3,7 @@ package com.jengine.feature.serialize;
 import java.io.*;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/25/2016
  * @description
  */

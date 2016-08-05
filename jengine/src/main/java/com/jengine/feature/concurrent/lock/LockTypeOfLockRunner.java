@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/7/2016
  * @description
  * lock.lockInterruptibly(): lock which can be interrupted

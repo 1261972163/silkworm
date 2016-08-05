@@ -3,7 +3,7 @@ package com.jengine.feature.concurrent.lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/8/2016
  * @description
  *

@@ -7,7 +7,7 @@ import com.jengine.feature.concurrent.threadCommunication.join.TimedJoinRunner;
 import org.junit.Test;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/5/2016
  * @description
  */

@@ -4,7 +4,7 @@ import com.jengine.feature.serialize.SerializeStrategy;
 import com.jengine.plugin.redis.RedisService;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/25/2016
  * @description
  */

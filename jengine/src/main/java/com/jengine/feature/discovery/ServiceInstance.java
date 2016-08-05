@@ -1,7 +1,7 @@
 package com.jengine.feature.discovery;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/18/2016
  * @description
  */

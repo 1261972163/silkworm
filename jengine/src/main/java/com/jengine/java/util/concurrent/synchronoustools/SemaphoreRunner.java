@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/29/2016
  * @description
  * use semaphore to build a bounded blocking container

@@ -4,7 +4,7 @@ import com.jengine.feature.concurrent.dataShare.synBlock.SynInnerClassOuterClass
 import com.jengine.feature.concurrent.dataShare.synBlock.SynInnerClassOuterClass.SynInnerClassInnerClassB;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/31/2016
  * @description
  */

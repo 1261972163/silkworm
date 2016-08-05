@@ -1,7 +1,7 @@
 package com.jengine.feature.concurrent.concept;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/11/2016
  * @description
  */

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 7/13/2016
  * @description mysql loadbalance service
  */

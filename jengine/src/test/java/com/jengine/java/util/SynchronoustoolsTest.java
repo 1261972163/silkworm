@@ -5,7 +5,7 @@ import com.jengine.java.util.concurrent.synchronoustools.LatchRunner;
 import com.jengine.java.util.concurrent.synchronoustools.SemaphoreRunner;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/29/2016
  * @description
  */

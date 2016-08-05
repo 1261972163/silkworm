@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 
 /**
- * Created by bl07637 on 2015/4/29.
+ * Created by nouuid on 2015/4/29.
  */
 public class FileSample {
     private static final Logger logger = LoggerFactory.getLogger(FileSample.class);

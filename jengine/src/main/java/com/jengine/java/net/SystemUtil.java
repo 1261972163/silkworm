@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by bl07637 on 2015/4/28.
+ * Created by nouuid on 2015/4/28.
  */
 public class SystemUtil {
 

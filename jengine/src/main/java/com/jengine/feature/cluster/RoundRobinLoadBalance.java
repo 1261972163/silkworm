@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/2/2016
  * @description Round-Robin, do loop from 1 to N
  */

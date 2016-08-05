@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/12/2016
  * @description
  * all consumers share one queue

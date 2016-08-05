@@ -6,7 +6,7 @@ import com.jengine.feature.concurrent.dataShare.synMethod.SynStaticMethodRunner;
 import org.junit.Test;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/31/2016
  * @description
  */

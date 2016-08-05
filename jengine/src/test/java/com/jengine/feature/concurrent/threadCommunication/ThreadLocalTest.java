@@ -6,7 +6,7 @@ import com.jengine.feature.concurrent.threadCommunication.threadLocal.ThreadLoca
 import org.junit.Test;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/6/2016
  * @description
  */

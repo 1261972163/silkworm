@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/28/2016
  * @description
  */

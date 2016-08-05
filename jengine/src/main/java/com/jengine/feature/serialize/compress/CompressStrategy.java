@@ -1,7 +1,7 @@
 package com.jengine.feature.serialize.compress;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 3/25/2016
  * @description
  */
