@@ -110,6 +110,12 @@
             <version>1.0.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.24.Final</version>
+        </dependency>
+
         <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
