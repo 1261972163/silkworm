@@ -34,4 +34,58 @@ public class StringSampleTest {
         Assert.assertFalse(stringSample.strMatches(s2, regex));
     }
 
+    @Test
+    public void split() {
+        String s = "1/2/1";
+        String[] splits = s.split("/");
+        if (splits==null) {
+            System.out.println("splits is null");
+        } else {
+            System.out.println("splits.length=" + splits.length);
+        }
+        for (String split : splits) {
+            System.out.println(split);
+        }
+    }
+
+    @Test
+    public void sub() {
+        String regex = "/bingo[a-z0-9A-Z/]*";
+//        String home = "/bingo/x/ /x/dd/ddd/ /d /////";
+        String home = "/bingo/////";
+        home = home.trim();
+
+        System.out.println(home.matches(regex));
+
+
+//        if (home.contains("/")) {
+//            String[] splits = home.split("/");
+//            StringBuilder newHome = new StringBuilder();
+//            for (String split : splits) {
+//                if (StringUtils.isNotBlank(split)) {
+//                    newHome.append("/" + split);
+//                }
+//            }
+//            home = newHome.toString();
+//        }
+//
+//        home = home.trim();
+//        if (!home.startsWith("/bingo")) {
+//            home = "/bingo" + home;
+//        }
+//        while (home.endsWith("/")) {
+//            int endIndex = 0;
+//            for (int i = home.length() - 1; i >= 0; i--) {
+//                if (!"/".equals(home.charAt(i)+"")) {
+//                    endIndex = i + 1;
+//                    break;
+//                }
+//            }
+//            home = home.substring(0, endIndex);
+//            home = home.trim();
+//        }
+//        System.out.println(home);
+
+    }
+
 }

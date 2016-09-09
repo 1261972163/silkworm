@@ -1,6 +1,7 @@
 package com.jengine.plugin.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.Properties;
@@ -18,4 +19,6 @@ public interface KafkaService {
     public ConsumerRecords<String, String> poll();
 
     public void closeProducer();
+
+    public KafkaConsumer<String, String> getConsumer();
 }
