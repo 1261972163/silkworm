@@ -1,5 +1,6 @@
 package com.jengine.feature.webservice;
 
+import junit.framework.Assert;
 import org.junit.Test;
 
 /**
@@ -17,7 +18,10 @@ public class WebServiceTest {
         MyClient myClient = new MyClient();
 
         myServer.start();
-        Thread.sleep(5*1000);
-        myClient.start();
+        Thread.sleep(3*1000);
+        int result = 0;
+        myClient.invoke(result);
+        Thread.sleep(3*1000);
+        Assert.assertEquals(25, result);
     }
 }

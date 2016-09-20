@@ -14,7 +14,7 @@ import java.net.URL;
  */
 public class MyClient {
 
-    public void start() {
+    public void invoke(int result) {
         try {
             //创建访问wsdl服务地址的URL
             URL url = new URL("http://localhost:8888/ns?wsdl");
@@ -24,12 +24,10 @@ public class MyClient {
             Service service = Service.create(url, sName);
             //实现接口
             MyService ms = service.getPort(MyService.class);
-            System.out.println("result=" + ms.add(12, 13));
+            result = ms.add(12, 13);
             //以上服务有问题，依然依赖于Myservice接口
         } catch (MalformedURLException e) {
-
             e.printStackTrace();
-
         }
     }
 }
