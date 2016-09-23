@@ -17,7 +17,7 @@ public class ChannelDemoTest {
 
     @Test
     public void allocate() throws IOException {
-        String filePath = ChannelDemo.class.getResource("/").getPath() + "java/nio/data.txt";
+        String filePath = ChannelDemo.class.getResource("/").getPath() + "nio/data.txt";
         channelDemo.fileChannel(filePath);
     }
 }
