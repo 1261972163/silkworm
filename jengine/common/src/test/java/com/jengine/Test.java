@@ -12,9 +12,6 @@ public class Test {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
-    }
-    public static void main(String[] args) {
-        System.out.println();
-    }
 }

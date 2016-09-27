@@ -13,7 +13,7 @@ public class MysqlService {
 
     private String url;
     private Connection conn = null;
-    private Statement stmt = null;
+    private PreparedStatement stmt = null;
 
     public void init(String url, String username, String password) throws Exception {
         if (StringUtils.isBlank(url)) {
@@ -24,7 +24,7 @@ public class MysqlService {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(url, username, password);
             System.out.println("connected to mysql.");
-            stmt = conn.createStatement();
+
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -43,7 +43,8 @@ public class MysqlService {
     public boolean doUpdate(String sql) {
         int result = 0;
         try {
-            result = stmt.executeUpdate(sql);
+            stmt = conn.prepareStatement(sql);
+            result = stmt.executeUpdate();
             if (result != -1) {
                 return true;
             } else {
@@ -58,7 +59,8 @@ public class MysqlService {
     public ResultSet doQuery(String sql) {
         ResultSet rs = null;
         try {
-            rs = stmt.executeQuery(sql);
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }
