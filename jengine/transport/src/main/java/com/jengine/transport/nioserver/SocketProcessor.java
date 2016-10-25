@@ -41,15 +41,11 @@ public class SocketProcessor implements Runnable {
 
     public SocketProcessor(Queue<Socket> inboundSocketQueue, MessageBuffer readMessageBuffer, MessageBuffer writeMessageBuffer, IMessageReaderFactory messageReaderFactory, IMessageProcessor messageProcessor) throws IOException {
         this.inboundSocketQueue = inboundSocketQueue;
-
         this.readMessageBuffer    = readMessageBuffer;
         this.writeMessageBuffer   = writeMessageBuffer;
         this.writeProxy           = new WriteProxy(writeMessageBuffer, this.outboundMessageQueue);
-
         this.messageReaderFactory = messageReaderFactory;
-
         this.messageProcessor     = messageProcessor;
-
         this.readSelector         = Selector.open();
         this.writeSelector        = Selector.open();
     }

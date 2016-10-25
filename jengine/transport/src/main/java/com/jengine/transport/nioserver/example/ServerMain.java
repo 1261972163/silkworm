@@ -13,7 +13,7 @@ import java.io.IOException;
  * @description
  * @date 9/28/16
  */
-public class Main {
+public class ServerMain {
 
     public static void main(String[] args) throws IOException {
 
