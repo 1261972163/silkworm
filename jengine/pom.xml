@@ -17,6 +17,7 @@
         <module>rpc</module>
         <module>store</module>
         <module>cluster</module>
+        <module>pattern</module>
     </modules>
 
     <properties>
