@@ -55,6 +55,12 @@
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch</artifactId>
 		</dependency>
+
+		<!--<dependency>-->
+			<!--<groupId>com.best.bingo</groupId>-->
+			<!--<artifactId>bingo-client</artifactId>-->
+			<!--<version>0.1.0-RELEASE</version>-->
+		<!--</dependency>-->
 	</dependencies>
 
 </project>
