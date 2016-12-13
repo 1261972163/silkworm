@@ -22,7 +22,7 @@ public class JerseyDemo {
     public static void main(String[] args) throws IOException, InterruptedException {
         JerseyDemo jerseyDemo = new JerseyDemo();
         jerseyDemo.startServer();
-        Thread.sleep(30*1000);
+        Thread.sleep(30*60*1000);
         jerseyDemo.stopServer();
     }
 

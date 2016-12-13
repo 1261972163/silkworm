@@ -1,6 +1,7 @@
 package com.jengine.transport.jersey;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
@@ -16,6 +17,15 @@ public class HelloWorldResource {
     @GET
     @Produces("text/plain")
     public String getClichedMessage() {
+        // curl -XGET http://localhost:9998/helloworld
         return "Hello World!";
+    }
+
+    @PUT
+    @Path("/put")
+    public String put(String s) {
+        // curl -XPUT 'http://localhost:9998/helloworld/put' -d 'this is a test'
+        System.out.println(s);
+        return s;
     }
 }
