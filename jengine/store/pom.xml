@@ -55,12 +55,27 @@
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.searchbox</groupId>
+			<artifactId>jest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<version>4.4.4</version>
+		</dependency>
 
 		<!--<dependency>-->
 			<!--<groupId>com.best.bingo</groupId>-->
 			<!--<artifactId>bingo-client</artifactId>-->
 			<!--<version>0.1.0-RELEASE</version>-->
 		<!--</dependency>-->
+
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+		</dependency>
+
 	</dependencies>
 
 </project>
