@@ -24,8 +24,6 @@ public class SocketAccepter implements Runnable{
         this.socketQueue = socketQueue;
     }
 
-
-
     public void run() {
         try{
             this.serverSocket = ServerSocketChannel.open();
@@ -35,21 +33,15 @@ public class SocketAccepter implements Runnable{
             return;
         }
 
-
         while(true){
             try{
                 SocketChannel socketChannel = this.serverSocket.accept();
-
                 System.out.println("Socket accepted: " + socketChannel);
-
                 //todo check if the queue can even accept more sockets.
                 this.socketQueue.add(new Socket(socketChannel));
-
             } catch(IOException e){
                 e.printStackTrace();
             }
-
         }
-
     }
 }
