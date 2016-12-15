@@ -1,6 +1,7 @@
 package com.jengine.transport.netty.remote;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -12,6 +13,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  * @description
  * @date 9/8/16
  */
+@ChannelHandler.Sharable
 public class NettyServerHandler extends SimpleChannelInboundHandler<String> { // (1)
 
     public static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);

@@ -7,8 +7,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.TopicPartition;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.UUID;
@@ -28,7 +31,8 @@ public class Kafka090ClientTest {
     private Kafka090ConsumeService kafka090ConsumeService = null;
 
     private volatile boolean flag = true;
-    private String topic = "localtest";
+//    private String topic = "localtest";
+    private String topic = "xingcore";
     private static int consumerNum = 1;
 
     final CountDownLatch startGate = new CountDownLatch(1);
@@ -61,10 +65,10 @@ public class Kafka090ClientTest {
         properties.put("key.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
         properties.put("value.deserializer", "org.apache.kafka.common.serialization.ByteArrayDeserializer");
 //        properties.put("fetch.min.bytes", );
-        properties.put("group.id", "localtestgroup");
+        properties.put("group.id", "localtest1");
         properties.put("heartbeat.interval.ms", "20000");
 //        properties.put("max.partition.fetch.bytes", "3145728");//3M
-        properties.put("max.partition.fetch.bytes", "1000");//3M
+        properties.put("max.partition.fetch.bytes", "10000");//3M
         properties.put("request.timeout.ms", "60000");
         properties.put("session.timeout.ms", "30000");
         properties.put("group.max.session.timeout.ms", "60000");
@@ -124,6 +128,30 @@ public class Kafka090ClientTest {
             if (consumerRecords.count()>0) {
                 consumer.commitSync();
             }
+            System.out.println("loop-" + i);
+            Thread.sleep(1000);
+        }
+    }
+
+    @org.junit.Test
+    public void consume2() throws InterruptedException {
+        CopyOnWriteArraySet<KafkaConsumer<byte[], byte[]>> consumers = kafka090ConsumeService.getConsumers();
+        KafkaConsumer<byte[], byte[]> consumer = consumers.iterator().next();
+        int i = 0;
+        while (flag) {
+            ConsumerRecords<byte[], byte[]> consumerRecords = consumer.poll(100);
+            for (TopicPartition topicPartition : consumerRecords.partitions()) {
+                for (ConsumerRecord<byte[], byte[]> record : consumerRecords.records(topicPartition)) {
+                    if (record.value() == null) {
+                        continue;
+                    }
+                    Message message = JsonUtil.formByteJson(Message.class, record.value());
+//                    System.out.println("consume:" + message.getContent() + "..");
+//                    Collections.frequency(new HashMap<TopicPartition, OffsetAndMetadata>());
+                    consumer.commitSync(Collections.singletonMap(new TopicPartition(topic,record.partition()), new OffsetAndMetadata(record.offset()+1)));
+                }
+            }
+            consumer.commitSync();
             System.out.println("loop-" + i);
             Thread.sleep(1000);
         }

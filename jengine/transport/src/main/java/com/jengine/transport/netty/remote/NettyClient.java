@@ -1,23 +1,19 @@
 package com.jengine.transport.netty.remote;
 
-import com.jengine.transport.netty.simpleChat.SimpleChatClientHandler;
-import com.jengine.transport.netty.simpleChat.SimpleChatClientInitializer;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 /**
  * @author nouuid
@@ -35,6 +31,10 @@ public class NettyClient {
     public NettyClient(String host, int port) {
         this.host = host;
         this.port = port;
+    }
+
+    public void open() {
+        doOpen();
     }
 
     public void doOpen() {
@@ -66,7 +66,10 @@ public class NettyClient {
         Channel channel = null;
         try {
             channel = bootstrap.connect(host, port).sync().channel();
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            String x = "asdfasdfasdf";
+            InputStream inputStream = new ByteArrayInputStream(x.getBytes());
+//            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
             while (true) {
                 channel.writeAndFlush(in.readLine() + "\r\n");
             }
