@@ -1,5 +1,6 @@
 package com.jengine.transport.netty.echoserver;
 
+import com.jengine.transport.netty.echoserver.EchoServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
