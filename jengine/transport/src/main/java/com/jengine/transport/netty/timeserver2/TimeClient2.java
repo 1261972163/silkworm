@@ -1,5 +1,6 @@
-package com.jengine.transport.netty.timeserver;
+package com.jengine.transport.netty.timeserver2;
 
+import com.jengine.transport.netty.timeserver.TimeClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -25,12 +26,12 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @description
  * @date 12/18/16
  */
-public class TimeClient {
+public class TimeClient2 {
 
     String host;
     int port;
 
-    public TimeClient(String host, int port) {
+    public TimeClient2(String host, int port) {
         this.host = host;
         this.port = port;
     }
@@ -46,7 +47,7 @@ public class TimeClient {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new TimeClientHandler());
+                    ch.pipeline().addLast(new TimeDecoder(), new TimeClientHandler());
                 }
             });
 
@@ -67,7 +68,7 @@ public class TimeClient {
         String host = "localhost";
         int port = 8080;
 
-        TimeClient timeClient = new TimeClient(host,port);
+        TimeClient2 timeClient = new TimeClient2(host,port);
         timeClient.run();
     }
 }

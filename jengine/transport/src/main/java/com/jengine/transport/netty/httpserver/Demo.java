@@ -28,5 +28,7 @@ public class Demo {
         client.send("1");
         client.send("2");
 
+        Thread.sleep(5*60*1000);
+
     }
 }

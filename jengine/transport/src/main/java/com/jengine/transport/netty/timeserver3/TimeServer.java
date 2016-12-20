@@ -1,4 +1,4 @@
-package com.jengine.transport.netty.echoserver;
+package com.jengine.transport.netty.timeserver3;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -10,42 +10,38 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * 应答服务器
- *
- * EchoServer类似DiscardServer，区别在于EchoServerHandler
- *
- * 在 ECHO 协议的实现下编写一个响应消息给客户端，这个协议针对任何接收的数据都会返回一个响应。
+ * 时间服务器
  *
  * @author nouuid
  * @description
  * @date 12/17/16
  */
-public class EchoServer {
+public class TimeServer {
 
     private int port;
 
-    public EchoServer(int port) {
+    public TimeServer(int port) {
         this.port = port;
     }
 
     public void run() throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-            ServerBootstrap b = new ServerBootstrap(); // (2)
+            ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class) // (3)
+                    .channel(NioServerSocketChannel.class)
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new EchoServerHandler());
+                            ch.pipeline().addLast(new TimeEncoder(), new TimeServerHandler());
                         }
                     })
-                    .option(ChannelOption.SO_BACKLOG, 128)          // (5)
-                    .childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true);
 
             // 绑定端口，开始接收进来的连接
-            ChannelFuture f = b.bind(port).sync(); // (7)
+            ChannelFuture f = b.bind(port).sync();
 
             // 等待服务器  socket 关闭 。
             // 在这个例子中，这不会发生，但你可以优雅地关闭你的服务器。
@@ -63,6 +59,6 @@ public class EchoServer {
         } else {
             port = 8080;
         }
-        new EchoServer(port).run();
+        new TimeServer(port).run();
     }
 }

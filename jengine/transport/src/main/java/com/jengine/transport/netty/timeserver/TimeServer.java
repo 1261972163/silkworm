@@ -1,5 +1,6 @@
-package com.jengine.transport.netty.echoserver;
+package com.jengine.transport.netty.timeserver;
 
+import com.jengine.transport.netty.echoserver.EchoServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -10,21 +11,27 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * 应答服务器
+ * 时间服务器
  *
- * EchoServer类似DiscardServer，区别在于EchoServerHandler
+ * 实现的协议是 TIME 协议。和之前的例子不同的是在不接受任何请求时他会发送一个含32位的整数的消息，并且一旦消息发送就会立即关闭连接。
+ * 在这个例子中，你会学习到如何构建和发送一个消息，然后在完成时关闭连接。
  *
- * 在 ECHO 协议的实现下编写一个响应消息给客户端，这个协议针对任何接收的数据都会返回一个响应。
+ * 因为我们将会忽略任何接收到的数据，而只是在连接被创建发送一个消息，所以这次我们不能使用 channelRead() 方法了，代替他的是，
+ * 我们需要覆盖 channelActive() 方法
+ *
+ * TimeServer类似DiscardServer，区别在于TimeServerHandler
+ *
+ *
  *
  * @author nouuid
  * @description
  * @date 12/17/16
  */
-public class EchoServer {
+public class TimeServer {
 
     private int port;
 
-    public EchoServer(int port) {
+    public TimeServer(int port) {
         this.port = port;
     }
 
@@ -38,7 +45,7 @@ public class EchoServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new EchoServerHandler());
+                            ch.pipeline().addLast(new TimeServerHandler());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)          // (5)
@@ -63,6 +70,6 @@ public class EchoServer {
         } else {
             port = 8080;
         }
-        new EchoServer(port).run();
+        new TimeServer(port).run();
     }
 }
