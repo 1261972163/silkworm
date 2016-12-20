@@ -1,5 +1,6 @@
 package com.jengine.transport.netty.discardserver;
 
+import com.jengine.transport.netty.echoserver.EchoServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -38,11 +39,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  * @description
  * @date 12/17/16
  */
-public class DiscardServer {
+public class EchoServer {
 
     private int port;
 
-    public DiscardServer(int port) {
+    public EchoServer(int port) {
         this.port = port;
     }
 
@@ -56,7 +57,7 @@ public class DiscardServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new DiscardServerHandler());
+                            ch.pipeline().addLast(new EchoServerHandler());
                         }
                     })
                     .option(ChannelOption.SO_BACKLOG, 128)          // (5)
@@ -81,6 +82,6 @@ public class DiscardServer {
         } else {
             port = 8080;
         }
-        new DiscardServer(port).run();
+        new EchoServer(port).run();
     }
 }

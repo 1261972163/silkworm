@@ -1,4 +1,4 @@
-package com.jengine.transport.netty.discardserver;
+package com.jengine.transport.netty.echoserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -39,7 +39,7 @@ import io.netty.util.ReferenceCountUtil;
  * @description
  * @date 12/17/16
  */
-public class DiscardServerHandler extends ChannelInboundHandlerAdapter { // (1)
+public class EchoServerHandler extends ChannelInboundHandlerAdapter { // (1)
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)

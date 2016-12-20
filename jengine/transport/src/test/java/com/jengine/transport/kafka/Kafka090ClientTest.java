@@ -31,8 +31,8 @@ public class Kafka090ClientTest {
     private Kafka090ConsumeService kafka090ConsumeService = null;
 
     private volatile boolean flag = true;
-//    private String topic = "localtest";
-    private String topic = "xingcore";
+    private String topic = "localtest";
+//    private String topic = "xingcore";
     private static int consumerNum = 1;
 
     final CountDownLatch startGate = new CountDownLatch(1);
@@ -101,14 +101,16 @@ public class Kafka090ClientTest {
     @org.junit.Test
     public void produce() throws InterruptedException {
         int i = 0;
-        while(i<1000){
+//        while(i<1000){
+        while(true){
             Message message = new Message();
             message.setContent(i + "");
             ProducerRecord<byte[], byte[]> producerRecord = new ProducerRecord<byte[], byte[]>(topic, UUID.randomUUID().toString().getBytes(), JsonUtil.toByteJson(message));
             kafka090ProducerService.send(producerRecord);
+            Thread.sleep(10);
             System.out.println("put " + i++);
         }
-        Thread.sleep(10*1000);
+//        Thread.sleep(10*1000);
     }
 
     @org.junit.Test
@@ -133,6 +135,10 @@ public class Kafka090ClientTest {
         }
     }
 
+    /**
+     * 分区提交
+     * @throws InterruptedException
+     */
     @org.junit.Test
     public void consume2() throws InterruptedException {
         CopyOnWriteArraySet<KafkaConsumer<byte[], byte[]>> consumers = kafka090ConsumeService.getConsumers();
@@ -146,7 +152,7 @@ public class Kafka090ClientTest {
                         continue;
                     }
                     Message message = JsonUtil.formByteJson(Message.class, record.value());
-//                    System.out.println("consume:" + message.getContent() + "..");
+                    System.out.println("consume:" + message.getContent() + "..");
 //                    Collections.frequency(new HashMap<TopicPartition, OffsetAndMetadata>());
                     consumer.commitSync(Collections.singletonMap(new TopicPartition(topic,record.partition()), new OffsetAndMetadata(record.offset()+1)));
                 }
