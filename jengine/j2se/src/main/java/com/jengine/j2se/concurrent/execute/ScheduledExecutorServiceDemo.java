@@ -1,7 +1,10 @@
 package com.jengine.j2se.concurrent.execute;
 
+import junit.framework.Assert;
 import org.junit.Test;
+
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -26,26 +29,52 @@ public class ScheduledExecutorServiceDemo {
 
             @Override
             public void run() {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("start1");
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+                System.out.println("2");
             }
-        }, 50, TimeUnit.MICROSECONDS);
+        }, 5000, TimeUnit.MILLISECONDS);
 
         scheduledExecutorService.schedule(new Runnable() {
             @Override
             public void run() {
-                System.out.println("start2");
+                System.out.println("3");
             }
-        }, 100, TimeUnit.MICROSECONDS);
+        }, 10000, TimeUnit.MILLISECONDS);
 
         System.out.println("1");
+        Thread.sleep(6000);
+        scheduledExecutorService.shutdown();
+//        scheduledExecutorService.shutdownNow();
+        System.out.println("4");
+        System.out.println("isShutdown:" + scheduledExecutorService.isShutdown());
+        System.out.println("isTerminated:" + scheduledExecutorService.isTerminated());
 
-        Thread.sleep(5000);
-        System.out.println("2");
+        Thread.sleep(15000);
+        System.out.println("5");
+        System.out.println("isShutdown:" + scheduledExecutorService.isShutdown());
+        System.out.println("isTerminated:" + scheduledExecutorService.isTerminated());
+
+        try {
+            scheduledExecutorService.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("6");
+                }
+            }, 1000, TimeUnit.MILLISECONDS);
+
+            Thread.sleep(5000);
+            System.out.println("7");
+            System.out.println("isShutdown:" + scheduledExecutorService.isShutdown());
+            System.out.println("isTerminated:" + scheduledExecutorService.isTerminated());
+        } catch (Exception e) {
+            if (e instanceof RejectedExecutionException) {
+                Assert.assertTrue(true);
+            }
+        }
     }
 
     /**
