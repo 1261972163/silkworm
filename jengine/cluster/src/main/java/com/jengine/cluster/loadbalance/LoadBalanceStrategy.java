@@ -9,12 +9,21 @@ import java.util.Locale;
  * @description
  */
 public abstract class LoadBalanceStrategy {
-    protected void ensureNodesAreAvailable(final List<String> nodes) {
+    protected void ensureNodesAreAvailable(final List<Node> nodes) {
         if (nodes.isEmpty()) {
             String message = String.format(Locale.ROOT, "None of the nodes are available: %s", nodes);
             throw new RuntimeException(message);
         }
     }
 
-    public abstract String select(List<String> nodes);
+    public Node select(List<Node> nodes) {
+        ensureNodesAreAvailable(nodes);
+        List<Node> nodeList = rebuildNodes(nodes);
+        return getNode(nodeList);
+    }
+
+    protected abstract List<Node> rebuildNodes(List<Node> nodes);
+
+    protected abstract Node getNode(List<Node> nodeList);
+
 }
