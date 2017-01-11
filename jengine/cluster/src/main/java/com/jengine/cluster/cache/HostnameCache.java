@@ -1,6 +1,7 @@
 package com.jengine.cluster.cache;
 
 import com.jengine.cluster.loadbalance.LoadBalanceStrategy;
+import com.jengine.cluster.loadbalance.Node;
 import com.jengine.cluster.loadbalance.RoundRobinLoadBalance;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @description
  */
 public class HostnameCache {
-    private List<String> hostnames = new ArrayList<String>();
+    private List<Node> hostnames = new ArrayList<Node>();
 
     private final  ReadWriteLock       hostnameLock        = new ReentrantReadWriteLock(true);
     private static LoadBalanceStrategy loadBalanceStrategy = new RoundRobinLoadBalance();
@@ -35,7 +36,7 @@ public class HostnameCache {
             if (hostnames == null || hostnames.size() <= 0) {
                 return null;
             }
-            return loadBalanceStrategy.select(hostnames);
+            return loadBalanceStrategy.select(hostnames).getHostIp();
         } finally {
             hostnameLock.readLock().unlock();
         }
@@ -45,7 +46,9 @@ public class HostnameCache {
         try {
             hostnameLock.writeLock().lock();
             Thread.sleep(1000);
-            hostnames.add(hostname);
+            Node node = new Node();
+            node.setHostIp(hostname);
+            hostnames.add(node);
             System.out.println("after add " + hostname);
         } catch (InterruptedException e) {
             e.printStackTrace();
