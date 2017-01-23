@@ -1,4 +1,6 @@
-package com.jengine.j2se.concurrent.threadCommunication.waitNotify;
+package com.jengine.j2se.concurrent.threadCommunication.waitNotifyPractice;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,30 @@ import java.util.List;
  * @description
  */
 public class ProducerConsumerRunner {
+
+    @Test
+    public void producerConsumerValueTest() throws Exception {
+        valueTest();
+        Thread.sleep(30*60*1000);
+    }
+
+    @Test
+    public void protendedDeathTest() throws Exception {
+        valueProtendedDeath();
+        Thread.sleep(30*60*1000);
+    }
+
+    @Test
+    public void producerConsumerStackTest() throws Exception {
+        stackTest();
+        Thread.sleep(30*60*1000);
+    }
+
+    @Test
+    public void producerConsumerStackTest2() throws Exception {
+        stackProtendedDeath();
+        Thread.sleep(30*60*1000);
+    }
 
     public static int num = 1;
 

@@ -9,7 +9,7 @@ import java.util.List;
  * @description
  * @date 9/3/16
  */
-public class ArraySample {
+public class ArrayDemo {
     public static void main(String[] args) {
         Object[] objectArray = null;
 
@@ -42,13 +42,5 @@ public class ArraySample {
         }
 
 
-    }
-}
-
-class BaseClass {
-    private int id;
-
-    public BaseClass(int id) {
-        this.id = id;
     }
 }

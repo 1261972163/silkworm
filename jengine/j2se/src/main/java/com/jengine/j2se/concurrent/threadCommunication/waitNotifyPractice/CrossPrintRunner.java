@@ -1,4 +1,6 @@
-package com.jengine.j2se.concurrent.threadCommunication.waitNotify;
+package com.jengine.j2se.concurrent.threadCommunication.waitNotifyPractice;
+
+import org.junit.Test;
 
 /**
  * @author nouuid
@@ -7,7 +9,8 @@ package com.jengine.j2se.concurrent.threadCommunication.waitNotify;
  */
 public class CrossPrintRunner {
 
-    public void test() throws InterruptedException {
+    @Test
+    public void crossPrintTest() throws Exception {
         CrossPrinter crossPrinter = new CrossPrinter();
         for (int i=0; i<10; i++) {
             Thread aPrinter = new Thread(new Runnable() {
@@ -28,6 +31,7 @@ public class CrossPrintRunner {
             });
             bPrinter.start();
         }
+        Thread.sleep(10*1000);
     }
 }
 

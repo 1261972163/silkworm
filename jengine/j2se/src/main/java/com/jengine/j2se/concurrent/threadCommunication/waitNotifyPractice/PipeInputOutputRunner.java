@@ -1,4 +1,6 @@
-package com.jengine.j2se.concurrent.threadCommunication.waitNotify;
+package com.jengine.j2se.concurrent.threadCommunication.waitNotifyPractice;
+
+import org.junit.Test;
 
 import java.io.*;
 
@@ -8,6 +10,18 @@ import java.io.*;
  * @description
  */
 public class PipeInputOutputRunner {
+
+    @Test
+    public void PipeInputOutputRunnerByteStreamTest() throws Exception {
+        pipeByteStreamTest();
+        Thread.sleep(10*1000);
+    }
+
+    @Test
+    public void PipeInputOutputRunnerCharacterStreamTest() throws Exception {
+        pipeCharacterStreamTest();
+        Thread.sleep(10*1000);
+    }
 
     public void pipeByteStreamTest() throws IOException, InterruptedException {
         PipedOutputStream pipedOutputStream = new PipedOutputStream();

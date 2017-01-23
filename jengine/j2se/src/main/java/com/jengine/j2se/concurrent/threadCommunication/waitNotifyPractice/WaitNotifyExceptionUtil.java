@@ -1,4 +1,4 @@
-package com.jengine.j2se.concurrent.threadCommunication.waitNotify;
+package com.jengine.j2se.concurrent.threadCommunication.waitNotifyPractice;
 
 /**
  * @author nouuid

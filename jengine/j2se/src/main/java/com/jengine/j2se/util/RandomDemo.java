@@ -22,7 +22,7 @@ public class RandomDemo {
     @Test
     public void random2() {
         Random random = new Random();
-        System.out.println(random.nextInt(10));
-        System.out.println(random.nextInt(10));
+        System.out.println(random.nextInt(10000));
+        System.out.println(random.nextInt(10000));
     }
 }

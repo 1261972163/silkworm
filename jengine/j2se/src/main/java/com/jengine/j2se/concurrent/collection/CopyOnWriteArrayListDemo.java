@@ -4,7 +4,18 @@ import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * content
+ * CopyOnWriteArrayList源自jdk1.5，通常被认为是ArrayList的线程安全变体。
+ * 内部由可变数组实现，和ArrayList的区别在于CopyOnWriteArrayList的数组内部均为有效数据。
+ *
+ * 可变性操作在添加或删除数据的时候，会对数组进行扩容或减容。扩容或减容的过程是：产生新数组，然后将有效数据复制到新数组，这也是“CopyOnWrite”的语义。
+ * 但复制操作的效率比较低。
+ *
+ * 每次获取数组都是final类型的，数组引用不可变。同时在add、set、remove、clear、subList、sort等可变性操作内部加锁，保证了数组操作的线程安全性。get操作不加锁。
+ *
+ * 使用COWIterator进行遍历，内部为CopyOnWriteArrayList的数据数组的final快照，保证了遍历时数据的不变性。不支持remove操作。
+ *
+ * 综合上述特性，CopyOnWriteArrayList多线程安全，写操作复制和加锁导致效率较低，读操作序号读取效率高，
+ * 适合使用在多线程、读操作远远大于写操作的场景里，比如缓存。
  *
  * @author bl07637
  * @date 12/7/2016
