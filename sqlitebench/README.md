@@ -25,7 +25,7 @@ sqlite性能测试
 参数：	
 
 |参数|含义|取值|默认值|
-|:--|:--|:--|:--}
+|:--|:--|:--|:--|
 |command|执行哪种操作|select/insert|-|
 |db|sqlite数据文件|数据文件路径|:memory:，表示使用内存|
 |table|表|String|test1|
