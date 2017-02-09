@@ -1,8 +1,8 @@
 package com.jengine.store;
 
 import com.jengine.serializer.SimpleSerialize;
-import com.jengine.store.mongo.MongoConfig;
-import com.jengine.store.mongo.MongoService;
+import com.jengine.store.db.mongo.MongoConfig;
+import com.jengine.store.db.mongo.MongoService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

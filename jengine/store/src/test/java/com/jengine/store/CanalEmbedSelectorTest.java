@@ -1,7 +1,7 @@
 package com.jengine.store;
 
 import com.alibaba.otter.canal.protocol.Message;
-import com.jengine.store.canal.CanalEmbedSelector;
+import com.jengine.store.db.canal.CanalEmbedSelector;
 import org.junit.Test;
 /**
  * content

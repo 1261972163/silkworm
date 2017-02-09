@@ -1,6 +1,6 @@
 package com.jengine.store;
 
-import com.jengine.store.mysql.MysqlLBService;
+import com.jengine.store.db.mysql.MysqlLBService;
 
 /**
  * @author nouuid

@@ -1,6 +1,6 @@
 package com.jengine.store;
 
-import com.jengine.store.es.EsDataService;
+import com.jengine.store.search.es.EsDataService;
 import junit.framework.Assert;
 import org.junit.Test;
 
