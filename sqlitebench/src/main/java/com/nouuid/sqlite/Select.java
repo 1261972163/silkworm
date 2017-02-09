@@ -1,4 +1,4 @@
-package com.best.sqlite;
+package com.nouuid.sqlite;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

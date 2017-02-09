@@ -63,7 +63,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.best.sqlite.Bench</mainClass>
+							<mainClass>com.nouuid.sqlite.Bench</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -87,7 +87,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.best.sqlite.Bench</mainClass>
+							<mainClass>com.nouuid.sqlite.Bench</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
