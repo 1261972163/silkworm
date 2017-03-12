@@ -9,15 +9,15 @@ import java.util.Date;
 /**
  * Created by nouuid on 2015/6/25.
  */
-public class TcpClient {
+public class TCPClient {
 
     public static void main(String[] args) {
-        TcpClient client = new TcpClient();
+        TCPClient client = new TCPClient();
         client.start();
     }
 
     public void start() {
-    	System.out.println("Client is starting...");
+    	System.out.println("TCPClient is starting...");
         Socket socket = null;
         String inContent = null;
         DataInputStream in = null;

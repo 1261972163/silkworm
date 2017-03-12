@@ -11,15 +11,15 @@ import java.util.LinkedList;
 /**
  * Created by nouuid on 2015/6/25.
  */
-public class TcpServer {
+public class TCPServer {
 
     public static void main(String[] args) {
-        TcpServer server = new TcpServer();
+        TCPServer server = new TCPServer();
         server.start();
     }
 
     public void start() {
-    	System.out.println("Server is starting...");
+    	System.out.println("TCPServer is starting...");
         ServerSocket server = null;
         LinkedList<SocketProcessor> socketProcessors = new LinkedList<SocketProcessor>();
         try {
@@ -31,6 +31,7 @@ public class TcpServer {
                     continue;
                 }
                 SocketProcessor socketProcessor = new SocketProcessor(socket);
+                socketProcessors.add(socketProcessor);
                 socketProcessor.start();
 
             }
