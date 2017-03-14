@@ -178,3 +178,30 @@ def log(func):
         return func(*args, **kw)
     return wrapper
 
+print
+print '----------偏函数----------'
+print int('12')
+print int('12', base=8)
+print int('12', 16)
+
+def int2(x, base=2):
+    return int(x, base)
+print int2('1000000')
+
+# functools.partial创建偏函数
+# 简单总结functools.partial的作用就是，把一个函数的某些参数给固定住（也就是设置默认值），返回一个新的函数
+# 需要注意的是，只能从后往前固定，固定参数后面不能跟未固定的参数
+import functools
+int2 = functools.partial(int, base=2)
+print int2('1000000')
+
+def f(x, y, z):
+    return x*y*z;
+f2 = functools.partial(f, z=2)
+print f2(3, 3)
+f3 = functools.partial(f, x=3, y=4, z=2)
+print f3()
+
+def f2(x, y, z=2):
+    return f(x, y, z)
+print f2(3, 3)
