@@ -78,3 +78,82 @@ try:
 	s.score = 110
 except ValueError, e:
 	print 'ValueError', e
+
+print
+print '----------多重继承-----------'
+
+class Animal(object):
+    pass
+
+class Runnable(object):
+    def run(self):
+        print('Running...')
+
+class Flyable(object):
+    def fly(self):
+        print('Flying...')
+
+class Dog(Animal, Runnable):
+    pass
+
+class Bat(Animal, Flyable):
+    pass
+
+dog = Dog()
+bat = Bat()
+dog.run()
+bat.fly()
+
+print
+print '----------定制类-----------'
+# 形如__xxx__的变量或者函数名就要注意，这些在Python中是有特殊用途的
+# 这样有特殊用途的函数，可以帮助我们定制类。
+print dir(dog)
+print dog
+print dir('A')
+# __str__()返回用户看到的字符串
+# __repr__()返回程序开发者看到的字符串
+
+print
+print '----------使用元类-----------'
+# 之前我们使用type检查类型
+# type()函数既可以返回一个对象的类型
+print type(1)
+# 又可以创建出新的类型
+# 通过type()函数创建的类和直接写class是完全一样的。
+# 因为Python解释器遇到class定义时，仅仅是扫描一下class定义的语法，然后调用type()函数创建出class。
+def fn(self, name="World"):
+	print('Hello, %s!' % name) 
+Hello = type('Hello', (object,), dict(say=fn))
+hello = Hello()
+hello.say()
+
+print
+print '----------元类-----------' 
+# metaclass，直译为元类，简单的解释就是：类的创建类
+# metaclass允许你创建类或者修改类
+# 换句话说，你可以把类看成是metaclass创建出来的“实例”。
+# 用法：
+# 	先定义metaclass，就可以创建一个类，最后创建实例。
+class ListMetaclass(type):                                      # metaclass是创建类，所以必须从`type`类型派生：
+    def __new__(cls, name, bases, attrs):                       # 参数：当前准备创建的类的对象、类的名字、类继承的父类集合、类的方法集合
+        attrs['add'] = lambda self, value: self.append(value)
+        return type.__new__(cls, name, bases, attrs)
+
+class MyList(list):
+    __metaclass__ = ListMetaclass # 指示使用ListMetaclass来定制类
+
+mylist = MyList()
+mylist.add(1)
+mylist.add(2)
+print mylist
+
+l = list()
+try:
+	l.add(1)
+except AttributeError, e:
+	print 'AttributeError:', e
+print l
+
+
+
