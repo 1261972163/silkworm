@@ -21,6 +21,8 @@ print add(-5, 6, abs)
 print
 print '----------map-reduce----------'
 # 内置map()
+# 传入的函数依次作用到序列的每个元素，并把结果作为新的list返回
+print 'map'
 def f(x):
 	return x*x
 print map(f, range(1,10))
@@ -28,11 +30,14 @@ print map(f, range(1,10))
 print [x*x for x in range(1,10)]
 
 # 内置reduce()
+# 把一个函数作用在一个序列上，这个函数必须接收两个参数，reduce把结果继续和序列的下一个元素做累积计算
+print 'reduce'
 def fn(x, y):
 	return x*10 + y
 print reduce(fn, range(1,10))
 
 # 运用map-reduce实现str转int
+print 'str->int'
 def fn(x, y):
 	return x * 10 + y
 def char2num(s):
@@ -48,9 +53,10 @@ def str2int(s):
 print str2int('13579')
 
 # 运用lambda简化上述代码
-def char2num(s):
-    return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s]
+print 'lambda'
 def str2int(s):
+    def char2num(s2):
+        return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s2]
     return reduce(lambda x,y: x*10+y, map(char2num, s))
 print str2int('13579')
 
@@ -98,9 +104,10 @@ f=lazy_sum(1, 2, 3)
 print f
 print f()
 
-# 闭包
+print '闭包'
 # 相关参数和变量都保存在返回的函数中，这种称为“闭包（Closure）”
 # 注意：当一个函数返回了一个函数后，其内部的局部变量还被新函数引用，所以，闭包用起来简单，实现起来可不容易。
+# 下面是错误示例：
 def count():
     fs = []
     for i in range(1, 4):
@@ -142,7 +149,9 @@ print f2.__name__
 # 在函数调用前后自动打印日志，但又不希望修改函数的定义，这种在代码运行期间动态增加功能的方式，称之为“装饰器”（Decorator）。
 def log(func):
     def wrapper(*args, **kw):
-        print 'call %s():' % func.__name__
+        print 'before call %s():' % func.__name__
+        func(*args, **kw)
+        print 'after call %s():' % func.__name__
         return func(*args, **kw)
     return wrapper
 

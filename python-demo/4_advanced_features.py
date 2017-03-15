@@ -33,7 +33,7 @@ for key in d:
 	print key,'->',d[key]
 
 # 下标循环
-# Python内置的enumerate函数可以把一个list变成索引-元素对
+# Python内置的enumerate函数可以把一个list变成"索引-元素"对，索引是顺序序号，元素值为输入的值
 for i, value in enumerate(nums):
 	print i, value
 	

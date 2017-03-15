@@ -84,10 +84,12 @@ print enroll('admin', 'F', 16)
 print enroll('admin', 'F', city='Beijing')
 
 # 默认参数必须指向不变对象
+# 不然就可能遇到下面的坑：
 def add_end(L=[]):
     L.append('END')
     return L
 
+# 这时还是正确的
 print add_end([1, 2, 3])
 print add_end(['x'])
 
@@ -150,6 +152,7 @@ def every(*args, **kw):
 	return args,kw
 print every(1, 2)
 print every(**{'key1':'value1', 'key2':'value2'})
+print every(1, 2, **{'key1':'value1', 'key2':'value2'})
 
 print
 print '----------递归函数----------'
