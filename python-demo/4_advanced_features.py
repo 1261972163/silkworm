@@ -34,6 +34,7 @@ for key in d:
 
 # 下标循环
 # Python内置的enumerate函数可以把一个list变成"索引-元素"对，索引是顺序序号，元素值为输入的值
+print 'enumerate(nums)', enumerate(nums)
 for i, value in enumerate(nums):
 	print i, value
 	

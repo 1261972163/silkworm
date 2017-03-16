@@ -85,6 +85,22 @@ print bart.get_name()
 # 强烈建议不要这样使用
 print bart._Student__name
 
+# 私有方法
+class Student(object):
+    def smile(self):
+        print 'smile'
+    def __help(self):
+        print 'help'
+    def help(self):
+        return self.__help()
+student = Student()
+student.smile()
+try:
+    student.__help()
+except AttributeError, e:
+    print 'AttributeError:', e
+student.help()
+
 print
 print '----------继承和多态-----------'
 class Animal(object):

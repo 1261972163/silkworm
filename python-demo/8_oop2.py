@@ -3,6 +3,7 @@
 
 print
 print '----------__slots__-----------'
+# __slots__限制class的属性
 class Student(object):
 	pass
 s = Student()
@@ -11,7 +12,7 @@ s.name = 'Jerry'
 print s.name
 
 print
-print '----------实例绑定方法-----------'
+print '----------MethodType实例绑定方法-----------'
 def set_age(self, age):
 	self.age = age
 
