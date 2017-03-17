@@ -69,14 +69,77 @@ print os.path.split(newpath)
 print os.path.splitext('./1_hello.py')
 
 # 创建文件
-fp = open('test.md', 'w')
+tmppath = os.path.join('./', 'tmp')
+os.mkdir(tmppath)
+tmpfile = os.path.join(tmppath, 'test.md')
+fp = open(tmpfile, 'w')
 # 重命名 windows不支持
 # os.rename('test.md', 'test.py')
 # 删除文件 windows不支持
 # os.remove('test.md')
+__import__('shutil').rmtree(tmppath)
 
 print '列出当前目录下的所有目录'
 print [x for x in os.listdir('.') if os.path.isdir(x)]
 
 print '列出所有的.py文件'
 print [x for x in os.listdir('.') if os.path.isfile(x) and os.path.splitext(x)[1]=='.py']
+
+print
+print '-----序列化'
+# 序列化，在Python中叫pickling
+# Python提供两个模块来实现序列化：cPickle和pickle
+# Pickle的问题和所有其他编程语言特有的序列化问题一样，就是它只能用于Python，
+# 并且可能不同版本的Python彼此都不兼容，因此，只能用Pickle保存那些不重要的数据，
+# 不能成功地反序列化也没关系。
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+d = dict(name='Bob', age=20, score=88)
+# pickle.dumps()方法把任意对象序列化成一个st
+s = pickle.dumps(d)
+print s
+
+# pickle.dump()直接把对象序列化后写入一个file-like Object
+tmppath = os.path.join('./', 'tmp')
+os.mkdir(tmppath)
+tmpfile = os.path.join(tmppath, 'dump.txt')
+# 对象写入文件
+with open(tmpfile, 'wb') as f:
+    pickle.dump(d, f)
+# 从文件读取对象
+with open(tmpfile, 'r') as f:
+    d=pickle.load(f)
+    print d
+__import__('shutil').rmtree(tmppath)
+
+
+print 
+print '-----json序列化'
+tmppath = os.path.join('./', 'tmp')
+os.mkdir(tmppath)
+tmpfile = os.path.join(tmppath, 'dump.txt')
+
+import json
+
+d = dict(name='Bob', age=20, score=88)
+print json.dumps(d)
+
+with open(tmpfile, 'wb') as f:
+    json.dump(d, f)
+
+with open(tmpfile, 'r') as f:
+    d=json.load(f)
+    print d
+#__import__('shutil').rmtree(tmppath)
+
+
+
+
+
+
+
+
+
