@@ -37,6 +37,8 @@ print '----------写文件'
 # 写文件时，操作系统往往不会立刻把数据写入磁盘，而是放到内存缓存起来，空闲的时候再慢慢写入。
 # 只有调用close()方法时，操作系统才保证把没有写入的数据全部写入磁盘。
 # 忘记调用close()的后果是数据可能只写了一部分到磁盘，剩下的丢失了。
+import os
+os.mkdir('./10_io')
 with open('./10_io/io.md', 'w') as f:
     f.write('Hello, world!')
 
@@ -73,11 +75,16 @@ tmppath = os.path.join('./', 'tmp')
 os.mkdir(tmppath)
 tmpfile = os.path.join(tmppath, 'test.md')
 fp = open(tmpfile, 'w')
-# 重命名 windows不支持
-# os.rename('test.md', 'test.py')
-# 删除文件 windows不支持
-# os.remove('test.md')
+
+if ('posix' == os.name):
+    # 重命名 windows不支持
+    tmpfile2 = os.path.join(tmppath, 'test.py')
+    os.rename(tmpfile, tmpfile2)
+    # 删除文件 windows不支持
+    os.remove(tmpfile2)
 __import__('shutil').rmtree(tmppath)
+__import__('shutil').rmtree("./10_io")
+
 
 print '列出当前目录下的所有目录'
 print [x for x in os.listdir('.') if os.path.isdir(x)]
@@ -133,7 +140,27 @@ with open(tmpfile, 'wb') as f:
 with open(tmpfile, 'r') as f:
     d=json.load(f)
     print d
-#__import__('shutil').rmtree(tmppath)
+__import__('shutil').rmtree(tmppath)
+
+print
+print 'json序列化class的实例对象'
+# Student转json
+class Student(object):
+    def __init__(self, name, age, score):
+        self.name = name
+        self.age = age
+        self.score = score
+
+s = Student('Bob', 20, 88)
+
+print(json.dumps(s, default=lambda obj: obj.__dict__))
+
+# json转Student
+def dict2student(d):
+    return Student(d['name'], d['age'], d['score'])
+
+json_str = '{"age": 20, "score": 88, "name": "Bob"}'
+print(json.loads(json_str, object_hook=dict2student))
 
 
 

@@ -28,7 +28,7 @@ except AttributeError, e:
 	print 'AttributeError', e
 
 print
-print '----------class绑定方法-----------'
+print '----------MethodType class绑定方法-----------'
 # 为了给所有实例都绑定方法，可以给class绑定方法
 Student.set_age = MethodType(set_age, None, Student) 
 s.set_age(1)
