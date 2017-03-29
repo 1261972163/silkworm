@@ -196,6 +196,26 @@ public class SynchronizedDemo extends ConcurrentTest {
         synLockInRunner.lockIn();
         Thread.sleep(10*1000);
     }
+
+    @Test
+    public void synLockIn2() throws InterruptedException {
+        SynLockInService2 synLockInService2 = new SynLockInService2();
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synLockInService2.service1();
+            }
+        });
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synLockInService2.service2();
+            }
+        });
+        thread1.start();
+        thread2.start();
+        Thread.sleep(10*1000);
+    }
 }
 
 //======================================================================================================================
@@ -1434,6 +1454,29 @@ class SynLockInService {
     synchronized public void service3() {
         System.out.println("service3");
     }
+}
+
+class SynLockInService2 {
+    synchronized public void service1() {
+        System.out.println("service1 start");
+        try {
+            Thread.sleep(30 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("service1 end");
+    }
+
+    synchronized public void service2() {
+        System.out.println("service2 start");
+        try {
+            Thread.sleep(30*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("service2 end");
+    }
+
 }
 
 //======================================================================================================================
