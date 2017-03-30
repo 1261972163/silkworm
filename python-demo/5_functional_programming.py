@@ -169,8 +169,9 @@ def log(text):
             return func(*args, **kw)
         return wrapper
     return decorator
-    
-@log('execute')
+
+# 传递参数    
+@log('myexecute')
 def now():
     print '2013-12-25'
 now()
