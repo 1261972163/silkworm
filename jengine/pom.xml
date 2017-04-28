@@ -170,6 +170,7 @@
                 <artifactId>storm-core</artifactId>
                 <version>${storm.core.version}</version>
             </dependency>
+
             <!-- ########## serializer ########## -->
             <!-- dom -->
             <dependency>
@@ -209,6 +210,13 @@
                 <artifactId>avro-ipc</artifactId>
                 <version>${avro.version}</version>
             </dependency>
+            <!-- yaml -->
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.13</version>
+            </dependency>
+
             <!-- ########## transport ########## -->
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>

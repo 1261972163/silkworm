@@ -1,7 +1,5 @@
 package com.jengine.store.mq.kafka;
 
-import com.jengine.transport.kafka.KafkaOldService;
-import com.jengine.transport.kafka.KafkaOldServiceImpl;
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import kafka.producer.KeyedMessage;

@@ -21,8 +21,7 @@ public class WebServiceTest {
 
         myServer.start();
         Thread.sleep(3*1000);
-        int result = 0;
-        myClient.invoke(result);
+        int result = myClient.invoke();
         Thread.sleep(3*1000);
         Assert.assertEquals(25, result);
     }

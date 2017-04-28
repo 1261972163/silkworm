@@ -14,12 +14,19 @@ import java.net.URL;
  */
 public class MyClient {
 
-    public void invoke(int result) {
+    @org.junit.Test
+    public void test() {
+        int x = invoke();
+        System.out.println("client end with" + x);
+    }
+
+    public int invoke() {
+        int result = 0;
         try {
             //创建访问wsdl服务地址的URL
-            URL url = new URL("http://localhost:8888/ns?wsdl");
+            URL url = new URL("http://10.45.16.140:8888/ns?wsdl");
             //通过QName指明服务的具体信息
-            QName sName = new QName("http://webservice.feature.jengine.com/", "MyServiceImplService");
+            QName sName = new QName("http://webservice.rpc.jengine.com/", "MyServiceImplService");
             //创建服务
             Service service = Service.create(url, sName);
             //实现接口
@@ -29,5 +36,6 @@ public class MyClient {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        return result;
     }
 }
