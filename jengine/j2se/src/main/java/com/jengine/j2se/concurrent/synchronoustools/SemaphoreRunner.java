@@ -1,4 +1,4 @@
-package com.jengine.j2se.util.concurrent.synchronoustools;
+package com.jengine.j2se.concurrent.synchronoustools;
 
 import java.util.Collections;
 import java.util.HashSet;

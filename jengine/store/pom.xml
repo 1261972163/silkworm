@@ -17,6 +17,11 @@
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>com.jengine</groupId>
+			<artifactId>jengine-j2se</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.alibaba.otter</groupId>
 			<artifactId>canal.server</artifactId>
 			<version>${canal.server.version}</version>

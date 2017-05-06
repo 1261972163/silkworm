@@ -1,7 +1,6 @@
 package com.jengine.store.search.es;
 
-
-import com.jengine.common.DateUtil;
+import com.jengine.j2se.util.DateUtil;
 
 import java.util.*;
 
@@ -54,9 +53,9 @@ public class EsDataService {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.setTimeInMillis(c.getTimeInMillis()-30*24*60*60*1000l);
-        String thirtyDaysAgo = DateUtil.simpleDateFormat.format(c.getTime());
+        String thirtyDaysAgo = DateUtil.format(c.getTime(), DateUtil.PATTERN1);
         c.setTimeInMillis(c.getTimeInMillis()-60*24*60*60*1000l);
-        String ninetyDaysAgo = DateUtil.simpleDateFormat.format(c.getTime());
+        String ninetyDaysAgo = DateUtil.format(c.getTime(), DateUtil.PATTERN1);
 
         // deleteIndicesNames
         List<String> filteredIndicesNames = new ArrayList<String>();

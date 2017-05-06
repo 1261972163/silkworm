@@ -1,4 +1,4 @@
-package com.jengine.j2se.util.concurrent.synchronoustools;
+package com.jengine.j2se.concurrent.synchronoustools;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
