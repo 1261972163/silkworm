@@ -12,6 +12,28 @@ import java.util.Random;
  */
 public class ThreadDemo extends ConcurrentTest {
 
+    // 一个线程的start方法只能调用一次，多次调用start方法会抛错java.lang.IllegalThreadStateException
+    @Test
+    public void multiStart() throws InterruptedException {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("1");
+            }
+        });
+        t.start();
+        Thread.sleep(5000);
+        // 不管前面启动的线程是否完成，都不能再次启动这个线程了
+        t.start();
+
+        Thread.sleep(5000);
+    }
+
     /**
      * 基本使用，打印2,1,3
      * @throws InterruptedException

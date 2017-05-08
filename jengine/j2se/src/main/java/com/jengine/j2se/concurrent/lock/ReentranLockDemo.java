@@ -5,10 +5,8 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -20,7 +18,24 @@ import java.util.concurrent.locks.ReentrantLock;
  * 4. 使用多个Condition实现通知部分线程
  * 5. ReentrantLock默认是公平锁，多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。
  * 6. ReentrantLock可以构造非公平锁，在锁释放时，任何一个等待锁的线程都有机会获得锁。
- * 7. lock.getHoldCount(): 当前线程持有该锁的次数
+ *      ReentrantLock.isFair() 判断是否为公平锁
+ *      ReentrantLock.isLocked() 锁是否被持有
+ *      ReentrantLock.isHeldByCurrentThread() 当前线程是否持有锁
+ * 7. 状态管理
+ *      lock.getHoldCount(): 当前线程持有该锁的次数
+ *      lock.getQueueLength()： 等待持有该锁的线程数
+ *      lock.getWaitQueueLength(condition)： 等待锁的Condition的线程数
+ *      lock.hasWaiters(condition)：锁的Condition是否有等待的线程
+ *      lock.hasQueuedThreads()： 是否有等待锁的线程
+ *      lock.hasQueuedThread(thread)： thread线程是否在等待锁
+ * 8. ReentrantLock可实现中断
+ *      ReentrantLock.lock()    不可中断
+ *      ReentrantLock.lockInterruptibly() 可中断
+ * 9. ReentrantLock 尝试加锁，等待可中断
+ *      lock.tryLock()   锁没被其他线程持有时，加锁
+ *      lock.tryLock(timeout, timeunit)  在一段时间内，锁没被其他线程持有时，加锁；否则放弃
+ * 10. condition.awaitUninterruptibly()不可被中断
+ * 11. condition.awaitUntil(time)等待一段时间，时间过后不等待了
  * @author nouuid
  * @date 4/6/2016
  * @description
@@ -403,579 +418,262 @@ public class ReentranLockDemo extends ConcurrentTest {
 
     }
 
-    //--------------------------------------------------------------------------------------------------------
-    // LockTypeOfLockRunner ----------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
+    volatile boolean flag = true;
+    volatile boolean res = false;
 
+    // 8. ReentrantLock可实现中断
+    //      ReentrantLock.lock()    不可中断
+    //      ReentrantLock.lockInterruptibly() 可中断
     @Test
-    public void lockInterruptiblyTest1() throws InterruptedException {
-        LockTypeOfLockRunner lockTypeOfLockRunner = new LockTypeOfLockRunner();
-        lockTypeOfLockRunner.lockInterruptiblyTest1();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void lockInterruptiblyTest2() throws InterruptedException {
-        LockTypeOfLockRunner lockTypeOfLockRunner = new LockTypeOfLockRunner();
-        lockTypeOfLockRunner.lockInterruptiblyTest2();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void tryLockTest() throws InterruptedException {
-        LockTypeOfLockRunner lockTypeOfLockRunner = new LockTypeOfLockRunner();
-        lockTypeOfLockRunner.tryLockTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void timedTryLockTest() throws InterruptedException {
-        LockTypeOfLockRunner lockTypeOfLockRunner = new LockTypeOfLockRunner();
-        lockTypeOfLockRunner.timedTryLockTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void timedTryLockTest2() throws InterruptedException {
-        LockTypeOfLockRunner lockTypeOfLockRunner = new LockTypeOfLockRunner();
-        lockTypeOfLockRunner.timedTryLockTest2();
-        Thread.sleep(30*1000);
-    }
-
-    //--------------------------------------------------------------------------------------------------------
-    // AwaitExtendMethodRunner -------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void awaitUninterruptiblyTest() throws InterruptedException {
-        AwaitExtendMethodRunner awaitExtendMethodRunner = new AwaitExtendMethodRunner();
-        awaitExtendMethodRunner.awaitUninterruptiblyTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void awaitUninterruptiblyTest2() throws InterruptedException {
-        AwaitExtendMethodRunner awaitExtendMethodRunner = new AwaitExtendMethodRunner();
-        awaitExtendMethodRunner.awaitUninterruptiblyTest2();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void awaitUtilTest() throws InterruptedException {
-        AwaitExtendMethodRunner awaitExtendMethodRunner = new AwaitExtendMethodRunner();
-        awaitExtendMethodRunner.awaitUtilTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void awaitUtilTest2() throws InterruptedException {
-        AwaitExtendMethodRunner awaitExtendMethodRunner = new AwaitExtendMethodRunner();
-        awaitExtendMethodRunner.awaitUtilTest2();
-        Thread.sleep(30*1000);
-    }
-}
-
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 4/6/2016
- * @description
- *
- * lock.hasQueuedThread(thread): is the specified thread waiting for holding this lock
- * lock.hasQueuedThreads(): is there any thread waiting for holding this lock
- * lock.hasWaiters(): is there any thread waiting for the condition related to this lock
- */
-class WaitingStatusMethodOfLockRunner {
-
-    public void hasQueuedThreadTest() throws InterruptedException {
+    public void lockType() throws InterruptedException {
         ReentrantLock reentrantLock = new ReentrantLock();
 
-        WaitingStatusMethodOfLockService waitingStatusMethodOfLockService = new WaitingStatusMethodOfLockService(reentrantLock);
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                waitingStatusMethodOfLockService.service1();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                waitingStatusMethodOfLockService.service2();
-            }
-        });
-
-        t1.setName("t1");
-        t2.setName("t2");
-
-        t1.start();
-        System.out.println("t2, before start, hasQueuedThread=" + reentrantLock.hasQueuedThread(t2));
-        Assert.assertEquals(false, reentrantLock.hasQueuedThread(t2));
-        Thread.sleep(1000);
-        t2.start();
-        System.out.println("t2, started, before lock, hasQueuedThread=" + reentrantLock.hasQueuedThread(t2));
-        Assert.assertEquals(false, reentrantLock.hasQueuedThread(t2));
-        Thread.sleep(3*1000);
-        System.out.println("t2, started, lock, hasQueuedThread=" + reentrantLock.hasQueuedThread(t2));
-        Assert.assertEquals(true, reentrantLock.hasQueuedThread(t2));
-        Thread.sleep(10*1000);
-        System.out.println("t2, ended, unlock, hasQueuedThread=" + reentrantLock.hasQueuedThread(t2));
-        Assert.assertEquals(false, reentrantLock.hasQueuedThread(t2));
-    }
-
-    public void hasQueuedThreadsTest() throws InterruptedException {
-        ReentrantLock reentrantLock = new ReentrantLock();
-
-        WaitingStatusMethodOfLockService waitingStatusMethodOfLockService = new WaitingStatusMethodOfLockService(reentrantLock);
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                waitingStatusMethodOfLockService.service1();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                waitingStatusMethodOfLockService.service2();
-            }
-        });
-
-        t1.setName("t1");
-        t2.setName("t2");
-
-        t1.start();
-        System.out.println("t2, before start, hasQueuedThreads=" + reentrantLock.hasQueuedThreads());
-        Assert.assertEquals(false, reentrantLock.hasQueuedThreads());
-        Thread.sleep(1000);
-        t2.start();
-        System.out.println("t2, started, before lock, hasQueuedThreads=" + reentrantLock.hasQueuedThreads());
-        Assert.assertEquals(false, reentrantLock.hasQueuedThreads());
-        Thread.sleep(3*1000);
-        System.out.println("t2, started, lock, hasQueuedThreads=" + reentrantLock.hasQueuedThreads());
-        Assert.assertEquals(true, reentrantLock.hasQueuedThreads());
-        Thread.sleep(10*1000);
-        System.out.println("t2, ended, unlock, hasQueuedThreads=" + reentrantLock.hasQueuedThreads());
-        Assert.assertEquals(false, reentrantLock.hasQueuedThreads());
-    }
-
-    public void hasWaitersTest() throws InterruptedException {
-        ReentrantLock reentrantLock = new ReentrantLock();
-
-        WaitingStatusMethodOfLockService statusMethodOfLockService = new WaitingStatusMethodOfLockService(reentrantLock);
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                statusMethodOfLockService.service3();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                statusMethodOfLockService.service4();
-            }
-        });
-
-        t1.setName("t1");
-        t2.setName("t2");
-
-        t1.start();
-        Thread.sleep(1000);
-        t2.start();
-    }
-}
-
-class WaitingStatusMethodOfLockService {
-
-    private ReentrantLock reentrantLock;
-
-    private Condition condition;
-
-    public WaitingStatusMethodOfLockService(ReentrantLock reentrantLock) {
-        this.reentrantLock = reentrantLock;
-        condition = reentrantLock.newCondition();
-    }
-
-    public void service1() {
-        try {
-            reentrantLock.lock();
-            System.out.print("                                                    ");
-            System.out.println(Thread.currentThread().getName() + " do service1");
-            Thread.sleep(10*1000);
-            reentrantLock.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service2() {
-        try {
-            Thread.sleep(2*1000);
-            reentrantLock.lock();
-            System.out.print("                                                    ");
-            System.out.println(Thread.currentThread().getName() + " do service1");
-            reentrantLock.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service3() {
-        try {
-            reentrantLock.lock();
-            System.out.println(Thread.currentThread().getName() + " is waiting");
-            condition.await();
-            System.out.print("                                                    ");
-            System.out.println(Thread.currentThread().getName() + " do service3");
-            System.out.println("hasWaiters=" + reentrantLock.hasWaiters(condition));
-            reentrantLock.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service4() {
-        try {
-            reentrantLock.lock();
-            System.out.print("                                                    ");
-            System.out.println(Thread.currentThread().getName() + " do service4");
-            System.out.println("hasWaiters=" + reentrantLock.hasWaiters(condition));
-            Thread.sleep(10*1000);
-            condition.signal();
-            reentrantLock.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 4/7/2016
- * @description
- * lock.lockInterruptibly(): lock which can be interrupted
- * lock.tryLock(): lock occurs when the lock was not held by others
- * lock.tryLock(timeout, timeunit): lock occurs when the lock was not held by others in provided times
- */
-class LockTypeOfLockRunner {
-
-    public void lockInterruptiblyTest1() throws InterruptedException {
-        LockTypeOfLockService lockTypeOfLockService = new LockTypeOfLockService();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                lockTypeOfLockService.service1();
+                // 不可中断
+                reentrantLock.lock();
+                try {
+                    while (flag) {
+                        Math.random();
+                    }
+                } finally {
+                    res = true;
+                    reentrantLock.unlock();
+                }
             }
         });
-
-        thread.setName("T1");
         thread.start();
         thread.interrupt();
+        Thread.sleep(3*1000);
+        // 因为不可中断，res不会变为true
+        Assert.assertEquals(false, res);
+        flag = false;
+        Thread.sleep(1*1000);
+        Assert.assertEquals(true, res);
+
+        Thread thread2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // 可中断
+                    reentrantLock.lockInterruptibly();
+                    while (flag) {
+                        Math.random();
+                    }
+                } catch (InterruptedException e) {
+                    if (e instanceof InterruptedException) {
+                        Assert.assertTrue(true);
+                    }
+                } finally {
+                    res = true;
+                    try {
+                        reentrantLock.unlock();
+                    } catch (IllegalMonitorStateException e2) {
+                        // 中断后，自动解锁，再次解锁会抛错
+                    }
+                }
+            }
+        });
+        thread2.start();
+        thread2.interrupt();
+        Thread.sleep(3*1000);
+        // 因为可中断，res变为true
+        Assert.assertEquals(true, res);
+
+        Thread.sleep(5000);
     }
 
-    public void lockInterruptiblyTest2() throws InterruptedException {
-        LockTypeOfLockService lockTypeOfLockService = new LockTypeOfLockService();
+    // 9. ReentrantLock 尝试加锁，等待可中断
+    //      lock.tryLock()   锁没被其他线程持有时，加锁
+    //      lock.tryLock(timeout, timeunit)  在一段时间内，锁没被其他线程持有时，加锁；否则放弃
+    @Test
+    public void tryLock() throws InterruptedException {
+        ReentrantLock reentrantLock = new ReentrantLock();
+        // lock.tryLock()   锁没被其他线程持有时，加锁
+        for (int i = 1; i <= 3; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (reentrantLock.tryLock()) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } finally {
+                            if (reentrantLock.isHeldByCurrentThread()) {
+                                reentrantLock.unlock();
+                            }
+                        }
+                    }
+                }
+            }, "t" + i);
+            if (i == 1) {
+                // t1启动前，锁没有被获取
+                Assert.assertFalse(reentrantLock.isLocked());
+            } else if (i == 2) {
+                // t2启动前，t1仍在运行，未释放锁
+                Assert.assertTrue(reentrantLock.isLocked());
+            } else if (i == 3) {
+                // t3启动前，t1运行结束，释放锁
+                Assert.assertFalse(reentrantLock.isLocked());
+            }
+            t.start();
+            if (i == 1) {
+                Thread.sleep(50);
+                // t1启动后，t1获取锁
+                Assert.assertTrue(reentrantLock.isLocked());
+                Thread.sleep(1000);
+            } else if (i == 2) {
+                Thread.sleep(50);
+                // t2启动时，t1仍然持有锁运行
+                Assert.assertTrue(reentrantLock.isLocked());
+                // t2不等待锁
+                Assert.assertFalse(reentrantLock.hasQueuedThread(t));
+                Thread.sleep(2000);
+            } else if (i == 3) {
+                Thread.sleep(50);
+                // t3启动时，t1运行结束，释放锁，t3获取到锁
+                Assert.assertTrue(reentrantLock.isLocked());
+            }
+        }
+    }
+
+    @Test
+    public void tryLockTimeout() throws InterruptedException {
+        ReentrantLock reentrantLock = new ReentrantLock();
+        // lock.tryLock(timeout, timeunit)  在一段时间内，锁没被其他线程持有时，加锁；否则放弃
+        for (int i=1; i<=3; i++) {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (reentrantLock.tryLock(1, TimeUnit.SECONDS)) {
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            } finally {
+                                if (reentrantLock.isHeldByCurrentThread()) {
+                                    reentrantLock.unlock();
+                                }
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, "t"+i);
+            if (i==1) {
+                // t1启动前，锁没有被获取
+                Assert.assertFalse(reentrantLock.isLocked());
+            } else if (i==2) {
+                // t2启动前，t1仍在运行，未释放锁
+                Assert.assertTrue(reentrantLock.isLocked());
+            } else if (i==3) {
+                // t3启动前，t1运行结束，释放锁
+                Assert.assertFalse(reentrantLock.isLocked());
+            }
+            t.start();
+            if (i==1) {
+                Thread.sleep(50);
+                // t1启动后，t1获取锁
+                Assert.assertTrue(reentrantLock.isLocked());
+                Thread.sleep(1000);
+            } else if (i==2) {
+                Thread.sleep(50);
+                // t2启动时，t1仍然持有锁运行
+                Assert.assertTrue(reentrantLock.isLocked());
+                // t2不等待锁
+                Assert.assertTrue(reentrantLock.hasQueuedThread(t));
+                Thread.sleep(1000);
+                // t1运行结束，释放锁，t2获得锁
+                Assert.assertTrue(reentrantLock.isLocked());
+                Assert.assertFalse(reentrantLock.hasQueuedThread(t));
+                Thread.sleep(5000);
+            } else if (i==3) {
+                Thread.sleep(50);
+                // t3启动时，t1运行结束，释放锁，t3获取到锁
+                Assert.assertTrue(reentrantLock.isLocked());
+            }
+        }
+    }
+
+    // 10. condition.awaitUninterruptibly()不可被中断
+    @Test
+    public void awaitUninterruptibly() throws InterruptedException {
+        res = true;
+        ReentrantLock reentrantLock = new ReentrantLock();
+        Condition condition = reentrantLock.newCondition();
+
+        // condition.awaitUninterruptibly()不可被中断
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                lockTypeOfLockService.service2();
+                reentrantLock.lock();
+                try {
+                    condition.awaitUninterruptibly();
+                } finally {
+                    res = false;
+                    reentrantLock.unlock();
+                }
             }
         });
-
-        thread.setName("T1");
         thread.start();
+        Thread.sleep(1000);
         thread.interrupt();
-    }
+        Thread.sleep(1000);
+        Assert.assertTrue(res);
 
-    public void tryLockTest() throws InterruptedException {
-        LockTypeOfLockService lockTypeOfLockService = new LockTypeOfLockService();
-        Runnable runnable = new Runnable() {
+        // condition.await()可被中断
+        res = true;
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                lockTypeOfLockService.service3();
-            }
-        };
+                reentrantLock.lock();
+                try {
+                    condition.await();
+                } catch (Exception e) {
 
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    public void timedTryLockTest() throws InterruptedException {
-        LockTypeOfLockService lockTypeOfLockService = new LockTypeOfLockService();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                lockTypeOfLockService.service4();
-            }
-        };
-
-        Thread threadA = new Thread(runnable);
-        Thread threadB = new Thread(runnable);
-
-        threadA.setName("TA");
-        threadB.setName("TB");
-
-        threadA.start();
-        Thread.sleep(1 * 1000);
-        threadB.start();
-    }
-
-    public void timedTryLockTest2() throws InterruptedException {
-        LockTypeOfLockService lockTypeOfLockService = new LockTypeOfLockService();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                lockTypeOfLockService.service5();
-            }
-        };
-
-        Thread threadA = new Thread(runnable);
-        Thread threadB = new Thread(runnable);
-
-        threadA.setName("TA");
-        threadB.setName("TB");
-
-        threadA.start();
-        Thread.sleep(1 * 1000);
-        threadB.start();
-    }
-}
-
-class LockTypeOfLockService {
-
-    private ReentrantLock reentrantLock = new ReentrantLock();
-
-    public void service1() {
-        try {
-            reentrantLock.lock();
-
-            System.out.println(Thread.currentThread().getName() + " lock begin");
-            for (int i=0; i<Integer.MAX_VALUE/10; i++) {
-                Math.random();
-            }
-            System.out.println(Thread.currentThread().getName() + " lock end");
-
-            reentrantLock.unlock();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service2() {
-        try {
-            reentrantLock.lockInterruptibly();
-            System.out.println(Thread.currentThread().getName() + " lock begin");
-            for (int i=0; i<Integer.MAX_VALUE/10; i++) {
-                Math.random();
-            }
-            System.out.println(Thread.currentThread().getName() + " lock end");
-
-            reentrantLock.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service3() {
-        try {
-            if (reentrantLock.tryLock()) {
-                System.out.println(Thread.currentThread().getName() + " get lock");
-            } else {
-                System.out.println(Thread.currentThread().getName() + " don't get lock");
-            }
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service4() {
-        try {
-            System.out.println(Thread.currentThread().getName() + " invoke time=" + System.currentTimeMillis());
-            if (reentrantLock.tryLock(1, TimeUnit.SECONDS)) {
-                System.out.println(Thread.currentThread().getName() + " get lock time=" + System.currentTimeMillis());
-                Thread.sleep(2 * 1000);
-            } else {
-                System.out.println(Thread.currentThread().getName() + " don't get lock");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            if (reentrantLock.isHeldByCurrentThread()) {
-                reentrantLock.unlock();
-            }
-        }
-    }
-
-    public void service5() {
-        try {
-            System.out.println(Thread.currentThread().getName() + " invoke time=" + System.currentTimeMillis());
-            if (reentrantLock.tryLock(2, TimeUnit.SECONDS)) {
-                System.out.println(Thread.currentThread().getName() + " get lock time=" + System.currentTimeMillis());
-                Thread.sleep(2 * 1000);
-            } else {
-                System.out.println(Thread.currentThread().getName() + " don't get lock");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            if (reentrantLock.isHeldByCurrentThread()) {
-                reentrantLock.unlock();
-            }
-        }
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 4/7/2016
- * @description
- * awaitUninterruptibly()
- * awaitUntil(date)
- */
-class AwaitExtendMethodRunner {
-
-    public void awaitUninterruptiblyTest() throws InterruptedException {
-        AwaitExtendMethodService awaitExtendMethodService = new AwaitExtendMethodService();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                awaitExtendMethodService.service1();
-            }
-        };
-        Thread t1 = new Thread(runnable);
-        t1.start();
-
-        Thread.sleep(2*1000);
-        System.out.println("before interrupt");
-        t1.interrupt();
-        System.out.println("after interrupt");
-    }
-
-    public void awaitUninterruptiblyTest2() throws InterruptedException {
-        AwaitExtendMethodService awaitExtendMethodService = new AwaitExtendMethodService();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                awaitExtendMethodService.service2();
-            }
-        };
-        Thread t1 = new Thread(runnable);
-        t1.start();
-
-        Thread.sleep(2*1000);
-        System.out.println("before interrupt");
-        t1.interrupt();
-    }
-
-    public void awaitUtilTest() throws InterruptedException {
-        AwaitExtendMethodService awaitExtendMethodService = new AwaitExtendMethodService();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                awaitExtendMethodService.service3();
-            }
-        };
-        Thread t1 = new Thread(runnable);
-        Thread t2 = new Thread(runnable);
-
-        t1.setName("T1");
-        t2.setName("T2");
-
-        t1.start();
-        Thread.sleep(2*1000);
-        t2.start();
-    }
-
-    public void awaitUtilTest2() throws InterruptedException {
-        AwaitExtendMethodService awaitExtendMethodService = new AwaitExtendMethodService();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                awaitExtendMethodService.service3();
+                } finally {
+                    res = false;
+                    reentrantLock.unlock();
+                }
             }
         });
-        Thread t2 = new Thread(new Runnable() {
+        thread.start();
+        Thread.sleep(1000);
+        thread.interrupt();
+        Thread.sleep(1000);
+        Assert.assertFalse(res);
+    }
+
+    // 11. condition.awaitUntil(time)等待一段时间，时间过后不等待了
+    @Test
+    public void awaitUntil() throws InterruptedException {
+        res = true;
+        ReentrantLock reentrantLock = new ReentrantLock();
+        Condition condition = reentrantLock.newCondition();
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                awaitExtendMethodService.service4();
+                reentrantLock.lock();
+                try {
+                    condition.await(2, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    res = false;
+                    reentrantLock.unlock();
+                }
             }
         });
+        thread.start();
+        Thread.sleep(1000);
+        Assert.assertTrue(res);
+        Thread.sleep(2000);
+        Assert.assertFalse(res);
 
-        t1.setName("T1");
-        t2.setName("T2");
-
-        t1.start();
-        Thread.sleep(3*1000);
-        t2.start();
     }
+
 }
-
-class AwaitExtendMethodService {
-
-    private ReentrantLock reentrantLock = new ReentrantLock();
-    private Condition condition = reentrantLock.newCondition();
-
-    public void service1() {
-        try {
-            reentrantLock.lock();
-            condition.await();
-            System.out.println(Thread.currentThread().getName() + " do service1");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            reentrantLock.unlock();
-        }
-    }
-
-    public void service2() {
-        reentrantLock.lock();
-        condition.awaitUninterruptibly();
-        System.out.println(Thread.currentThread().getName() + " do service2");
-        reentrantLock.unlock();
-    }
-
-    public void service3() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 10);
-        try {
-            reentrantLock.lock();
-            long start = System.currentTimeMillis();
-            condition.awaitUntil(calendar.getTime());
-            long end = System.currentTimeMillis();
-            System.out.println(Thread.currentThread().getName() + " cost " + (end-start)/1000);
-            System.out.println(Thread.currentThread().getName() + " do service3");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            reentrantLock.unlock();
-        }
-    }
-
-    public void service4() {
-        try {
-            reentrantLock.lock();
-            condition.signalAll();
-            System.out.println(Thread.currentThread().getName() + " do service4");
-        } finally {
-            reentrantLock.unlock();
-        }
-    }
-}
-
-
-//======================================================================================================================
