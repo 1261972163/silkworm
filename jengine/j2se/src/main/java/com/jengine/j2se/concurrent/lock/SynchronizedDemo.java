@@ -3,1483 +3,507 @@ package com.jengine.j2se.concurrent.lock;
 import com.jengine.j2se.concurrent.ConcurrentTest;
 import org.junit.Test;
 
+import java.util.Objects;
+
 /**
+ * 1. synchronized是互斥同步的基本手段，synchronized的对象会阻塞其他线程的访问
+ * 2. synchronized普通方法 锁定的是当前对象
+ * 3. synchronized块可以锁定任意对象
+ * 4. 锁定不同的对象，产生不同的同步互斥
+ * 5. synchronized块锁定Class
+ * 6. synchronized静态方法，锁定的是Class
+ * 7. synchronized块 优于 synchronized方法
+ * 8. 锁定String时，因为String的常量池特性，synchronized同步块不能使用String作为锁对象
+ * 9. 只要锁住的对象不变，对象属性变化对同步没有影响
+ * 10. 使用共享数据的方法加synchronized，线程安全
+ * 11. synchronized是可重入的，同一个线程可以多次获取该对象锁
+ *
+ *
  * @author nouuid
  * @date 3/31/2016
  * @description
  */
 public class SynchronizedDemo extends ConcurrentTest {
 
-    /**
-     *
-     * @throws InterruptedException
-     */
+    // 1. synchronized阻塞其他线程的访问
     @Test
     public void synBlock()  throws InterruptedException {
-        SynBlockRunner synBlockRunner = new SynBlockRunner();
-        synBlockRunner.test();
+        class SynBlockTask {
+            public synchronized void doLongTimeTask() {
+                try {
+                    int i = 1;
+                    while (i<=10) {
+                        System.out.println(Thread.currentThread().getName() + " -> " + i);
+                        Thread.sleep(500);
+                        i++;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        SynBlockTask synBlockTask = new SynBlockTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.doLongTimeTask();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.doLongTimeTask();
+            }
+        }, "t2");
+        t1.start();
+        Thread.sleep(1000);
+        // t1先获取对象锁，t2不能获取到锁，被阻塞
+        t2.start();
 
         Thread.sleep(20*1000);
     }
 
-    /**
-     * @throws InterruptedException
-     */
-    @Test
-    public void halfSynAndAsyn() throws InterruptedException {
-        HalfSynAndAsynRunner halfSynAndAsynRunner = new HalfSynAndAsynRunner();
-        halfSynAndAsynRunner.test();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     *
-     * @throws InterruptedException
-     */
+    // 2. synchronized方法获取的是当前对象锁
+    // t1先获取对象锁，t2无法获取this锁，被阻塞，说明t1获取的也是this锁，t1执行完后t2
     @Test
     public void synBlocksSynchronism() throws InterruptedException {
-        SynBlocksSynchronismRunner synBlocksSynchronismRunner = new SynBlocksSynchronismRunner();
-        synBlocksSynchronismRunner.test();
-        Thread.sleep(10*1000);
+        class SynBlockTask {
+            public synchronized void m1() {
+                try {
+                    Thread.sleep(3*1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName());
+            }
+
+            public void m2() {
+                synchronized (this) {
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+        }
+
+        SynBlockTask synBlockTask = new SynBlockTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m2();
+            }
+        }, "t2");
+        t1.start();
+        Thread.sleep(1000);
+        // t1先获取对象锁，t2不能获取到锁，被阻塞
+        t2.start();
+        Thread.sleep(5*1000);
     }
 
-    /**
-     *
-     * @throws InterruptedException
-     */
+    // 3. synchronized块可以锁定任意对象
     @Test
     public void synBlockObject() throws InterruptedException {
-        SynBlockObjectRunner synBlockObjectRunner = new SynBlockObjectRunner();
-        synBlockObjectRunner.test();
-        Thread.sleep(10*1000);
+        class SynBlockTask {
+            Object object = new Object();
+            public void m1() {
+                synchronized (object) {
+                    try {
+                        Thread.sleep(3 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+            public void m2() {
+                synchronized (object) {
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+        }
+
+        SynBlockTask synBlockTask = new SynBlockTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m2();
+            }
+        }, "t2");
+        // t1获取object锁
+        t1.start();
+        Thread.sleep(1000);
+        // t2被阻塞无法获取object锁
+        t2.start();
+        // 结果：t1、t2
+        Thread.sleep(5*1000);
     }
 
-    /**
-     *
-     * @throws InterruptedException
-     */
+    // 4. 锁定不同的对象，产生不同的同步互斥
+    @Test
+    public void synBlockDifferentObject() throws InterruptedException {
+        class SynBlockTask {
+            Object object = new Object();
+            Object object2 = new Object();
+            public void m1() {
+                synchronized (object) {
+                    try {
+                        Thread.sleep(3 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+            public void m2() {
+                synchronized (object2) {
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+        }
+
+        SynBlockTask synBlockTask = new SynBlockTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m2();
+            }
+        }, "t3");
+        // t1获取object锁
+        t1.start();
+        Thread.sleep(1000);
+        // t2获取object2锁，和t1锁不互斥
+        t2.start();
+        // 结果：t2、t1
+        Thread.sleep(5*1000);
+    }
+
+    // 5. synchronized块锁定Class
+    @Test
+    public void synBlockClass() throws InterruptedException {
+        class SynBlockTask {
+            public void m1() {
+                synchronized (SynchronizedDemo.class) {
+                    try {
+                        Thread.sleep(3 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+            public void m2() {
+                synchronized (SynchronizedDemo.class) {
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+        }
+
+        SynBlockTask synBlockTask = new SynBlockTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m2();
+            }
+        }, "t2");
+        // t1获取SynchronizedDemo.class锁
+        t1.start();
+        Thread.sleep(1000);
+        // t2被阻塞无法获取SynchronizedDemo.class锁
+        t2.start();
+        // 结果：t1、t2
+        Thread.sleep(5*1000);
+    }
+
+    // 6. synchronized静态方法，锁定的是Class
     @Test
     public void synStaticMethod() throws InterruptedException {
-        SynStaticMethodRunner synStaticMethodRunner = new SynStaticMethodRunner();
-        synStaticMethodRunner.test();
-        Thread.sleep(10*1000);
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SynStaticMethodTask.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SynStaticMethodTask.m2();
+            }
+        }, "t2");
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SynStaticMethodTask.m3();
+            }
+        }, "t3");
+        // t1获取Class锁
+        t1.start();
+        Thread.sleep(1000);
+        // t2被阻塞在获取Class锁的时候
+        t2.start();
+        // t3获取的是Object对象锁，和t1、t2不互斥
+        t3.start();
+        // 结果：t3、t1、t2
+        Thread.sleep(5*1000);
     }
 
-    /**
-     * 锁class
-     * @throws InterruptedException
-     */
-    @Test
-    public void synClass() throws InterruptedException {
-        SynClassRunner synClassRunner = new SynClassRunner();
-        synClassRunner.test();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * 锁String对象
-     * @throws InterruptedException
-     */
+    // 8. 锁定String时，一定要注意String的常量池特性
+    // 直接赋值的String是相同的对象，synchronized同步块不能使用String作为锁对象
+    // new String()出来的对象是不相同的，
     @Test
     public void synStringConstantPoolFeature() throws InterruptedException {
-        SynStringConstantPoolFeatureRunner synStringConstantPoolFeatureRunner = new SynStringConstantPoolFeatureRunner();
-        synStringConstantPoolFeatureRunner.test();
-        Thread.sleep(10*1000);
+        class SynStringConstantPoolFeatureTask {
+            public String str1;
+            public String str2;
+            public void m1() {
+                synchronized (str1) {
+                    try {
+                        Thread.sleep(2*1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+            public void m2() {
+                synchronized (str2) {
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+        }
+        SynStringConstantPoolFeatureTask sscpft = new SynStringConstantPoolFeatureTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sscpft.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                sscpft.m2();
+            }
+        }, "t2");
+        sscpft.str1 = "XXX";
+        sscpft.str2 = "XXX";
+        // t1获取str1锁
+        t1.start();
+        Thread.sleep(1000);
+        // t2准备获取str2锁，但被阻塞无法获取str2锁
+        t2.start();
+        // 结果：t1、t2
+        Thread.sleep(5*1000);
     }
 
-    /**
-     * 死锁
-     * @throws InterruptedException
-     */
-    @Test
-    public void deadLock() throws InterruptedException {
-        DeadLockRunner deadLockRunner = new DeadLockRunner();
-        deadLockRunner.test();
-        Thread.sleep(30*60*1000);
-    }
-
-    /**
-     * 锁静态内部类
-     * @throws InterruptedException
-     */
-    @Test
-    public void synStaticInnerClass() throws InterruptedException {
-        SynStaticInnerClassRunner synStaticInnerClassRunner = new SynStaticInnerClassRunner();
-        synStaticInnerClassRunner.test();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * 锁内部类
-     * @throws InterruptedException
-     */
-    @Test
-    public void synInnerClass() throws InterruptedException {
-        SynInnerClassRunner synInnerClassRunner = new SynInnerClassRunner();
-        synInnerClassRunner.test();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * 锁住的对象发生变化
-     * @throws InterruptedException
-     */
+    // 9. 只要锁住的对象不变，对象属性变化对同步没有影响
     @Test
     public void synBlockObjectChanged() throws InterruptedException {
-        SynBlockObjectChangedRunner synBlockObjectChangedRunner = new SynBlockObjectChangedRunner();
-        synBlockObjectChangedRunner.test();
-        Thread.sleep(10*1000);
+        class MyLock {
+            public String value = "value";
+        }
+        class SynBlockTask {
+            public MyLock myLock = new MyLock();
+            public void m1() {
+                synchronized (myLock) {
+                    try {
+                        Thread.sleep(3 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+            public void m2() {
+                synchronized (myLock) {
+                    System.out.println(Thread.currentThread().getName());
+                }
+            }
+
+        }
+
+        SynBlockTask synBlockTask = new SynBlockTask();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m1();
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synBlockTask.m2();
+            }
+        }, "t2");
+        // t1获取myLock锁
+        t1.start();
+        Thread.sleep(1000);
+        synBlockTask.myLock.value = new String("value2");
+        // t2被阻塞无法获取myLock锁
+        t2.start();
+        // 结果：t1、t2
+        Thread.sleep(5*1000);
     }
 
-    /**
-     * 无共享数据，线程安全
-     * @throws InterruptedException
-     */
-    @Test
-    public void noDataShareCounterRunnerTest() throws InterruptedException {
-        NoDataShareCounterRunner noDataShareCounterRunner = new NoDataShareCounterRunner();
-        noDataShareCounterRunner.test();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * 使用共享数据的方法加synchronized，线程安全
-     * @throws InterruptedException
-     */
+    // 10. 使用共享数据的方法加synchronized，线程安全
+    // 共享数据线程不安全和线程安全的实现
     @Test
     public void dataShareCounterSafeRunnerTest() throws InterruptedException {
-        DataShareCounterSafeRunner dataShareCounterSafeRunner = new DataShareCounterSafeRunner();
-        dataShareCounterSafeRunner.test();
-        Thread.sleep(10*1000);
-    }
+        // 线程不安全
+        class DataShareUnsafeCounter {
+            private int num;
+            public void add1() { num += 1; }
+            public void add2() { num += 2; }
+            public int get() { return num; }
+        }
 
-    /**
-     * 方法不加synchronized，非线程安全
-     * @throws InterruptedException
-     */
-    @Test
-    public void dataShareCounterUnsafeRunnerTest() throws InterruptedException {
-        DataShareCounterUnsafeRunner dataShareCounterUnsafeRunner = new DataShareCounterUnsafeRunner();
-        dataShareCounterUnsafeRunner.test();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * synchronized一个方法线程安全，另一个方法非线程安全
-     * @throws InterruptedException
-     */
-    @Test
-    public void synOneMethod() throws InterruptedException {
-        SynOneMethodRunner synOneMethodRunner = new SynOneMethodRunner();
-        synOneMethodRunner.oneMethodSynchronized();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * synchronized所有方法，所有方法线程安全
-     * @throws InterruptedException
-     */
-    @Test
-    public void synAllMethod() throws InterruptedException {
-        SynAllMethodRunner synAllMethodRunner = new SynAllMethodRunner();
-        synAllMethodRunner.allMethodSynchronized();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * synchronized是可重入的
-     * @throws InterruptedException
-     */
-    @Test
-    public void synLockIn() throws InterruptedException {
-        SynLockInRunner synLockInRunner = new SynLockInRunner();
-        synLockInRunner.lockIn();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void synLockIn2() throws InterruptedException {
-        SynLockInService2 synLockInService2 = new SynLockInService2();
-        Thread thread1 = new Thread(new Runnable() {
+        DataShareUnsafeCounter unsafeCounter = new DataShareUnsafeCounter();
+        Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                synLockInService2.service1();
+                int i = 1;
+                while (i<=10000) {
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    unsafeCounter.add1();
+                    i++;
+                }
             }
         });
-        Thread thread2 = new Thread(new Runnable() {
+        Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                synLockInService2.service2();
+                int i = 1;
+                while (i<=10000) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    unsafeCounter.add2();
+                    i++;
+                }
             }
         });
-        thread1.start();
-        thread2.start();
-        Thread.sleep(10*1000);
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 3/30/2016
- * @description
- *
- * synchronized block is superior to synchronized method
- */
-class SynBlockRunner {
-
-    public void test() throws InterruptedException {
-        SynBlockTask synBlockTask = new SynBlockTask();
-        SynBlockThreadA t1 = new SynBlockThreadA(synBlockTask);
-        SynBlockThreadB t2 = new SynBlockThreadB(synBlockTask);
         t1.start();
         t2.start();
+        Thread.sleep(40*1000);
+        System.out.println(unsafeCounter.get());
 
-        Thread.sleep(10*1000);
-
-        long beginTime = TimeUtil.beginTime1;
-        long endTime = TimeUtil.endTime1;
-
-        if (TimeUtil.beginTime1>TimeUtil.beginTime2) {
-            beginTime = TimeUtil.beginTime2;
+        // 线程安全
+        class DataShareSafeCounter {
+            private int num;
+            public synchronized void add1() { num += 1; }
+            public synchronized void add2() { num += 2; }
+            public synchronized int get() { return num; }
         }
-        if (TimeUtil.endTime1<TimeUtil.endTime2) {
-            endTime = TimeUtil.endTime2;
-        }
-        System.out.println("cost: " + (endTime-beginTime)/1000);
-
-    }
-}
-
-class TimeUtil {
-    public static long beginTime1;
-    public static long beginTime2;
-    public static long endTime1;
-    public static long endTime2;
-}
-
-class SynBlockThreadA extends Thread {
-
-    private SynBlockTask synBlockTask;
-
-    public SynBlockThreadA(SynBlockTask synBlockTask) {
-        super();
-        this.synBlockTask = synBlockTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        TimeUtil.beginTime1 = System.currentTimeMillis();
-        synBlockTask.doLongTimeTask();
-        TimeUtil.endTime1 = System.currentTimeMillis();
-    }
-}
-
-class SynBlockThreadB extends Thread {
-    private SynBlockTask synBlockTask;
-
-    public SynBlockThreadB(SynBlockTask synBlockTask) {
-        super();
-        this.synBlockTask = synBlockTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        TimeUtil.beginTime2 = System.currentTimeMillis();
-        synBlockTask.doLongTimeTask();
-        TimeUtil.endTime2 = System.currentTimeMillis();
-    }
-}
-
-class SynBlockTask {
-    private String data1;
-    private String data2;
-
-    synchronized public void doLongTimeTask() {
-        try {
-            System.out.println("begin task");
-            Thread.sleep(3*1000);
-            String name1 = "long time task data1 by " + Thread.currentThread().getName();
-            String name2 = "long time task data2 by " + Thread.currentThread().getName();
-
-            data1 = name1;
-            data2 = name2;
-
-            System.out.println(data1);
-            System.out.println(data2);
-            System.out.println("end task");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void doLongTimeTask2() {
-        try {
-            System.out.println("begin task");
-            Thread.sleep(3*1000);
-            String name1 = "long time task data1 by " + Thread.currentThread().getName();
-            String name2 = "long time task data2 by " + Thread.currentThread().getName();
-            synchronized (this) {
-                data1 = name1;
-                data2 = name2;
+        DataShareSafeCounter counter = new DataShareSafeCounter();
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i = 1;
+                while (i<=10000) {
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    counter.add1();
+                    i++;
+                }
             }
-
-            System.out.println(data1);
-            System.out.println(data2);
-            System.out.println("end task");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        });
+        Thread t4 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i = 1;
+                while (i<=10000) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    counter.add2();
+                    i++;
+                }
+            }
+        });
+        t3.start();
+        t4.start();
+        Thread.sleep(40*1000);
+        System.out.println(counter.get());
     }
-}
 
-
-//======================================================================================================================
-
-class HalfSynAndAsynRunner {
-
-    public void test() {
-        HalfSynAndAsynTask halfSynAndAsynTask = new HalfSynAndAsynTask();
-        Thread t1 = new Thread(halfSynAndAsynTask);
-        Thread t2 = new Thread(halfSynAndAsynTask);
-        t1.start();
-        t2.start();
-    }
-}
-
-class HalfSynAndAsynTask implements Runnable {
-
-    public void print() {
-        for (int i=0; i<100; i++) {
-            System.out.println("nosynchronized thread name = " + Thread.currentThread().getName() + "-" + i);
-        }
-
-        synchronized (this) {
-            for (int i = 0; i < 100; i++) {
-                System.out.println("synchronized thread name = " + Thread.currentThread().getName() + "-" + i);
+    // 11. synchronized是可重入的，同一个线程可以多次获取该对象锁
+    @Test
+    public void synReentrant() throws InterruptedException {
+        class ReentrantTask {
+            public synchronized void m1() {
+                // 再次获取锁
+                m2();
+                System.out.println(Thread.currentThread().getName() + "-m1");
+            }
+            public synchronized void m2() {
+                System.out.println(Thread.currentThread().getName() + "-m2");
             }
         }
+        ReentrantTask reentrantTask = new ReentrantTask();
+        // 获取锁
+        reentrantTask.m1();
+        Thread.sleep(3*1000);
     }
 
-    @Override
-    public void run() {
-        print();
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 3/30/2016
- * @description
- *
- * synchronized block, lock specified Object
- * different Object specified, has different synchronism
- */
-class SynBlocksSynchronismRunner {
-    public void test() {
-        SynBlocksSynchronismTask synBlocksSynchronismTask = new SynBlocksSynchronismTask();
-        SynBlocksSynchronismThreadA synBlocksSynchronismThreadA = new SynBlocksSynchronismThreadA(synBlocksSynchronismTask);
-        SynBlocksSynchronismThreadB synBlocksSynchronismThreadB = new SynBlocksSynchronismThreadB(synBlocksSynchronismTask);
-        synBlocksSynchronismThreadA.start();
-        synBlocksSynchronismThreadB.start();
-    }
-}
-
-class SynBlocksSynchronismThreadA extends Thread {
-    SynBlocksSynchronismTask synBlocksSynchronismTask;
-
-    public SynBlocksSynchronismThreadA(SynBlocksSynchronismTask synBlocksSynchronismTask) {
-        this.synBlocksSynchronismTask = synBlocksSynchronismTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synBlocksSynchronismTask.serviceA();
-    }
-}
-
-class SynBlocksSynchronismThreadB extends Thread {
-    SynBlocksSynchronismTask synBlocksSynchronismTask;
-
-    public SynBlocksSynchronismThreadB(SynBlocksSynchronismTask synBlocksSynchronismTask) {
-        this.synBlocksSynchronismTask = synBlocksSynchronismTask;
-    }
-
-
-    @Override
-    public void run() {
-        super.run();
-        synBlocksSynchronismTask.serviceB();
-    }
-}
-
-class SynBlocksSynchronismTask {
-    public void serviceA() {
-        synchronized (this) {
-            System.out.println("service A begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service A end time=" + System.currentTimeMillis());
-        }
-    }
-
-    public void serviceB() {
-        synchronized (this) {
-            System.out.println("service B begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service B end time=" + System.currentTimeMillis());
-        }
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 3/30/2016
- * @description
- *
- * synchronized block, lock specified Object
- * different Object specified, has different synchronism
- */
-class SynBlockObjectRunner {
-    public void test() {
-        SynBlockObjectTask synBlockObjectTask = new SynBlockObjectTask();
-        SynBlockObjectThreadA synBlockObjectThreadA = new SynBlockObjectThreadA(synBlockObjectTask);
-        SynBlockObjectThreadB synBlockObjectThreadB = new SynBlockObjectThreadB(synBlockObjectTask);
-        SynBlockObjectThreadC synBlockObjectThreadC = new SynBlockObjectThreadC(synBlockObjectTask);
-        synBlockObjectThreadA.start();
-        synBlockObjectThreadB.start();
-        synBlockObjectThreadC.start();
-    }
-}
-
-class SynBlockObjectTask {
-    Object anyObject = new Object();
-
-    public void serviceA() {
-        synchronized (anyObject) {
-            System.out.println("service A begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service A end time=" + System.currentTimeMillis());
-        }
-    }
-
-    public void serviceB() {
-        synchronized (anyObject) {
-            System.out.println("service B begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service B end time=" + System.currentTimeMillis());
-        }
-    }
-
-    public void serviceC() {
-        synchronized (this) {
-            System.out.println("service C begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service C end time=" + System.currentTimeMillis());
-        }
-    }
-}
-
-class SynBlockObjectThreadA extends Thread {
-    SynBlockObjectTask synBlockObjectTask;
-
-    public SynBlockObjectThreadA(SynBlockObjectTask synBlockObjectTask) {
-        this.synBlockObjectTask = synBlockObjectTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synBlockObjectTask.serviceA();
-    }
-}
-
-class SynBlockObjectThreadB extends Thread {
-    SynBlockObjectTask synBlockObjectTask;
-
-    public SynBlockObjectThreadB(SynBlockObjectTask synBlockObjectTask) {
-        this.synBlockObjectTask = synBlockObjectTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synBlockObjectTask.serviceB();
-    }
-}
-
-class SynBlockObjectThreadC extends Thread {
-    SynBlockObjectTask synBlockObjectTask;
-
-    public SynBlockObjectThreadC(SynBlockObjectTask synBlockObjectTask) {
-        this.synBlockObjectTask = synBlockObjectTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synBlockObjectTask.serviceC();
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 3/31/2016
- * @description
- *
- * synchronized method, lock Object
- * synchronized static method, lock Class
- */
-class SynStaticMethodRunner {
-    public void test() {
-        SynStaticMethodTask synStaticMethodTask = new SynStaticMethodTask();
-        SynStaticMethodThreadA synStaticMethodThreadA = new SynStaticMethodThreadA(synStaticMethodTask);
-        SynStaticMethodThreadB synStaticMethodThreadB = new SynStaticMethodThreadB(synStaticMethodTask);
-        SynStaticMethodThreadC synStaticMethodThreadC = new SynStaticMethodThreadC(synStaticMethodTask);
-        synStaticMethodThreadA.start();
-        synStaticMethodThreadB.start();
-        synStaticMethodThreadC.start();
-    }
 }
 
 class SynStaticMethodTask {
-    synchronized public static void serviceA() {
-        System.out.println("service A begin time=" + System.currentTimeMillis());
+    public synchronized static void m1() {
         try {
-            Thread.sleep(2*1000);
+            Thread.sleep(3 * 1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("service A end time=" + System.currentTimeMillis());
+        System.out.println(Thread.currentThread().getName());
     }
 
-    synchronized public static void serviceB() {
-        System.out.println("service B begin time=" + System.currentTimeMillis());
-        try {
-            Thread.sleep(2*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("service B end time=" + System.currentTimeMillis());
-    }
-
-    synchronized public void serviceC() {
-        System.out.println("service C begin time=" + System.currentTimeMillis());
-        try {
-            Thread.sleep(2*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("service C end time=" + System.currentTimeMillis());
-    }
-}
-
-class SynStaticMethodThreadA extends Thread {
-    SynStaticMethodTask synStaticMethodTask;
-
-    public SynStaticMethodThreadA(SynStaticMethodTask synStaticMethodTask) {
-        this.synStaticMethodTask = synStaticMethodTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synStaticMethodTask.serviceA();
-    }
-}
-
-class SynStaticMethodThreadB extends Thread {
-    SynStaticMethodTask synStaticMethodTask;
-
-    public SynStaticMethodThreadB(SynStaticMethodTask synStaticMethodTask) {
-        this.synStaticMethodTask = synStaticMethodTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synStaticMethodTask.serviceB();
-    }
-}
-
-class SynStaticMethodThreadC extends Thread {
-    SynStaticMethodTask synStaticMethodTask;
-
-    public SynStaticMethodThreadC(SynStaticMethodTask synStaticMethodTask) {
-        this.synStaticMethodTask = synStaticMethodTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synStaticMethodTask.serviceC();
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 3/30/2016
- * @description
- *
- * lock Class
- */
-class SynClassRunner {
-    public void test() {
-        SynClassTask synClassTask = new SynClassTask();
-        SynClassThreadA synClassThreadA = new SynClassThreadA(synClassTask);
-        SynClassThreadB synClassThreadB = new SynClassThreadB(synClassTask);
-        SynClassThreadC synClassThreadC = new SynClassThreadC(synClassTask);
-        synClassThreadA.start();
-        synClassThreadB.start();
-        synClassThreadC.start();
-    }
-}
-
-class SynClassTask {
-    public static void serviceA() {
-        synchronized (SynClassTask.class) {
-            System.out.println("service A begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2 * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service A end time=" + System.currentTimeMillis());
+    public static void m2() {
+        synchronized (SynStaticMethodTask.class) {
+            System.out.println(Thread.currentThread().getName());
         }
     }
 
-    public static void serviceB() {
-        synchronized (SynClassTask.class) {
-            System.out.println("service B begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2 * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service B end time=" + System.currentTimeMillis());
-        }
-    }
-
-    public void serviceC() {
-        synchronized (SynClassTask.class) {
-            System.out.println("service C begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2 * 1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service C end time=" + System.currentTimeMillis());
+    public static void m3() {
+        synchronized (new Object()) {
+            System.out.println(Thread.currentThread().getName());
         }
     }
 }
-
-class SynClassThreadA extends Thread {
-    SynClassTask synClassTask;
-
-    public SynClassThreadA(SynClassTask synClassTask) {
-        this.synClassTask = synClassTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synClassTask.serviceA();
-    }
-}
-
-class SynClassThreadB extends Thread {
-    SynClassTask synClassTask;
-
-    public SynClassThreadB(SynClassTask synClassTask) {
-        this.synClassTask = synClassTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synClassTask.serviceB();
-    }
-}
-
-class SynClassThreadC extends Thread {
-    SynClassTask synClassTask;
-
-    public SynClassThreadC(SynClassTask synClassTask) {
-        this.synClassTask = synClassTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synClassTask.serviceC();
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 3/31/2016
- * @description
- *
- * String has constant pool feature
- * we prefer not to use String as part of synchronized(...)
- */
-class SynStringConstantPoolFeatureRunner {
-    public void test() {
-        SynStringConstantPoolFeatureTask synStringConstantPoolFeatureTask = new SynStringConstantPoolFeatureTask();
-        synStringConstantPoolFeatureTask.setShareStr("TTT");
-        SynStringConstantPoolFeatureThreadA synStringConstantPoolFeatureThreadA = new SynStringConstantPoolFeatureThreadA(synStringConstantPoolFeatureTask);
-        synStringConstantPoolFeatureTask.setShareStr("TTT");
-        SynStringConstantPoolFeatureThreadB synStringConstantPoolFeatureThreadB = new SynStringConstantPoolFeatureThreadB(synStringConstantPoolFeatureTask);
-        synStringConstantPoolFeatureThreadA.start();
-        synStringConstantPoolFeatureThreadB.start();
-    }
-}
-
-
-class SynStringConstantPoolFeatureTask {
-    private String shareStr;
-
-    public String getShareStr() {
-        return shareStr;
-    }
-
-    public void setShareStr(String shareStr) {
-        this.shareStr = shareStr;
-    }
-
-    public void serviceA() {
-        synchronized (shareStr) {
-            System.out.println("service A begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service A end time=" + System.currentTimeMillis());
-        }
-    }
-
-    public void serviceB() {
-        synchronized (shareStr) {
-            System.out.println("service B begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("service B end time=" + System.currentTimeMillis());
-        }
-    }
-}
-
-class SynStringConstantPoolFeatureThreadA extends Thread {
-    SynStringConstantPoolFeatureTask synStringConstantPoolFeatureTask;
-
-    public SynStringConstantPoolFeatureThreadA(SynStringConstantPoolFeatureTask synStringConstantPoolFeatureTask) {
-        this.synStringConstantPoolFeatureTask = synStringConstantPoolFeatureTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synStringConstantPoolFeatureTask.serviceA();
-    }
-}
-
-class SynStringConstantPoolFeatureThreadB extends Thread {
-    SynStringConstantPoolFeatureTask synStringConstantPoolFeatureTask;
-
-    public SynStringConstantPoolFeatureThreadB(SynStringConstantPoolFeatureTask synStringConstantPoolFeatureTask) {
-        this.synStringConstantPoolFeatureTask = synStringConstantPoolFeatureTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synStringConstantPoolFeatureTask.serviceB();
-    }
-}
-
-//======================================================================================================================
-
-class DeadLockRunner {
-
-    public void test() {
-        DeadLockTask deadLockTask = new DeadLockTask();
-        DeadLockThreadA deadLockThreadA = new DeadLockThreadA(deadLockTask);
-        DeadLockThreadB deadLockThreadB = new DeadLockThreadB(deadLockTask);
-        deadLockThreadA.start();
-        deadLockThreadB.start();
-    }
-}
-
-class DeadLockThreadA extends Thread {
-    DeadLockTask deadLockTask;
-
-    public DeadLockThreadA(DeadLockTask deadLockTask) {
-        this.deadLockTask = deadLockTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        deadLockTask.serviceA();
-    }
-}
-
-class DeadLockThreadB extends Thread {
-    DeadLockTask deadLockTask;
-
-    public DeadLockThreadB(DeadLockTask deadLockTask) {
-        this.deadLockTask = deadLockTask;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        deadLockTask.serviceB();
-    }
-}
-
-class DeadLockTask {
-
-    Object o1 = new Object();
-    Object o2 = new Object();
-
-    public void serviceA() {
-        synchronized (o1) {
-            System.out.println("service A begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            synchronized (o2) {
-                System.out.println("service A end time=" + System.currentTimeMillis());
-            }
-        }
-    }
-
-    public void serviceB() {
-        synchronized (o2) {
-            System.out.println("service B begin time=" + System.currentTimeMillis());
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            synchronized (o1) {
-                System.out.println("service B end time=" + System.currentTimeMillis());
-            }
-        }
-    }
-}
-
-//======================================================================================================================
-
-class SynStaticInnerClassRunner {
-
-    public void test() {
-        final SynStaticInnerClassOuterClass.SynStaticInnerClassInnerClassA synStaticInnerClassInnerClassA = new SynStaticInnerClassOuterClass.SynStaticInnerClassInnerClassA();
-        final SynStaticInnerClassOuterClass.SynStaticInnerClassInnerClassB synStaticInnerClassInnerClassB = new SynStaticInnerClassOuterClass.SynStaticInnerClassInnerClassB();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synStaticInnerClassInnerClassA.service1(synStaticInnerClassInnerClassB);
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synStaticInnerClassInnerClassA.service2();
-            }
-        });
-
-        Thread t3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synStaticInnerClassInnerClassB.service1();
-            }
-        });
-
-        t1.start();
-        t2.start();
-        t3.start();
-    }
-}
-
-class SynStaticInnerClassOuterClass {
-    static class SynStaticInnerClassInnerClassA {
-        public void service1(SynStaticInnerClassInnerClassB synStaticInnerClassInnerClass2) {
-            synchronized (synStaticInnerClassInnerClass2) {
-                System.out.println("A service1 begin");
-                try {
-                    Thread.sleep(2*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("A service1 end");
-            }
-        }
-
-        synchronized public void service2() {
-            System.out.println("A service2 begin");
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("A service2 end");
-        }
-    }
-
-    static class SynStaticInnerClassInnerClassB {
-        synchronized public void service1() {
-            System.out.println("B service1 begin");
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("B service1 end");
-        }
-    }
-}
-
-//======================================================================================================================
-
-class SynInnerClassRunner {
-    public void test() {
-        SynInnerClassOuterClass synInnerClassOuterClass = new SynInnerClassOuterClass();
-        SynInnerClassOuterClass.SynInnerClassInnerClassA synInnerClassInnerClassA = synInnerClassOuterClass.new SynInnerClassInnerClassA();
-        SynInnerClassOuterClass.SynInnerClassInnerClassB synInnerClassInnerClassB = synInnerClassOuterClass.new SynInnerClassInnerClassB();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synInnerClassInnerClassA.service1(synInnerClassInnerClassB);
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synInnerClassInnerClassA.service2();
-            }
-        });
-
-        Thread t3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synInnerClassInnerClassB.service1();
-            }
-        });
-
-//        t1.start();
-        t2.start();
-        t3.start();
-    }
-}
-
-class SynInnerClassOuterClass {
-    class SynInnerClassInnerClassA {
-        public void service1(SynInnerClassInnerClassB synInnerClassInnerClassB) {
-            synchronized (synInnerClassInnerClassB) {
-                System.out.println("A service1 begin");
-                try {
-                    Thread.sleep(2*1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("A service1 end");
-            }
-        }
-
-        synchronized public void service2() {
-            System.out.println("A service2 begin");
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("A service2 end");
-        }
-    }
-
-    class SynInnerClassInnerClassB {
-        synchronized public void service1() {
-            System.out.println("B service1 begin");
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("B service1 end");
-        }
-    }
-}
-
-//======================================================================================================================
-
-class SynBlockObjectChangedRunner {
-
-    public void test() {
-        SynBlockObjectChangedTask synBlockObjectChangedTask = new SynBlockObjectChangedTask();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synBlockObjectChangedTask.service();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synBlockObjectChangedTask.service();
-            }
-        });
-
-        t1.setName("A");
-        t2.setName("B");
-
-        t1.start();
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        t2.start();
-
-    }
-}
-
-class SynBlockObjectChangedTask {
-
-    private String lockStr = "123";
-
-    public void service() {
-        System.out.println("---------------" + Thread.currentThread().getName() + " lockStr=" + lockStr);
-        synchronized (lockStr) {
-            System.out.println(Thread.currentThread().getName() + " service begin"+ ", lockStr=" + lockStr);
-//            try {
-//                Thread.sleep(2*1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            lockStr = "456";
-            try {
-                Thread.sleep(2*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(Thread.currentThread().getName() + " service end");
-        }
-    }
-}
-
-//======================================================================================================================
-
-class NoDataShareCounterRunner {
-    public void test() {
-        Thread t1 = new Thread(new NoDataShareCounter("a"));
-        Thread t2 = new Thread(new NoDataShareCounter("b"));
-        t1.start();
-        t2.start();
-    }
-}
-
-class NoDataShareCounter implements Runnable {
-    private String name;
-
-    public NoDataShareCounter(String name) {
-        this.name = name;
-    }
-
-    public void add() {
-        int num = 0;
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add over");
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add over");
-        }
-        System.out.println(num);
-    }
-
-    @Override
-    public void run() {
-        add();
-    }
-}
-
-//======================================================================================================================
-
-class DataShareCounterSafeRunner {
-    public void test() {
-        DataShareSafeCounter dataShareSafeCounter = new DataShareSafeCounter();
-        SafeThreadA ta = new SafeThreadA(dataShareSafeCounter);
-        SafeThreadB tb = new SafeThreadB(dataShareSafeCounter);
-        ta.start();
-        tb.start();
-    }
-}
-
-class DataShareSafeCounter {
-    private int num;
-
-    synchronized public void add(String name) {
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add over");
-            try {
-                Thread.sleep(5*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add over");
-        }
-        System.out.println(name + " set " + num);
-    }
-}
-
-class SafeThreadA extends Thread {
-    private DataShareSafeCounter dataShareSafeCounter;
-
-    public SafeThreadA(DataShareSafeCounter dataShareSafeCounter) {
-        this.dataShareSafeCounter = dataShareSafeCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        dataShareSafeCounter.add("a");
-    }
-}
-
-class SafeThreadB extends Thread {
-    private DataShareSafeCounter dataShareSafeCounter;
-
-    public SafeThreadB(DataShareSafeCounter dataShareSafeCounter) {
-        this.dataShareSafeCounter = dataShareSafeCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        dataShareSafeCounter.add("b");
-    }
-}
-
-//======================================================================================================================
-
-class DataShareCounterUnsafeRunner {
-    public void test() {
-        DataShareUnsafeCounter dataShareUnsafeCounter = new DataShareUnsafeCounter();
-        ThreadA ta = new ThreadA(dataShareUnsafeCounter);
-        ThreadB tb = new ThreadB(dataShareUnsafeCounter);
-        ta.start();
-        tb.start();
-    }
-}
-
-class DataShareUnsafeCounter {
-    private int num;
-
-    public void add(String name) {
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add over");
-            try {
-                Thread.sleep(5*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add over");
-        }
-        System.out.println(name + " set " + num);
-    }
-
-}
-
-class ThreadA extends Thread {
-    private DataShareUnsafeCounter dataShareUnsafeCounter;
-
-    public ThreadA(DataShareUnsafeCounter dataShareUnsafeCounter) {
-        this.dataShareUnsafeCounter = dataShareUnsafeCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        dataShareUnsafeCounter.add("a");
-    }
-}
-
-class ThreadB extends Thread {
-    private DataShareUnsafeCounter dataShareUnsafeCounter;
-
-    public ThreadB(DataShareUnsafeCounter dataShareUnsafeCounter) {
-        this.dataShareUnsafeCounter = dataShareUnsafeCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        dataShareUnsafeCounter.add("b");
-    }
-}
-
-//======================================================================================================================
-
-class SynOneMethodRunner {
-    public void oneMethodSynchronized() {
-        SynOneMethodCounter synchronizedCounter = new SynOneMethodCounter();
-        SynOneMethodThreadA ta = new SynOneMethodThreadA(synchronizedCounter);
-        SynOneMethodThreadB tb = new SynOneMethodThreadB(synchronizedCounter);
-        ta.start();
-        tb.start();
-    }
-}
-
-class SynOneMethodCounter {
-    private int num;
-
-    synchronized public void add(String name) {
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add over");
-            try {
-                Thread.sleep(5*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add over");
-        }
-        System.out.println(name + " set " + num);
-    }
-
-    public void add2(String name) {
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add2 over");
-            try {
-                Thread.sleep(5*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add2 over");
-        }
-        System.out.println(name + " set " + num);
-    }
-}
-
-
-
-class SynOneMethodThreadA extends Thread {
-    private SynOneMethodCounter synOneMethodCounter;
-
-    public SynOneMethodThreadA(SynOneMethodCounter synOneMethodCounter) {
-        this.synOneMethodCounter = synOneMethodCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synOneMethodCounter.add("a");
-    }
-}
-
-class SynOneMethodThreadB extends Thread {
-    private SynOneMethodCounter synOneMethodCounter;
-
-    public SynOneMethodThreadB(SynOneMethodCounter synOneMethodCounter) {
-        this.synOneMethodCounter = synOneMethodCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synOneMethodCounter.add2("b");
-    }
-}
-
-//======================================================================================================================
-
-class SynAllMethodRunner {
-    public void allMethodSynchronized() {
-        SynAllMethodCounter synAllMethodCounter = new SynAllMethodCounter();
-        SynAllMethodThreadA ta = new SynAllMethodThreadA(synAllMethodCounter);
-        SynAllMethodThreadB tb = new SynAllMethodThreadB(synAllMethodCounter);
-        ta.start();
-        tb.start();
-    }
-}
-
-class SynAllMethodCounter {
-    private int num;
-
-    synchronized public void add(String name) {
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add over");
-            try {
-                Thread.sleep(5*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add over");
-        }
-        System.out.println(name + " set " + num);
-    }
-
-    synchronized public void add2(String name) {
-        if ("a".equals(name)) {
-            num = 100;
-            System.out.println("a add2 over");
-            try {
-                Thread.sleep(5*1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else if ("b".equals(name)) {
-            num = 200;
-            System.out.println("b add2 over");
-        }
-        System.out.println(name + " set " + num);
-    }
-}
-
-class SynAllMethodThreadA extends Thread {
-    private SynAllMethodCounter synAllMethodCounter;
-
-    public SynAllMethodThreadA(SynAllMethodCounter synAllMethodCounter) {
-        this.synAllMethodCounter = synAllMethodCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synAllMethodCounter.add("a");
-    }
-}
-
-class SynAllMethodThreadB extends Thread {
-    private SynAllMethodCounter synAllMethodCounter;
-
-    public SynAllMethodThreadB(SynAllMethodCounter synAllCounter) {
-        this.synAllMethodCounter = synAllCounter;
-    }
-
-    @Override
-    public void run() {
-        super.run();
-        synAllMethodCounter.add2("b");
-    }
-}
-
-//======================================================================================================================
-
-class SynLockInRunner {
-
-    public void lockIn() {
-        SynLockInThread synLockInThread = new SynLockInThread();
-        synLockInThread.start();
-    }
-}
-
-class SynLockInThread extends Thread {
-    @Override
-    public void run() {
-        super.run();
-        SynLockInService synLockInService = new SynLockInService();
-        synLockInService.service1();
-    }
-}
-
-class SynLockInService {
-    synchronized public void service1() {
-        service2();
-        System.out.println("service1");
-    }
-
-    synchronized public void service2() {
-        service3();
-        System.out.println("service2");
-    }
-
-    synchronized public void service3() {
-        System.out.println("service3");
-    }
-}
-
-class SynLockInService2 {
-    synchronized public void service1() {
-        System.out.println("service1 start");
-        try {
-            Thread.sleep(30 * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("service1 end");
-    }
-
-    synchronized public void service2() {
-        System.out.println("service2 start");
-        try {
-            Thread.sleep(30*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("service2 end");
-    }
-
-}
-
-//======================================================================================================================
-//======================================================================================================================
-//======================================================================================================================
-//======================================================================================================================

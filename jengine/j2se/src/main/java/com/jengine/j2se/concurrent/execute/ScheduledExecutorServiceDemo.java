@@ -3,6 +3,7 @@ package com.jengine.j2se.concurrent.execute;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,157 +18,100 @@ import java.util.concurrent.TimeUnit;
  */
 public class ScheduledExecutorServiceDemo {
 
-    /**
-     * 只执行一次
-     * public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit)
-     * @throws InterruptedException
-     */
+    // 1. scheduledExecutorService.schedule()指定一段时间后执行，只执行一次
     @Test
-    public void test1() throws InterruptedException {
+    public void schedule() throws InterruptedException {
+        Date start = new Date();
+        Date end = new Date();
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.schedule(new Runnable() {
-
             @Override
             public void run() {
-//                try {
-//                    Thread.sleep(2000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                System.out.println("2");
+                System.out.println("1");
+                end.setTime(System.currentTimeMillis());
             }
-        }, 5000, TimeUnit.MILLISECONDS);
+        }, 1000, TimeUnit.MILLISECONDS);
+        Thread.sleep(2000);
+        System.out.println((end.getTime() - start.getTime()));
+    }
 
+    // 2. newScheduledThreadPool(1)执行多个任务时单线程顺序执行
+    // 多个计划任务按启动时间执行
+    @Test
+    public void scheduleStartByTime() throws InterruptedException {
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.schedule(new Runnable() {
             @Override
             public void run() {
-                System.out.println("3");
+                System.out.println("2");
             }
-        }, 10000, TimeUnit.MILLISECONDS);
-
-        System.out.println("1");
-        Thread.sleep(6000);
-        scheduledExecutorService.shutdown();
-//        scheduledExecutorService.shutdownNow();
-        System.out.println("4");
-        System.out.println("isShutdown:" + scheduledExecutorService.isShutdown());
-        System.out.println("isTerminated:" + scheduledExecutorService.isTerminated());
-
-        Thread.sleep(15000);
-        System.out.println("5");
-        System.out.println("isShutdown:" + scheduledExecutorService.isShutdown());
-        System.out.println("isTerminated:" + scheduledExecutorService.isTerminated());
-
-        try {
-            scheduledExecutorService.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("6");
-                }
-            }, 1000, TimeUnit.MILLISECONDS);
-
-            Thread.sleep(5000);
-            System.out.println("7");
-            System.out.println("isShutdown:" + scheduledExecutorService.isShutdown());
-            System.out.println("isTerminated:" + scheduledExecutorService.isTerminated());
-        } catch (Exception e) {
-            if (e instanceof RejectedExecutionException) {
-                Assert.assertTrue(true);
+        }, 3000, TimeUnit.MILLISECONDS);
+        scheduledExecutorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("1");
             }
-        }
+        }, 1000, TimeUnit.MILLISECONDS);
+
+        Thread.sleep(4000);
     }
 
-    /**
-     * 循环执行
-     */
+    // 3. newScheduledThreadPool(2)执行多个任务时2个线程并发执行
     @Test
-    public void test2() throws InterruptedException {
+    public void scheduleStartConcurrent() throws InterruptedException {
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(2);
+        scheduledExecutorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                int i = 1;
+                while (i<10) {
+                    System.out.println("1");
+                    i++;
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, 500, TimeUnit.MICROSECONDS);
+        scheduledExecutorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                int i = 1;
+                while (i<10) {
+                    System.out.println("   2");
+                    i++;
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, 510, TimeUnit.MICROSECONDS);
+
+        Thread.sleep(3*1000);
+        System.out.println("end");
+    }
+
+    // 4. scheduledExecutorService.scheduleWithFixedDelay按照固定延迟循环执行
+    // initialDelay初始延迟时间
+    // delay每次执行的间隔时间
+    // shutdown可以关闭循环
+    @Test
+    public void scheduleWithFixedDelay() throws InterruptedException {
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("start1");
+                System.out.println("do");
             }
-        }, 50, 50, TimeUnit.MICROSECONDS);
-
-        System.out.println("1");
-        Thread.sleep(1000);
-        System.out.println("2");
+        }, 0, 1, TimeUnit.SECONDS);
+        Thread.sleep(2000);
         scheduledExecutorService.shutdown();
+        Thread.sleep(1000);
     }
 
-    /**
-     * newScheduledThreadPool(1)执行多个任务时单线程顺序执行
-     * @throws InterruptedException
-     */
-    @Test
-    public void test3() throws InterruptedException {
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-        scheduledExecutorService.schedule(new Runnable() {
 
-            @Override
-            public void run() {
-                try {
-                    System.out.println("3：" + System.currentTimeMillis());
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("4：" + System.currentTimeMillis());
-            }
-        }, 1000, TimeUnit.MICROSECONDS);
-        System.out.println("1：" + System.currentTimeMillis());
-
-        scheduledExecutorService.schedule(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("5：" + System.currentTimeMillis());
-            }
-        }, 2000, TimeUnit.MICROSECONDS);
-
-        System.out.println("2：" + System.currentTimeMillis());
-
-        Thread.sleep(10000);
-        System.out.println("6：" + System.currentTimeMillis());
-    }
-
-    /**
-     * newScheduledThreadPool(2)执行多个任务时2个线程并发执行
-     * @throws InterruptedException
-     */
-    @Test
-    public void test4() throws InterruptedException {
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-        scheduledExecutorService.schedule(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    System.out.println("3：" + System.currentTimeMillis());
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("4：" + System.currentTimeMillis());
-            }
-        }, 1000, TimeUnit.MICROSECONDS);
-        System.out.println("1：" + System.currentTimeMillis());
-
-        scheduledExecutorService.schedule(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("5：" + System.currentTimeMillis());
-            }
-        }, 2000, TimeUnit.MICROSECONDS);
-
-        System.out.println("2：" + System.currentTimeMillis());
-
-        Thread.sleep(10000);
-        System.out.println("6：" + System.currentTimeMillis());
-    }
 }

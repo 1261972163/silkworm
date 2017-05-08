@@ -1,53 +1,43 @@
 package com.jengine.j2se.concurrent.execute;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 /**
- * FutureTask作闭锁，用于数据预加载
- * @author nouuid
  *
+ * FutureTask是一个异步执行策略
+ *
+ * @author nouuid
+ * @description
+ * @date 5/6/17
  */
 public class FutureTaskDemo {
-	
-	class Info {
-		
-	}
-	
-	private final FutureTask<Info> future = new FutureTask<Info>(new Callable<Info>() {
-		public Info call() throws Exception {
-			return loadInfo();
-		}
-	});
-	
-	private final Thread thread = new Thread(future);
-	
-	public Info loadInfo() {
-		long startTime = System.currentTimeMillis();
-		long endTime = startTime + 5000;
-		while((startTime=System.currentTimeMillis())<endTime) {
-			
-		}
-		return new Info();
-	}
-	
-	public void doing() {
-		thread.start();
-		System.out.println(System.currentTimeMillis());
-		try {
-			future.get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} finally {
-			System.out.println(System.currentTimeMillis());
-		}
-	}
-	
-	public static void main(String[] args) {
-		FutureTaskDemo t = new FutureTaskDemo();
-		t.doing();
-	}
+
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        // 1. FutureTask是可执行的Future，传入Callable实现
+        FutureTask futureTask = new FutureTask(new Callable() {
+            @Override
+            public Object call() throws Exception {
+                System.out.println("---1");
+                Thread.sleep(5000);
+                System.out.println("---3");
+                return "CALLBACK";
+            }
+        });
+        // 2. 放入Thread执行
+        Thread thread = new Thread(futureTask);
+        thread.start();
+
+        Thread.sleep(1000);
+        System.out.println("---2");
+        Thread.sleep(1000);
+        // 3. FutureTask.get()是阻塞式的
+        // 4. 读取的值是Object，需要强制转型
+        long start = System.currentTimeMillis();
+        String res = (String)(futureTask.get());
+        long end = System.currentTimeMillis();
+        System.out.println("cost: " + (end-start));
+        System.out.println("res:" + res);
+        Thread.sleep(10 * 1000);
+        System.out.println("END");
+    }
 }

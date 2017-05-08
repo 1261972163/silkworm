@@ -4,171 +4,403 @@ import com.jengine.j2se.concurrent.ConcurrentTest;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 1. ReentrantLock可实现线程同步
+ * 2. await/signal实现等待/通知模式。await时释放锁，signal通知唤醒一个该Condition的await。
+ * 3. signalAll唤醒所有该Condition的await
+ * 4. 使用多个Condition实现通知部分线程
+ * 5. ReentrantLock默认是公平锁，多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。
+ * 6. ReentrantLock可以构造非公平锁，在锁释放时，任何一个等待锁的线程都有机会获得锁。
+ * 7. lock.getHoldCount(): 当前线程持有该锁的次数
  * @author nouuid
  * @date 4/6/2016
  * @description
  */
 public class ReentranLockDemo extends ConcurrentTest {
 
-    //--------------------------------------------------------------------------------------------------------
-    // ReentrantLockRunner -----------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
+    // 1. ReentrantLock可实现线程同步
     @Test
-    public void reentrantLockTest() throws InterruptedException {
-        ReentrantLockRunner reentrantLockRunner = new ReentrantLockRunner();
-        reentrantLockRunner.reentrantLockTest();
+    public void lock() throws InterruptedException {
+        class Counter {
+            private Lock locker = new ReentrantLock();
+            private int count = 0;
+
+            public void add1() {
+                locker.lock();
+                try {
+                    count += 1;
+                } finally {
+                    locker.unlock();
+                }
+            }
+
+            public void add2() {
+                locker.lock();
+                try {
+                    count += 2;
+                } finally {
+                    locker.unlock();
+                }
+            }
+
+            public int get() {
+                locker.lock();
+                try {
+                    return count;
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }
+
+        Counter counter = new Counter();
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 10000; i++) {
+                    counter.add1();
+                }
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 10000; i++) {
+                    counter.add2();
+                }
+            }
+        });
+        t1.start();
+        t2.start();
+        Thread.sleep(5000);
+        System.out.println(counter.get());
+    }
+
+    // 2. await/notify实现等待/通知模式。await时释放锁，signal通知被await阻塞的线程重新获取锁。
+    @Test
+    public void awaitSignal() throws InterruptedException {
+        Lock locker = new ReentrantLock();
+        Condition condition = locker.newCondition();
+
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    // await释放锁
+                    condition.await();
+                    System.out.println(Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    // await释放锁
+                    condition.await();
+                    System.out.println(Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t2");
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    System.out.println(Thread.currentThread().getName());
+                    // signal通知被await阻塞的线程去获取锁
+                    condition.signal();
+                } finally {
+                    // 释放锁后，被await阻塞的线程获得锁
+                    locker.unlock();
+                }
+            }
+        }, "t3");
+        t1.start();
+        Thread.sleep(500);
+        t2.start();
+        Thread.sleep(500);
+        t3.start();
+        Thread.sleep(15*1000);
+    }
+
+    // 3. signalAll唤醒所有该Condition的await
+    @Test
+    public void awaitSignalAll() throws InterruptedException {
+        Lock locker = new ReentrantLock();
+        Condition condition = locker.newCondition();
+
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    // await释放锁
+                    condition.await();
+                    System.out.println(Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    // await释放锁
+                    condition.await();
+                    System.out.println(Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t2");
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    System.out.println(Thread.currentThread().getName());
+                    // signal通知被await阻塞的线程去获取锁
+                    condition.signalAll();
+                } finally {
+                    // 释放锁后，被await阻塞的线程获得锁
+                    locker.unlock();
+                }
+            }
+        }, "t3");
+        t1.start();
+        Thread.sleep(500);
+        t2.start();
+        Thread.sleep(500);
+        t3.start();
+        Thread.sleep(15*1000);
+    }
+
+    // 4. 使用多个Condition实现通知部分线程
+    // t3发通知，通知t1，不通知t2
+    @Test
+    public void multiConditionAwaitSingal() throws InterruptedException {
+        Lock locker = new ReentrantLock();
+        Condition conditionA = locker.newCondition();
+        Condition conditionB = locker.newCondition();
+
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    conditionA.await();
+                    System.out.println(Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t1");
+
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    conditionB.await();
+                    System.out.println(Thread.currentThread().getName());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t2");
+
+        Thread t3 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                locker.lock();
+                try {
+                    conditionA.signalAll();
+                    System.out.println(Thread.currentThread().getName());
+                } finally {
+                    locker.unlock();
+                }
+            }
+        }, "t3");
+
+        t1.start();
+        Thread.sleep(1000);
+        t2.start();
+        Thread.sleep(1000);
+        t3.start();
+
         Thread.sleep(30*1000);
     }
 
-    //--------------------------------------------------------------------------------------------------------
-    // ReentrantLockConditionRunner --------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
+    // 5. ReentrantLock默认是公平锁，多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。
     @Test
-    public void reentrantLockConditionAwaitTest() throws InterruptedException {
-        ReentrantLockConditionRunner reentrantLockConditionRunner = new ReentrantLockConditionRunner();
-        reentrantLockConditionRunner.reentrantLockConditionAwaitTest();
-        Thread.sleep(30*1000);
+    public void fairLock() throws InterruptedException {
+        Lock lock = new ReentrantLock();
+        ArrayList<Thread> threadArrayList = new ArrayList<Thread>();
+        for (int i=1; i<=10; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    lock.lock();
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println(Thread.currentThread().getName());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+            }, "t"+i);
+            threadArrayList.add(thread);
+        }
+        for (int i=1; i<=10; i++) {
+            threadArrayList.get(i-1).start();
+        }
+        Thread.sleep(15*1000);
     }
 
+    // 6. ReentrantLock可以构造非公平锁，在锁释放时，任何一个等待锁的线程都有机会获得锁。
+    // ReentrantLock.isFair() 判断是否为公平锁
+    // ReentrantLock.isLocked() 锁是否被持有
+    // ReentrantLock.isHeldByCurrentThread() 当前线程是否持有锁
     @Test
-    public void reentrantLockConditionAwaitSingalTest() throws InterruptedException {
-        ReentrantLockConditionRunner reentrantLockConditionRunner = new ReentrantLockConditionRunner();
-        reentrantLockConditionRunner.reentrantLockConditionAwaitSingalTest();
-        Thread.sleep(30*1000);
+    public void unfairLock() throws InterruptedException {
+        ReentrantLock lock = new ReentrantLock(false);
+        // 判断是否为公平锁
+        Assert.assertEquals(false, lock.isFair());
+        // 锁是否被持有
+        Assert.assertEquals(false, lock.isLocked());
+        ArrayList<Thread> threadArrayList = new ArrayList<Thread>();
+        for (int i=1; i<=10; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    lock.lock();
+                    Assert.assertEquals(true, lock.isLocked());
+                    try {
+                        Thread.sleep(1000);
+                        // 当前线程是否持有锁
+                        Assert.assertEquals(true, lock.isHeldByCurrentThread());
+                        System.out.println(Thread.currentThread().getName());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+            }, "t"+i);
+            threadArrayList.add(thread);
+        }
+        for (int i=1; i<=10; i++) {
+            threadArrayList.get(i-1).start();
+        }
+        Thread.sleep(15*1000);
     }
 
+    // 7. 状态管理
+    // lock.getHoldCount(): 当前线程持有该锁的次数
+    // lock.getQueueLength()： 等待持有该锁的线程数
+    // lock.getWaitQueueLength(condition)： 等待锁的Condition的线程数
+    // lock.hasWaiters(condition)：锁的Condition是否有等待的线程
+    // lock.hasQueuedThreads()： 是否有等待锁的线程
+    // lock.hasQueuedThread(thread)： thread线程是否在等待锁
     @Test
-    public void reentrantLockMultiConditionAwaitSingalTest() throws InterruptedException {
-        ReentrantLockConditionRunner reentrantLockConditionRunner = new ReentrantLockConditionRunner();
-        reentrantLockConditionRunner.reentrantLockMultiConditionAwaitSingalTest();
-        Thread.sleep(30*1000);
-    }
+    public void status() throws InterruptedException {
+        ReentrantLock lock = new ReentrantLock();
+        Thread t0 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lock.lock();
+                try {
+                    // 当前线程持有该锁的次数
+                    Assert.assertEquals(1, lock.getHoldCount());
+                    lock.lock();
+                    try {
+                        Assert.assertEquals(2, lock.getHoldCount());
+                    } finally {
+                        lock.unlock();
+                    }
+                } finally {
+                    lock.unlock();
+                }
+            }
+        });
+        t0.start();
+        Thread.sleep(3000);
 
-    //--------------------------------------------------------------------------------------------------------
-    // ProducerConsumerRunner --------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
+        Condition condition = lock.newCondition();
+        List<Thread> threads = new ArrayList<Thread>();
+        for (int i=1; i<=10; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    lock.lock();
+                    try {
+                        condition.await();
+                        Thread.sleep(50);
+                        // 等待持有该锁的线程数
+                        int length = lock.getQueueLength();
+                        System.out.println(Thread.currentThread().getName() + " getQueueLength=" + length);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } finally {
+                        lock.unlock();
+                    }
+                }
+            }, "t"+i);
+            threads.add(thread);
+        }
+        for (int i=1; i<=10; i++) {
+            threads.get(i-1).start();
+        }
+        Thread.sleep(1000);
+        lock.lock();
+        try {
+            // 等待锁的Condition的线程数
+            Assert.assertEquals(10, lock.getWaitQueueLength(condition));
+            // 锁的Condition是否有等待的线程
+            Assert.assertEquals(true, lock.hasWaiters(condition));
+            // 通知所有的await
+            condition.signalAll();
+            // 是否有等待锁的线程
+            Assert.assertEquals(true, lock.hasQueuedThreads());
+            // t0线程是否在等待锁
+            Assert.assertEquals(true, lock.hasQueuedThread(threads.get(0)));
+        } finally {
+            lock.unlock();
+        }
+        Thread.sleep(3000);
 
-    @Test
-    public void producerConsumerOneToOneTest() throws InterruptedException {
-        ProducerConsumerRunner producerConsumerRunner = new ProducerConsumerRunner();
-        producerConsumerRunner.oneToOneTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void producerConsumerMultiToMultiTest() throws InterruptedException {
-        ProducerConsumerRunner producerConsumerRunner = new ProducerConsumerRunner();
-        producerConsumerRunner.multiToMultiTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void producerConsumerMultiToMultiTest2() throws InterruptedException {
-        ProducerConsumerRunner producerConsumerRunner = new ProducerConsumerRunner();
-        producerConsumerRunner.multiToMultiTest2();
-        Thread.sleep(30*1000);
-    }
-
-    //--------------------------------------------------------------------------------------------------------
-    // FairNofairRunner --------------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void fairTest() throws InterruptedException {
-        FairNofairRunner fairNofairRunner = new FairNofairRunner();
-        fairNofairRunner.fairTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void nofairTest() throws InterruptedException {
-        FairNofairRunner fairNofairRunner = new FairNofairRunner();
-        fairNofairRunner.nofairTest();
-        Thread.sleep(30*1000);
-    }
-
-    //--------------------------------------------------------------------------------------------------------
-    // CountMethodOfLockRunner -------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void getHoldCountTest() throws InterruptedException {
-        CountMethodOfLockRunner countMethodOfLockRunner = new CountMethodOfLockRunner();
-        countMethodOfLockRunner.getHoldCountTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void getQueueLengthTest() throws InterruptedException {
-        CountMethodOfLockRunner countMethodOfLockRunner = new CountMethodOfLockRunner();
-        countMethodOfLockRunner.getQueueLengthTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void getWaitQueueLengthServiceTest() throws InterruptedException {
-        CountMethodOfLockRunner countMethodOfLockRunner = new CountMethodOfLockRunner();
-        countMethodOfLockRunner.getWaitQueueLengthServiceTest();
-        Thread.sleep(10*1000);
-    }
-
-    //--------------------------------------------------------------------------------------------------------
-    // WaitingStatusMethodOfLockRunner -----------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void hasQueuedThreadTest() throws InterruptedException {
-        WaitingStatusMethodOfLockRunner statusMethodOfLockRunner = new WaitingStatusMethodOfLockRunner();
-        statusMethodOfLockRunner.hasQueuedThreadTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void hasQueuedThreadsTest() throws InterruptedException {
-        WaitingStatusMethodOfLockRunner waitingStatusMethodOfLockRunner = new WaitingStatusMethodOfLockRunner();
-        waitingStatusMethodOfLockRunner.hasQueuedThreadsTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void hasWaitersTest() throws InterruptedException {
-        WaitingStatusMethodOfLockRunner waitingStatusMethodOfLockRunner = new WaitingStatusMethodOfLockRunner();
-        waitingStatusMethodOfLockRunner.hasWaitersTest();
-        Thread.sleep(30*1000);
-    }
-
-    //--------------------------------------------------------------------------------------------------------
-    // HoldStatusMethodOfLockRunner --------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void isFairTest() throws InterruptedException {
-        HoldStatusMethodOfLockRunner holdStatusMethodOfLockRunner = new HoldStatusMethodOfLockRunner();
-        holdStatusMethodOfLockRunner.isFairTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void isHeldByCurrentThreadTest() throws InterruptedException {
-        HoldStatusMethodOfLockRunner holdStatusMethodOfLockRunner = new HoldStatusMethodOfLockRunner();
-        holdStatusMethodOfLockRunner.isHeldByCurrentThreadTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void isLockedTest() throws InterruptedException {
-        HoldStatusMethodOfLockRunner holdStatusMethodOfLockRunner = new HoldStatusMethodOfLockRunner();
-        holdStatusMethodOfLockRunner.isLockedTest();
-        Thread.sleep(30*1000);
     }
 
     //--------------------------------------------------------------------------------------------------------
@@ -243,656 +475,6 @@ public class ReentranLockDemo extends ConcurrentTest {
     }
 }
 
-//========================================================================================================================
-
-class ReentrantLockRunner {
-
-    public void reentrantLockTest() {
-        ReentrantLockTask reentrantLockTask = new ReentrantLockTask();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                reentrantLockTask.service();
-            }
-        });
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                reentrantLockTask.service();
-            }
-        });
-
-        t1.setName("A");
-        t2.setName("B");
-
-        t1.start();
-        t2.start();
-
-    }
-}
-
-class ReentrantLockTask {
-    private Lock locker = new ReentrantLock();
-
-    public void service() {
-        try {
-            locker.lock();
-            for (int i = 0; i < 10; i++) {
-                System.out.println(Thread.currentThread().getName() + " do service " + i);
-                Thread.sleep(1000);
-            }
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-//========================================================================================================================
-
-class ReentrantLockConditionRunner {
-
-    public void reentrantLockConditionAwaitTest() {
-        ReentrantLockConditionTask reentrantLockConditionTask = new ReentrantLockConditionTask();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                reentrantLockConditionTask.service();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                reentrantLockConditionTask.service2();
-            }
-        });
-
-        t1.setName("A");
-        t2.setName("B");
-
-        t1.start();
-        t2.start();
-    }
-
-    public void reentrantLockConditionAwaitSingalTest() {
-        ReentrantLockConditionTask reentrantLockConditionTask = new ReentrantLockConditionTask();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                reentrantLockConditionTask.service();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                reentrantLockConditionTask.service3();
-            }
-        });
-
-        t1.setName("A");
-        t2.setName("B");
-
-        t1.start();
-        t2.start();
-    }
-
-    public void reentrantLockMultiConditionAwaitSingalTest() throws InterruptedException {
-        Lock locker = new ReentrantLock();
-        Condition conditionA = locker.newCondition();
-        Condition conditionB = locker.newCondition();
-        Condition conditionC = locker.newCondition();
-
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locker.lock();
-                    System.out.println("A start");
-                    conditionA.await();
-                    System.out.println("A end");
-                    locker.unlock();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locker.lock();
-                    System.out.println("B start");
-                    conditionB.await();
-                    System.out.println("B end");
-                    locker.unlock();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        Thread t3 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    locker.lock();
-                    System.out.println("C start");
-                    conditionA.signalAll();
-                    System.out.println("C end");
-                    locker.unlock();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        t1.start();
-        Thread.sleep(1000);
-        t2.start();
-        Thread.sleep(1000);
-        t3.start();
-
-    }
-}
-
-class ReentrantLockConditionTask {
-    private Lock locker = new ReentrantLock();
-    private Condition condition = locker.newCondition();
-
-    public void service() {
-        try {
-            locker.lock();
-            for (int i = 0; i < 10; i++) {
-                if (i==5) {
-                    condition.await();
-                }
-                System.out.println(Thread.currentThread().getName() + " do service " + i);
-                Thread.sleep(1000);
-            }
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service2() {
-        try {
-            locker.lock();
-            for (int i = 0; i < 10; i++) {
-                System.out.println(Thread.currentThread().getName() + " do service " + i);
-                Thread.sleep(1000);
-            }
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void service3() {
-        try {
-            locker.lock();
-            for (int i = 0; i < 10; i++) {
-                if (i==5) {
-                    condition.signal();
-                }
-                System.out.println(Thread.currentThread().getName() + " do service " + i);
-                Thread.sleep(1000);
-            }
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-//======================================================================================================================
-
-class ProducerConsumerRunner {
-
-    public void oneToOneTest() throws InterruptedException {
-        ProducerConsumerRunnerProducerConsumer producerConsumerRunnerProducerConsumer = new ProducerConsumerRunnerProducerConsumer();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i=0; i<10; i++) {
-                    producerConsumerRunnerProducerConsumer.produce();
-                }
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i=0; i<10; i++) {
-                    producerConsumerRunnerProducerConsumer.consume();
-                }
-            }
-        });
-
-        t2.start();
-        Thread.sleep(1000);
-        t1.start();
-    }
-
-    public void multiToMultiTest() throws InterruptedException {
-        ProducerConsumerRunnerProducerConsumer2 producerConsumerRunnerProducerConsumer2 = new ProducerConsumerRunnerProducerConsumer2();
-
-        Thread[] producerThreads = new Thread[10];
-        Thread[] consumerThreads = new Thread[10];
-
-        for (int i=0; i<10; i++) {
-            producerThreads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    producerConsumerRunnerProducerConsumer2.produce();
-                }
-            });
-
-            consumerThreads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    producerConsumerRunnerProducerConsumer2.consume();
-                }
-            });
-
-            producerThreads[i].start();
-            consumerThreads[i].start();
-        }
-    }
-
-    public void multiToMultiTest2() throws InterruptedException {
-        ProducerConsumerRunnerProducerConsumer3 producerConsumerRunnerProducerConsumer3 = new ProducerConsumerRunnerProducerConsumer3();
-
-        Thread[] producerThreads = new Thread[10];
-        Thread[] consumerThreads = new Thread[100];
-
-        for (int i=0; i<10; i++) {
-            producerThreads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    producerConsumerRunnerProducerConsumer3.produce();
-                }
-            });
-
-            producerThreads[i].start();
-
-        }
-
-        for (int i=0; i<100; i++) {
-            consumerThreads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    producerConsumerRunnerProducerConsumer3.consume();
-                }
-            });
-
-            consumerThreads[i].start();
-        }
-
-    }
-}
-
-class ProducerConsumerRunnerProducerConsumer {
-
-    private Lock locker = new ReentrantLock();
-    private Condition condition = locker.newCondition();
-    private boolean prevIsProducer = false;
-
-    public void produce() {
-        try {
-            locker.lock();
-            if (prevIsProducer) {
-                condition.await();
-            }
-            System.out.println("produce");
-            Thread.sleep(1000);
-            prevIsProducer = true;
-            condition.signalAll();
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void consume() {
-        try {
-            locker.lock();
-            if (!prevIsProducer) {
-                condition.await();
-            }
-            System.out.println("          consume");
-            Thread.sleep(1000);
-            prevIsProducer = false;
-            condition.signalAll();
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-class ProducerConsumerRunnerProducerConsumer2 {
-
-    private Lock locker = new ReentrantLock();
-    private Condition conditionP = locker.newCondition();
-    private Condition conditionC = locker.newCondition();
-    private boolean prevIsProducer = false;
-
-    public void produce() {
-        try {
-            locker.lock();
-            if (prevIsProducer) {
-                conditionP.await();
-            }
-            System.out.println("produce");
-            Thread.sleep(1000);
-            prevIsProducer = true;
-            conditionC.signal();
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void consume() {
-        try {
-            locker.lock();
-            if (!prevIsProducer) {
-                conditionC.await();
-            }
-            System.out.println("          consume");
-            Thread.sleep(1000);
-            prevIsProducer = false;
-            conditionP.signal();
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-class ProducerConsumerRunnerProducerConsumer3 {
-
-    private Lock locker = new ReentrantLock();
-    private Condition condition = locker.newCondition();
-    private boolean prevIsProducer = false;
-
-    public void produce() {
-        try {
-            locker.lock();
-            if (prevIsProducer) {
-                condition.await();
-            }
-            System.out.println("produce");
-            Thread.sleep(1000);
-            prevIsProducer = true;
-            condition.signal();
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void consume() {
-        try {
-            locker.lock();
-            if (!prevIsProducer) {
-                condition.await();
-            }
-            System.out.println("          consume");
-            Thread.sleep(1000);
-            prevIsProducer = false;
-            condition.signal();
-            locker.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-//======================================================================================================================
-
-/**
- * 公平锁和非公平锁
- */
-class FairNofairRunner {
-
-    public void fairTest() {
-        FairNofairTask fairNofairTask = new FairNofairTask(true);
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
-                fairNofairTask.service();
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    public void nofairTest() {
-        FairNofairTask fairNofairTask = new FairNofairTask(false);
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getName() + " start");
-                fairNofairTask.service();
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-}
-
-class FairNofairTask {
-    private Lock locker;
-
-    public FairNofairTask(boolean isFair) {
-        locker = new ReentrantLock(isFair);
-    }
-
-    public void service() {
-        locker.lock();
-        System.out.println("                     " + Thread.currentThread().getName() + " do service");
-        locker.unlock();
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 4/6/2016
- * @description
- *
- * lock.getHoldCount(): count number of threads which hold this lock
- * lock.getQueueLength(): count number of threads which is waiting for holding this lock
- * lock.getWaitQueueLength(condition): count number of threads which is waiting for condition related to this lock
- */
-class CountMethodOfLockRunner {
-
-    public void getHoldCountTest() {
-        GetHoldCountService getHoldCountService = new GetHoldCountService();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getHoldCountService.service1();
-            }
-        });
-        thread.start();
-    }
-
-    public void getQueueLengthTest() {
-        GetQueueLengthService getQueueLengthService = new GetQueueLengthService();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                getQueueLengthService.service1();
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println("getQueueLength=" + getQueueLengthService.getLocker().getQueueLength());
-    }
-
-    public void getWaitQueueLengthServiceTest() {
-        GetWaitQueueLengthService getWaitQueueLengthService = new GetWaitQueueLengthService();
-        Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                getWaitQueueLengthService.service1();
-            }
-        };
-
-        Runnable runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                getWaitQueueLengthService.service2();
-            }
-        };
-
-        Thread[] threads1 = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads1[i] = new Thread(runnable1);
-            threads1[i].setName("AT" + i);
-        }
-
-        Thread[] threads2 = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads2[i] = new Thread(runnable2);
-            threads2[i].setName("BT" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads1[i].start();
-            threads2[i].start();
-        }
-    }
-}
-
-class GetHoldCountService {
-
-    private ReentrantLock locker = new ReentrantLock();
-
-    public void service1() {
-        locker.lock();
-        System.out.println("service1 getHoldCount=" + locker.getHoldCount());
-        service2();
-        locker.unlock();
-    }
-
-    public void service2() {
-        locker.lock();
-        System.out.println("service2 getHoldCount=" + locker.getHoldCount());
-        locker.unlock();
-    }
-}
-
-class GetQueueLengthService {
-    private ReentrantLock locker = new ReentrantLock();
-
-    public ReentrantLock getLocker() {
-        return locker;
-    }
-
-    public void setLocker(ReentrantLock locker) {
-        this.locker = locker;
-    }
-
-    public void service1() {
-        try {
-            locker.lock();
-            System.out.println(Thread.currentThread().getName() + " do service1");
-            Thread.sleep(5*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            locker.unlock();
-        }
-    }
-}
-
-class GetWaitQueueLengthService {
-    private ReentrantLock locker = new ReentrantLock();
-    private Condition conditionA = locker.newCondition();
-    private Condition conditionB = locker.newCondition();
-
-    public Condition getConditionA() {
-        return conditionA;
-    }
-
-    public void setConditionA(Condition conditionA) {
-        this.conditionA = conditionA;
-    }
-
-    public ReentrantLock getLocker() {
-        return locker;
-    }
-
-    public void setLocker(ReentrantLock locker) {
-        this.locker = locker;
-    }
-
-    public void service1() {
-        try {
-            locker.lock();
-            System.out.println("A getWaitQueueLength=" + locker.getWaitQueueLength(conditionA));
-            conditionA.await();
-            System.out.println(Thread.currentThread().getName() + " do service1");
-            Thread.sleep(2*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            locker.unlock();
-        }
-    }
-
-    public void service2() {
-        try {
-            locker.lock();
-            System.out.println("                               B getWaitQueueLength=" + locker.getWaitQueueLength(conditionB));
-            conditionA.signal();
-            conditionB.await();
-            System.out.println("                               "  + Thread.currentThread().getName() + " do service2");
-            Thread.sleep(2*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            locker.unlock();
-        }
-    }
-}
 
 //======================================================================================================================
 
@@ -1064,114 +646,6 @@ class WaitingStatusMethodOfLockService {
             Thread.sleep(10*1000);
             condition.signal();
             reentrantLock.unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-//======================================================================================================================
-
-/**
- * @author nouuid
- * @date 4/7/2016
- * @description
- * lock.isFair(): is this lock a fair lock
- * lock.isHeldByCurrentThread(): is this lock locked by current thread
- * lock.isLocked(): is this lock locked by any threads
- */
-class HoldStatusMethodOfLockRunner {
-
-    public void isFairTest() {
-        HoldStatusMethodOfLockService holdStatusMethodOfLockService = new HoldStatusMethodOfLockService();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                holdStatusMethodOfLockService.service1();
-            }
-        });
-
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                holdStatusMethodOfLockService.service2();
-            }
-        });
-
-        t1.setName("t1");
-        t2.setName("t2");
-
-        t1.start();
-        t2.start();
-    }
-
-    public void isHeldByCurrentThreadTest() {
-        HoldStatusMethodOfLockService holdStatusMethodOfLockService = new HoldStatusMethodOfLockService();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                holdStatusMethodOfLockService.service3();
-            }
-        });
-
-        t1.setName("t1");
-        t1.start();
-    }
-
-    public void isLockedTest() throws InterruptedException {
-        HoldStatusMethodOfLockService holdStatusMethodOfLockService = new HoldStatusMethodOfLockService();
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                holdStatusMethodOfLockService.service4();
-            }
-        });
-
-        t1.setName("t1");
-        System.out.println("t1, before start, lock isLocked=" + holdStatusMethodOfLockService.getFairReentrantLock().isLocked());
-        t1.start();
-        Thread.sleep(1000);
-        System.out.println("t1, start, lock, lock isLocked=" + holdStatusMethodOfLockService.getFairReentrantLock().isLocked());
-        Thread.sleep(10000);
-        System.out.println("t1, unlock, lock isLocked=" + holdStatusMethodOfLockService.getFairReentrantLock().isLocked());
-    }
-}
-
-class HoldStatusMethodOfLockService {
-    private ReentrantLock fairReentrantLock = new ReentrantLock(true);
-    private ReentrantLock nofairReentrantLock = new ReentrantLock(false);
-
-    public ReentrantLock getFairReentrantLock() {
-        return fairReentrantLock;
-    }
-
-    public void service1() {
-        System.out.println(Thread.currentThread().getName() + ", fairReentrantLock=" + fairReentrantLock.isFair());
-        Assert.assertEquals(true, fairReentrantLock.isFair());
-    }
-
-    public void service2() {
-        System.out.println(Thread.currentThread().getName() + ", nofairReentrantLock=" + nofairReentrantLock.isFair());
-        Assert.assertEquals(false, nofairReentrantLock.isFair());
-    }
-
-    public void service3() {
-        fairReentrantLock.lock();
-        System.out.println(Thread.currentThread().getName() + ", fairReentrantLock isHeldByCurrentThread=" + fairReentrantLock.isHeldByCurrentThread());
-        Assert.assertEquals(true, fairReentrantLock.isHeldByCurrentThread());
-
-        System.out.println(Thread.currentThread().getName() + ", nofairReentrantLock isHeldByCurrentThread=" + nofairReentrantLock.isHeldByCurrentThread());
-        Assert.assertEquals(false, nofairReentrantLock.isHeldByCurrentThread());
-        fairReentrantLock.unlock();
-    }
-
-    public void service4() {
-        try {
-            fairReentrantLock.lock();
-            System.out.print("                                                    ");
-            System.out.println(Thread.currentThread().getName() + " do service4");
-            Thread.sleep(5*1000);
-            fairReentrantLock.unlock();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
