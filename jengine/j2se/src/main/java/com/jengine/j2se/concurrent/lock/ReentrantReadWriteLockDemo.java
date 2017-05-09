@@ -7,192 +7,71 @@ import org.junit.Test;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 1. ReentrantReadWriteLock有两个锁
+ *      ReentrantReadWriteLock.readLock()，读相关的共享锁
+ *      ReentrantReadWriteLock.writeLock()，写操作相关的排他锁
+ *      读读不互斥，读写互斥，写写互斥
  * @author nouuid
  * @date 4/8/2016
  * @description
  */
 public class ReentrantReadWriteLockDemo extends ConcurrentTest{
 
+    // 1. ReentrantReadWriteLock有两个锁
+    //      ReentrantReadWriteLock.readLock()，读相关的共享锁
+    //      ReentrantReadWriteLock.writeLock()，写操作相关的排他锁
+    //      读读不互斥，读写互斥，写写互斥
     @Test
-    public void amongReadLocksTest() throws InterruptedException {
-        ReentrantReadWriteLockRunner reentrantReadWriteLockRunner = new ReentrantReadWriteLockRunner();
-        reentrantReadWriteLockRunner.amongReadLocksTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void amongWriteLocksTest() throws InterruptedException {
-        ReentrantReadWriteLockRunner reentrantReadWriteLockRunner = new ReentrantReadWriteLockRunner();
-        reentrantReadWriteLockRunner.amongWriteLocksTest();
-        Thread.sleep(10*1000);
-    }
-
-    @Test
-    public void amongReadWriteLocksTest() throws InterruptedException {
-        ReentrantReadWriteLockRunner reentrantReadWriteLockRunner = new ReentrantReadWriteLockRunner();
-        reentrantReadWriteLockRunner.amongReadWriteLocksTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void amongReadWriteLocksTest2() throws InterruptedException {
-        ReentrantReadWriteLockRunner reentrantReadWriteLockRunner = new ReentrantReadWriteLockRunner();
-        reentrantReadWriteLockRunner.amongReadWriteLocksTest2();
-        Thread.sleep(30*1000);
-    }
-}
-
-
-/**
- * @author nouuid
- * @date 4/8/2016
- * @description
- *
- * no mutex among read locks
- * mutex between read lock and write lock
- * mutex between write locks
- */
-class ReentrantReadWriteLockRunner {
-    public void amongReadLocksTest() {
-        ReentrantReadWriteLockTask reentrantReadWriteLockTask = new ReentrantReadWriteLockTask();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                reentrantReadWriteLockTask.readLockService();
+    public void twoLock() throws InterruptedException {
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+        String[] spaces = {"", "       ", "             ", "                     "};
+        for (int j=1; j<=4; j++) {
+            final int index = j;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (index==1 || index==2) {
+                        reentrantReadWriteLock.readLock().lock();
+                    }
+                    if (index==3 || index==4) {
+                        reentrantReadWriteLock.writeLock().lock();
+                    }
+                    try {
+                        for (int i = 1; i <= 100; i++) {
+                            System.out.println(Thread.currentThread().getName() + "-" + i);
+                            try {
+                                Thread.sleep(30);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } finally {
+                        if (index==1 || index==2) {
+                            reentrantReadWriteLock.readLock().unlock();
+                        }
+                        if (index==3 || index==4) {
+                            reentrantReadWriteLock.writeLock().unlock();
+                        }
+                    }
+                }
+            }, spaces[j-1] + "t"+j);
+            if (index==1) {
+                // t1获取读锁
+                thread.start();
+                Thread.sleep(10);
+            } else if (index==2) {
+                // t2也获取读锁，没有被阻塞
+                thread.start();
+                Thread.sleep(10);
+            } else if (index==3) {
+                // t3要获取写锁，和t1/t2读锁互斥，t3被阻塞，等到t1和t2都释放读锁后，t3获取到写锁
+                thread.start();
+                Thread.sleep(3000);
+            } else if (index==4) {
+                // t4要获取写锁，和t3写锁4斥，t3被阻塞，等到t3是否写锁后，t4获取到写锁
+                thread.start();
+                Thread.sleep(1000*6);
             }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    public void amongWriteLocksTest() {
-        ReentrantReadWriteLockTask reentrantReadWriteLockTask = new ReentrantReadWriteLockTask();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                reentrantReadWriteLockTask.writeLockService();
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    public void amongReadWriteLocksTest() {
-        ReentrantReadWriteLockTask reentrantReadWriteLockTask = new ReentrantReadWriteLockTask();
-        Runnable readRunnable = new Runnable() {
-            @Override
-            public void run() {
-                reentrantReadWriteLockTask.readLockService();
-            }
-        };
-
-        Runnable writeRunnable = new Runnable() {
-            @Override
-            public void run() {
-                reentrantReadWriteLockTask.writeLockService();
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            if (i%2==0) {
-                threads[i] = new Thread(readRunnable);
-            } else{
-                threads[i] = new Thread(writeRunnable);
-            }
-            threads[i].setName("T" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    public void amongReadWriteLocksTest2() {
-        ReentrantReadWriteLockTask reentrantReadWriteLockTask = new ReentrantReadWriteLockTask();
-        Runnable readRunnable = new Runnable() {
-            @Override
-            public void run() {
-                reentrantReadWriteLockTask.readLockUnlockService();
-            }
-        };
-
-        Runnable writeRunnable = new Runnable() {
-            @Override
-            public void run() {
-                reentrantReadWriteLockTask.writeLockUnlockService();
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            if (i%2==0) {
-                threads[i] = new Thread(readRunnable);
-            } else{
-                threads[i] = new Thread(writeRunnable);
-            }
-            threads[i].setName("T" + i);
-        }
-
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-}
-
-class ReentrantReadWriteLockTask {
-    private ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
-
-    public void readLockService() {
-        reentrantReadWriteLock.readLock().lock();
-        System.out.println(Thread.currentThread().getName() + " read");
-    }
-
-    public void writeLockService() {
-        reentrantReadWriteLock.writeLock().lock();
-        System.out.println(Thread.currentThread().getName() + " write");
-        try {
-            Thread.sleep(1 * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void readLockUnlockService() {
-        try {
-            reentrantReadWriteLock.readLock().lock();
-            System.out.println(Thread.currentThread().getName() + " read");
-            Thread.sleep(1 * 1000);
-            reentrantReadWriteLock.readLock().unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeLockUnlockService() {
-        try {
-            reentrantReadWriteLock.writeLock().lock();
-            System.out.println(Thread.currentThread().getName() + " write");
-            Thread.sleep(1 * 1000);
-            reentrantReadWriteLock.writeLock().unlock();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
