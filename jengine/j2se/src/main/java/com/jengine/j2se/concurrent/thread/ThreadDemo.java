@@ -1,18 +1,31 @@
 package com.jengine.j2se.concurrent.thread;
 
 import com.jengine.j2se.concurrent.ConcurrentTest;
+import junit.framework.Assert;
 import org.junit.Test;
 
-import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 /**
+ * 1. Thread线程，执行Runnable任务，由start()启动。
+ * 2. 一个线程的start方法只能调用一次，多次调用start方法会抛错java.lang.IllegalThreadStateException
+ * 3. 一些方法
+ *      Thread.currentThread().getName()    线程名称
+ *      Thread.currentThread().getId()      线程id
+ *      thread.isAlive()                    是否存活
+ * 4. Thread.sleep(long)    当前线程睡眠一段时间
+ * 5. interrupt()方法并不能终止线程。
+ *      调用此方法仅仅是在当前中打一个停止的标记，并不是真的停止线程。
+ *      但是如果线程处于等待状态或睡眠状态时，此方法的调用会导致线程抛出InterruptException异常，从而导致线程停止。
+ * 6. 放弃当前的CPU资源，让给其他的任务去占用CPU资源。放弃的时间不确定，有可能刚放弃CPU资源，又立马获得。
+ * 7. 高优先级的线程具有更高的运行概率
  * @author nouuid
  * @date 4/11/2016
  * @description
  */
 public class ThreadDemo extends ConcurrentTest {
 
-    // 一个线程的start方法只能调用一次，多次调用start方法会抛错java.lang.IllegalThreadStateException
+    // 2. 一个线程的start方法只能调用一次，多次调用start方法会抛错java.lang.IllegalThreadStateException
     @Test
     public void multiStart() throws InterruptedException {
         Thread t = new Thread(new Runnable() {
@@ -34,271 +47,91 @@ public class ThreadDemo extends ConcurrentTest {
         Thread.sleep(5000);
     }
 
-    /**
-     * 基本使用，打印2,1,3
-     * @throws InterruptedException
-     */
+    // 3. 一些方法
+    //       Thread.currentThread().getName()    线程名称
+    //       Thread.currentThread().getId()      线程id
+    //       thread.isAlive()                    是否存活
     @Test
-    public void basic() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.basic();
+    public void methods() throws InterruptedException {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 线程名称
+                Assert.assertEquals("t1", Thread.currentThread().getName());
+                // 线程id
+                System.out.println(Thread.currentThread().getId());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "t1");
+        thread.start();
+        Thread.sleep(100);
+        // 正在运行
+        Assert.assertTrue(thread.isAlive());
     }
 
-    /**
-     * 获取当前线程名称
-     * Thread.currentThread().getName()
-     * @throws InterruptedException
-     */
+    // 5. interrupt()方法并不能终止线程。
+    //      调用此方法仅仅是在当前中打一个停止的标记，并不是真的停止线程。
+    //      但是如果线程处于等待状态或睡眠状态时，此方法的调用会导致线程抛出InterruptException异常，可能导致线程停止。
+    volatile long count = 0;
     @Test
-    public void currentThreadName() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.currentThreadName();
-        Thread.sleep(10*1000);
+    public void interruptTest() throws InterruptedException {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i=0; i<100000000; i++) {
+                    count++;
+                }
+            }
+        });
+        thread.start();
+        // interrupt()方法并不能终止线程
+        thread.interrupt();
+        // thread没有被终止
+        Assert.assertTrue(thread.isAlive());
+        // thread没有运行结束，count不为100000000
+        System.out.println(count);
+        Thread.sleep(5*1000);
+        // thread运行结束，count为100000000
+        Assert.assertFalse(thread.isAlive());
+        Assert.assertEquals(100000000, count);
     }
 
-    /**
-     * 指定线程是否存活
-     * thread.isAlive()
-     * @throws InterruptedException
-     */
+    // 5. 但是如果线程处于等待状态或睡眠状态时，interrupt()的调用会导致线程抛出InterruptException异常，可能导致线程停止。
     @Test
-    public void isAlive() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.isAlive();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * 获取当前线程id
-     * Thread.currentThread().getId()
-     * @throws InterruptedException
-     */
-    @Test
-    public void getId() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.getId();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * join
-     * A线程在B线程中使用join，B线程等待A线程执行任务完毕，然后B执行完成自己的任务
-     * 执行结果: start -> T1 start -> T2 start -> T1 end -> T2 end -> end
-     * @throws InterruptedException
-     */
-    @Test
-    public void joinTest() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.joinTest();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * 限时join
-     * A线程在B线程中使用join，B线程等待x时间，在此期间A可执行自己的任务，然后B执行完成自己的任务
-     * 执行结果: start -> T1 start -> T2 start -> T2 end -> T1 end -> end
-     * @throws InterruptedException
-     */
-    @Test
-    public void timedJoinTest() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.timedJoinTest();
-        Thread.sleep(10*1000);
-    }
-
-    /**
-     * yield
-     *
-     * @throws InterruptedException
-     */
-    @Test
-    public void yieldTest() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.yieldTest();
-        Thread.sleep(30*1000);
-    }
-
-    @Test
-    public void priorityTest() throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.priorityTest();
-        Thread.sleep(30*1000);
-    }
-
-    /**
-     * daemonTest
-     */
-    public static void main(String[] args) throws InterruptedException {
-        ThreadRunner threadRunner = new ThreadRunner();
-        threadRunner.daemonTest();
-    }
-
-
-}
-
-class ThreadRunner {
-
-    public void basic() throws InterruptedException {
+    public void interruptExceptionTest() throws InterruptedException {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(1000);
-                    System.out.println("1");
+                    while (true) {
+                        Thread.sleep(100);
+                        count++;
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         });
         thread.start();
-        System.out.println("2");
-        Thread.sleep(5000);
-        System.out.println("3");
-    }
-
-    public void currentThreadName() throws InterruptedException {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getName() + " do");
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-        }
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    public void isAlive() throws InterruptedException {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getName() + " do");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-            threads[i].setName("T" + i);
-        }
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-        while (true) {
-            System.out.println("T6 isAlive=" + threads[6].isAlive());
-            Thread.sleep(1*1000);
-        }
-    }
-
-    public void getId() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getId() + " do");
-            }
-        };
-
-        Thread[] threads = new Thread[10];
-        for (int i=0; i<10; i++) {
-            threads[i] = new Thread(runnable);
-        }
-        for (int i=0; i<10; i++) {
-            threads[i].start();
-        }
-    }
-
-    /**
-     * A thread use join method in B thread
-     * B thread will wait A thread to finish its task
-     * then B thread finish its own task
-     *
-     */
-    public void joinTest() throws InterruptedException {
-        Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " start " + System.currentTimeMillis());
-                    Thread.sleep(5*1000);
-                    System.out.println(Thread.currentThread().getName() + " end " + System.currentTimeMillis());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread thread1 = new Thread(runnable1);
-        thread1.setName("T1");
-        Runnable runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " start " + System.currentTimeMillis());
-                    thread1.join();
-                    Thread.sleep(1000);
-                    System.out.println(Thread.currentThread().getName() + " end " + System.currentTimeMillis());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread thread2 = new Thread(runnable2);
-        thread2.setName("T2");
-
-        thread1.start();
+        Thread.sleep(10);
+        // interrupt()方法导致线程抛出InterruptException异常
+        thread.interrupt();
+        // 因为异常，线程跳出while，导致线程停止。
+        long count1 = count;
         Thread.sleep(1000);
-        thread2.start();
+        long count2 = count;
+        Assert.assertEquals(count1, count2);
+        // thread处于终止状态
+        Assert.assertFalse(thread.isAlive());
     }
 
-    public void timedJoinTest() throws InterruptedException {
-        Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " start " + System.currentTimeMillis());
-                    Thread.sleep(5*1000);
-                    System.out.println(Thread.currentThread().getName() + " end " + System.currentTimeMillis());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread thread1 = new Thread(runnable1);
-        thread1.setName("T1");
-        Runnable runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " start " + System.currentTimeMillis());
-                    thread1.join(2000);
-                    Thread.sleep(1000);
-                    System.out.println(Thread.currentThread().getName() + " end " + System.currentTimeMillis());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread thread2 = new Thread(runnable2);
-        thread2.setName("T2");
-
-        thread1.start();
-        Thread.sleep(1000);
-        thread2.start();
-    }
-
-    /**
-     * yield used thread will abandon CPU resource
-     */
-    public void yieldTest() {
+    // 6. 放弃当前的CPU资源，让给其他的任务去占用CPU资源。放弃的时间不确定，有可能刚放弃CPU资源，又立马获得。
+    @Test
+    public void yeldTest() throws InterruptedException {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -314,67 +147,87 @@ class ThreadRunner {
         };
         Thread thread = new Thread(runnable);
         thread.start();
+        Thread.sleep(30*1000);
     }
 
-    /**
-     * higher priority thread has more probability to run
-     */
-    public void priorityTest() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                int count = 0;
-                System.out.println(Thread.currentThread().getName() + " start");
-                for (int i=0; i<10000000; i++) {
-                    Random random = new Random();
-                    random.nextInt();
-                    count = count + 1;
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    System.out.println(Thread.currentThread().getName());
-                }
-                System.out.println("                           " + Thread.currentThread().getName() + " end");
-            }
-        };
-        for (int i=0; i<5; i++) {
-            Thread threadA = new Thread(runnable);
-            threadA.setName("TA" + i);
-            threadA.setPriority(1);
-            threadA.start();
-
-            Thread threadB = new Thread(runnable);
-            threadB.setName("TB" + i);
-            threadB.setPriority(10);
-            threadB.start();
-        }
-    }
-
-    public void daemonTest() throws InterruptedException {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int count = 0;
-                    while (true) {
-                        count++;
-                        System.out.println("count=" + count);
-                        Thread.sleep(1000);
+    // 6. 高优先级的线程具有更高的运行概率
+    volatile long count1 = 0;
+    volatile long count2 = 0;
+    volatile long count3 = 0;
+    volatile boolean flag = true;
+    @Test
+    public void priorityTest() throws InterruptedException {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        for (int i=1; i<=3; i++) {
+            final int index = i;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    while(flag) {
+//                        Math.random();
+                        if (index==1) {
+                            count1++;
+                        } else if(index==2) {
+                            count2++;
+                        } else if(index==3) {
+                            count3++;
+                        }
+                    }
                 }
+            }, "t"+i);
+            if (index==1) {
+                thread.setPriority(10);
+            } else if(index==2) {
+                thread.setPriority(5);
+            } else if(index==3) {
+                thread.setPriority(1);
             }
-        };
-        Thread t1 = new Thread(runnable);
-        t1.setName("T1");
-//        t1.setDaemon(true);
-        t1.start();
+            thread.start();
+        }
+        countDownLatch.countDown();
+        Thread.sleep(3*1000);
+        flag = false;
+        System.out.println(count1);
+        System.out.println(count2);
+        System.out.println(count3);
+    }
 
+    // 7. 当进程中不存在非守护线程了，则守护线程自动销毁。
+    //      Daemon的作用是为其他线程的运行提供便利服务，
+    //      只要当前JVM实例中存在任何一个非守护线程没有结束，守护线程就在工作
+    //      只有当最后一个非守护线程结束时，守护线程才随着JVM一同结束工作。
+    //      守护线程最典型的应用就是GC（垃圾回收器）
+    @Test
+    public void daemon() throws InterruptedException {
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName());
+            }
+        }, "t1");
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (flag) {
+                    Math.random();
+                }
+                System.out.println(Thread.currentThread().getName());
+            }
+        }, "t2");
+        t2.start();
+        Thread.sleep(100);
+        t1.setDaemon(true);
+        t1.start();
         Thread.sleep(5000);
-        System.out.println("finish");
+        System.out.println(t1.isAlive());
+        flag = false;
+        Thread.sleep(3000);
+        System.out.println(t1.isAlive());
     }
 
 }
