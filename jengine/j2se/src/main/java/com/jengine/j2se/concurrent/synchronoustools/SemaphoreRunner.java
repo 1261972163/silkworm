@@ -1,90 +1,72 @@
 package com.jengine.j2se.concurrent.synchronoustools;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import org.junit.Test;
+
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 1. 同一时刻多个线程访问同一资源时，Semaphore用来限制访问此资源的最大线程数目。
+ * 2. 通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
+ * 3. release具有叠加效应，可以先执行几次release，增加许可数目
  * @author nouuid
  * @date 4/29/2016
  * @description
- * use semaphore to build a bounded blocking container
  */
 public class SemaphoreRunner {
-    public void test() {
-        SemaphoreBoundedHashSet<Object> objectSemaphoreBoundedHashSet = new SemaphoreBoundedHashSet<Object>(10);
 
-        Thread producer = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(int i=0; i<100; i++) {
+    @Test
+    public void acquire() throws InterruptedException {
+        Semaphore semaphore = new Semaphore(2);
+        AtomicInteger count = new AtomicInteger(0);
+        for (int i=1; i<=10; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
                     try {
-                        objectSemaphoreBoundedHashSet.add(new String());
+                        semaphore.acquire();
+                        count.incrementAndGet();
+                        // Semaphore限制了只能有2个线程acquire到许可，只打印t1和t2
+                        System.out.println(Thread.currentThread().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("i=" + i);
                 }
-            }
-        });
+            }, "t"+i);
+            thread.start();
+        }
+        Thread.sleep(3000);
+        // 只有2个线程可以进入semaphore.acquire()，打印2
+        System.out.println(count.get());
+    }
 
-        Thread consumer = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true) {
-                    objectSemaphoreBoundedHashSet.remove();
+    @Test
+    public void release() throws InterruptedException {
+        Semaphore semaphore = new Semaphore(2);
+        // 3. release具有叠加效应，可以先执行几次release，增加许可数目
+        semaphore.release();
+        semaphore.release();
+        AtomicInteger count = new AtomicInteger(0);
+        for (int i=1; i<=10; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        semaphore.acquire();
+                        count.incrementAndGet();
+                        // Semaphore限制了只能有4个线程acquire到许可，只打印t1、t2、t3和t4
+                        System.out.println(Thread.currentThread().getName());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-
-        producer.start();
-        consumer.start();
-
+            }, "t"+i);
+            thread.start();
+            Thread.sleep(100);
+        }
+        Thread.sleep(3000);
+        // 只有4个线程可以进入semaphore.acquire()，打印4
+        System.out.println(count.get());
     }
 }
 
-class SemaphoreBoundedHashSet<T> {
-    private final Set<T> set;
-    private final Semaphore semaphore;
-
-    public SemaphoreBoundedHashSet(int bound) {
-        set = Collections.synchronizedSet(new HashSet<T>());
-        semaphore = new Semaphore(bound);
-    }
-
-    public boolean add(T o) throws InterruptedException {
-        semaphore.acquire();
-        boolean isAdded = false;
-        try {
-            isAdded = set.add(o);
-            return isAdded;
-        } finally {
-            if(!isAdded) {
-                semaphore.release();
-            }
-        }
-    }
-
-    public boolean remove() {
-        if(set!=null && set.size()>0) { //has thread safe problem
-            for(T e : set) {
-                return remove(e);
-            }
-        }
-        return true;
-    }
-
-    public boolean remove(T o) {
-
-        boolean isRemoved = false;
-        try {
-            isRemoved = set.remove(o);
-            return isRemoved;
-        } finally {
-            if(isRemoved) {
-                semaphore.release();
-            }
-        }
-    }
-}
