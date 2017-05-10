@@ -18,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
  *      调用此方法仅仅是在当前中打一个停止的标记，并不是真的停止线程。
  *      但是如果线程处于等待状态或睡眠状态时，此方法的调用会导致线程抛出InterruptException异常，从而导致线程停止。
  * 6. 放弃当前的CPU资源，让给其他的任务去占用CPU资源。放弃的时间不确定，有可能刚放弃CPU资源，又立马获得。
- * 7. 高优先级的线程具有更高的运行概率
+ * 7. 高优先级的线程具有更高的运行概率，但优先级具有随机性，优先级高的线程不一定就先执行完
  * @author nouuid
  * @date 4/11/2016
  * @description
@@ -150,7 +150,7 @@ public class ThreadDemo extends ConcurrentTest {
         Thread.sleep(30*1000);
     }
 
-    // 6. 高优先级的线程具有更高的运行概率
+    // 7. 高优先级的线程具有更高的运行概率，但优先级具有随机性，优先级高的线程不一定就先执行完
     volatile long count1 = 0;
     volatile long count2 = 0;
     volatile long count3 = 0;
@@ -169,7 +169,7 @@ public class ThreadDemo extends ConcurrentTest {
                         e.printStackTrace();
                     }
                     while(flag) {
-//                        Math.random();
+                        Math.random();
                         if (index==1) {
                             count1++;
                         } else if(index==2) {
@@ -192,42 +192,9 @@ public class ThreadDemo extends ConcurrentTest {
         countDownLatch.countDown();
         Thread.sleep(3*1000);
         flag = false;
+        // 优先级具有随机性，优先级高的线程不一定就先执行完
         System.out.println(count1);
         System.out.println(count2);
         System.out.println(count3);
     }
-
-    // 7. 当进程中不存在非守护线程了，则守护线程自动销毁。
-    //      Daemon的作用是为其他线程的运行提供便利服务，
-    //      只要当前JVM实例中存在任何一个非守护线程没有结束，守护线程就在工作
-    //      只有当最后一个非守护线程结束时，守护线程才随着JVM一同结束工作。
-    //      守护线程最典型的应用就是GC（垃圾回收器）
-    @Test
-    public void daemon() throws InterruptedException {
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println(Thread.currentThread().getName());
-            }
-        }, "t1");
-        Thread t2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (flag) {
-                    Math.random();
-                }
-                System.out.println(Thread.currentThread().getName());
-            }
-        }, "t2");
-        t2.start();
-        Thread.sleep(100);
-        t1.setDaemon(true);
-        t1.start();
-        Thread.sleep(5000);
-        System.out.println(t1.isAlive());
-        flag = false;
-        Thread.sleep(3000);
-        System.out.println(t1.isAlive());
-    }
-
 }

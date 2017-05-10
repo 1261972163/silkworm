@@ -8,31 +8,25 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  *
- * @ThreadLocal目的 变量线程隔离
+ * 1. ThreadLocal目的：【变量线程隔离】
+ * 2. ThreadLocal原理：
+ *      在ThreadLocal类中有一个Map，用于存储每一个线程的变量副本，
+ *      Map中元素的键为线程对象，而值对应线程的变量副本。
  *
- * @ThreadLocal原理 思路很简单：
- * 在ThreadLocal类中有一个Map，用于存储每一个线程的变量副本，
- * Map中元素的键为线程对象，而值对应线程的变量副本。
- *
- * @set方法 设置当前线程的线程局部变量的值。
- *
- * @get方法 返回当前线程所对应的线程局部变量。
- *
- * @remove方法 将当前线程局部变量的值删除
- * 目的是为了减少内存的占用，该方法是JDK 5.0新增的方法。
- * 需要指出的是，当线程结束后，对应该线程的局部变量将自动被垃圾回收，
- * 所以显式调用该方法清除线程的局部变量并不是必须的操作，但它可以加快内存回收的速度。
- *
- * @initialValue方法
- * 在未使用其他方法的前提下，初次使用get方法时会调用initialValue方法
- * 默认的initialValue方法直接返回null
- *
- * @静态ThreadLocal
- * 使用static ThreadLocal，同线程该类所有对象的ThreadLocal为同一个
- * 直接使用ThreadLocal，同线程该类所有对象的ThreadLocal不同
- *
- * @InheritableThreadLocal 子线程获取父线程继承下来的值
- * 需要注意：子线程取值x1的同时，主线程修改值为x2，则子线程获取的仍然是x1
+ * 3. set方法：设置当前线程的线程局部变量的值。
+ * 4. get方法： 返回当前线程所对应的线程局部变量。
+ * 5. remove方法 将当前线程局部变量的值删除
+ *      目的是为了减少内存的占用，该方法是JDK 5.0新增的方法。
+ *      需要指出的是，当线程结束后，对应该线程的局部变量将自动被垃圾回收，
+ *      所以显式调用该方法清除线程的局部变量并不是必须的操作，但它可以加快内存回收的速度。
+ * 6. initialValue方法
+ *      在未使用其他方法的前提下，初次使用get方法时会调用initialValue方法
+ *      默认的initialValue方法直接返回null
+ * 7. 静态ThreadLocal
+ *      使用static ThreadLocal，同线程该类所有对象的ThreadLocal为同一个
+ *      直接使用ThreadLocal，同线程该类所有对象的ThreadLocal不同
+ * 8. InheritableThreadLocal 子线程获取父线程继承下来的值
+ *      需要注意：子线程取值x1的同时，主线程修改值为x2，则子线程获取的仍然是x1
  *
  *
  * @author bl07637

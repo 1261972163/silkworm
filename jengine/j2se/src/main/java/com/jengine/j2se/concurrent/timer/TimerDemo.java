@@ -5,15 +5,17 @@ import org.junit.Test;
 import java.util.*;
 
 /**
+ * 1. Timer用于定时执行任务，原理：
+ *
+ * 2. 任务需要继承TimerTask。
+ *
  * @author nouuid
  * @date 4/8/2016
  * @description
  */
 public class TimerDemo {
 
-    /**
-     * Task will be excuted at specified time
-     */
+    // 1. Timer用于定时执行任务
     @Test
     public void scheduleDateTest() throws InterruptedException {
         Timer timer = new Timer();

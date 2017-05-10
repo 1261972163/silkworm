@@ -8,7 +8,7 @@ import org.junit.Test;
  * @date 4/11/2016
  * @description
  */
-public class StopThreadDemo extends ConcurrentTest {
+public class StopDemo extends ConcurrentTest {
 
     @Test
     public void loopTest() throws InterruptedException {
