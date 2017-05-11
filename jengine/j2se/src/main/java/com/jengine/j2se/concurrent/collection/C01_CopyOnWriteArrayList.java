@@ -57,6 +57,8 @@ public class C01_CopyOnWriteArrayList {
     }
 
 
+
+
     public void test1() throws InterruptedException {
         CopyOnWriteArrayList<String> copyOnWriteArrayList = new CopyOnWriteArrayList<String>();
 
@@ -93,27 +95,75 @@ public class C01_CopyOnWriteArrayList {
         }
         System.out.println("end");
     }
-}
 
-class AddTask implements Runnable {
-    CopyOnWriteArrayList<String> copyOnWriteArrayList;
-    String name;
+    class AddTask implements Runnable {
+        CopyOnWriteArrayList<String> copyOnWriteArrayList;
+        String name;
 
-    public AddTask(CopyOnWriteArrayList<String> copyOnWriteArrayList, String name) {
-        this.copyOnWriteArrayList = copyOnWriteArrayList;
-        this.name = name;
+        public AddTask(CopyOnWriteArrayList<String> copyOnWriteArrayList, String name) {
+            this.copyOnWriteArrayList = copyOnWriteArrayList;
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            String s;
+            int i = 1;
+            while (true) {
+                try {
+                    s = name + i++;
+                    Thread.sleep(500);
+                    copyOnWriteArrayList.add(s);
+                    System.out.println("add:" + s);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
-    @Override
-    public void run() {
-        String s;
-        int i = 1;
-        while (true) {
+    class RemoveTask implements Runnable {
+
+        CopyOnWriteArrayList<String> copyOnWriteArrayList;
+
+        public RemoveTask(CopyOnWriteArrayList<String> copyOnWriteArrayList) {
+            this.copyOnWriteArrayList = copyOnWriteArrayList;
+        }
+
+        @Override
+        public void run() {
             try {
-                s = name + i++;
-                Thread.sleep(500);
-                copyOnWriteArrayList.add(s);
-                System.out.println("add:" + s);
+                Random random = new Random();
+                while (true) {
+                    Thread.sleep(1000);
+                    int i = random.nextInt(copyOnWriteArrayList.size());
+                    System.out.println("               remove:" + copyOnWriteArrayList.get(i));
+                    copyOnWriteArrayList.remove(i);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    class LoopTask implements Runnable {
+
+        CopyOnWriteArrayList<String> copyOnWriteArrayList;
+
+        public LoopTask(CopyOnWriteArrayList<String> copyOnWriteArrayList) {
+            this.copyOnWriteArrayList = copyOnWriteArrayList;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    Thread.sleep(431);
+                    for (String s : copyOnWriteArrayList) {
+                        System.out.println("                            print:" + s);
+                    }
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -121,50 +171,4 @@ class AddTask implements Runnable {
     }
 }
 
-class RemoveTask implements Runnable {
 
-    CopyOnWriteArrayList<String> copyOnWriteArrayList;
-
-    public RemoveTask(CopyOnWriteArrayList<String> copyOnWriteArrayList) {
-        this.copyOnWriteArrayList = copyOnWriteArrayList;
-    }
-
-    @Override
-    public void run() {
-        try {
-            Random random = new Random();
-            while (true) {
-                Thread.sleep(1000);
-                int i = random.nextInt(copyOnWriteArrayList.size());
-                System.out.println("               remove:" + copyOnWriteArrayList.get(i));
-                copyOnWriteArrayList.remove(i);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-
-class LoopTask implements Runnable {
-
-    CopyOnWriteArrayList<String> copyOnWriteArrayList;
-
-    public LoopTask(CopyOnWriteArrayList<String> copyOnWriteArrayList) {
-        this.copyOnWriteArrayList = copyOnWriteArrayList;
-    }
-
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                Thread.sleep(431);
-                for (String s : copyOnWriteArrayList) {
-                    System.out.println("                            print:" + s);
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}

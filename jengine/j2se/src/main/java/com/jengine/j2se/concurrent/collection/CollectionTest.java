@@ -1,10 +1,7 @@
 package com.jengine.j2se.concurrent.collection;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class CollectionTest {
 

@@ -1,5 +1,7 @@
 package com.jengine.j2se.concurrent.collection;
 
+import java.util.concurrent.ConcurrentSkipListSet;
+
 /**
  * ConcurrentSkipListSet源自jdk1.6，
  * 1. 内部持有ConcurrentSkipListMap。
@@ -11,4 +13,8 @@ package com.jengine.j2se.concurrent.collection;
  * @date 5/11/17
  */
 public class C12_ConcurrentSkipListSet {
+
+    public void test() {
+        ConcurrentSkipListSet concurrentSkipListSet = new ConcurrentSkipListSet();
+    }
 }

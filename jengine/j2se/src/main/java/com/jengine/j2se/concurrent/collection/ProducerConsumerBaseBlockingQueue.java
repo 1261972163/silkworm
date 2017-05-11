@@ -4,11 +4,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * 生产者-消费者
+ * 基于LinkedBlockingQueue实现的 生产者-消费者
  * @author nouuid
  *
  */
-public class BlockingQueueDemo {
+public class ProducerConsumerBaseBlockingQueue {
 
 	public static final int QUEUE_BOUND = 10;
 	public static final int N_PRODUCER = 10;
@@ -89,7 +89,7 @@ public class BlockingQueueDemo {
 	}
 	
 	public static void main(String[] args) {
-		BlockingQueueDemo t = new BlockingQueueDemo();
+		ProducerConsumerBaseBlockingQueue t = new ProducerConsumerBaseBlockingQueue();
 		t.doing();
 	}
 	
