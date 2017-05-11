@@ -25,7 +25,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @date 1/22/2017
  * @since 0.1.0
  */
-public class ArrayBlockingQueueDemo {
+public class C02_ArrayBlockingQueue {
 
     @Test
     public void putTake() throws InterruptedException {
@@ -37,19 +37,38 @@ public class ArrayBlockingQueueDemo {
                 public void run() {
                     try {
                         // 1. put操作，队列满时，存储元素的线程会阻塞，等待队列可用。
-                        // 
                         arrayBlockingQueue.put(Thread.currentThread().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     System.out.println(Thread.currentThread().getName());
                 }
+            }, "p"+i);
+            thread.start();
+        }
+        Thread.sleep(1000);
+        // 其他9个线程都被阻塞了
+        System.out.println(arrayBlockingQueue.size() + ", " + group.activeCount());
+        System.out.println(group.activeCount());
+
+        ThreadGroup group2 = new ThreadGroup("group2");
+        for (int i=1; i<=15; i++) {
+            Thread thread = new Thread(group2, new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // 1. take操作，队列为空时，获取元素的线程会阻塞，等待队列变为非空。
+                        // t11-t15的线程都被堵塞了，不打印
+                        System.out.println("________" + arrayBlockingQueue.take());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }, "t"+i);
             thread.start();
         }
-        Thread.sleep(3000);
-        // 其他线程都被阻塞了
-        System.out.println(arrayBlockingQueue.size());
-        System.out.println(group.activeCount());
+        Thread.sleep(1000);
+        // 5个还存活
+        System.out.println("________" + arrayBlockingQueue.size() + ", " + group2.activeCount());
     }
 }

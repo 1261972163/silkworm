@@ -21,7 +21,7 @@ import java.util.concurrent.CountDownLatch;
  * @date 12/7/2016
  * @since 0.1.0
  */
-public class CopyOnWriteArrayListDemo {
+public class C01_CopyOnWriteArrayList {
 
     // 1. CopyOnWriteArrayList源自jdk1.5，通常被认为是ArrayList的线程安全变体。
     @Test
