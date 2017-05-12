@@ -34,7 +34,7 @@
         <mongo.version>3.0.1</mongo.version>
         <jedis.version>2.7.2</jedis.version>
         <mysql.version>5.1.39</mysql.version>
-        <elasticsearch.version>2.1.0</elasticsearch.version>
+        <elasticsearch.version>5.2.2</elasticsearch.version>
         <jest.version>2.0.0</jest.version>
         <canal.client.version>1.0.22</canal.client.version>
         <canal.server.version>1.0.22</canal.server.version>
@@ -126,14 +126,9 @@
                 <version>${jedis.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.elasticsearch</groupId>
-                <artifactId>elasticsearch</artifactId>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>transport</artifactId>
                 <version>${elasticsearch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.searchbox</groupId>
-                <artifactId>jest</artifactId>
-                <version>${jest.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>

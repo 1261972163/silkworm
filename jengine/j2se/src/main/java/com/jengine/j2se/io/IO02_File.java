@@ -7,11 +7,11 @@ import java.io.*;
 /**
  * Created by nouuid on 2015/4/29.
  */
-public class FileDemo {
+public class IO02_File {
 
     @Test
     public void operate() throws IOException {
-        String foldPath = FileDemo.class.getResource("/").getPath() + "test";
+        String foldPath = IO02_File.class.getResource("/").getPath() + "test";
         String filePath = foldPath + "/test1.md";
         File file1 = new File(foldPath);
         // 1. 检查目录是否存在
@@ -35,7 +35,7 @@ public class FileDemo {
     // 6. FileInputStream按字节读文件
     @Test
     public void writeReadBytes() throws IOException {
-        String filePath = FileDemo.class.getResource("/").getPath() + "test";
+        String filePath = IO02_File.class.getResource("/").getPath() + "test";
         System.out.println(filePath);
         File file = new File(filePath);
         file.deleteOnExit();
@@ -63,7 +63,7 @@ public class FileDemo {
     // BufferedOutputStream和BufferedInputStream按字节缓冲读写文件
     @Test
     public void writeReadBufferedBytes() throws IOException {
-        String filePath = FileDemo.class.getResource("/").getPath() + "test";
+        String filePath = IO02_File.class.getResource("/").getPath() + "test";
         System.out.println(filePath);
         File file = new File(filePath);
         file.deleteOnExit();
@@ -94,7 +94,7 @@ public class FileDemo {
     // 9. FileReader按行读文件，包装到BufferedReader
     @Test
     public void writerReader() throws IOException {
-        String filePath = FileDemo.class.getResource("/").getPath() + "test";
+        String filePath = IO02_File.class.getResource("/").getPath() + "test";
         System.out.println(filePath);
         File file = new File(filePath);
         file.deleteOnExit();

@@ -7,7 +7,6 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.concurrent.CountDownLatch;
 
 /**
  *
@@ -23,24 +22,27 @@ import java.util.concurrent.CountDownLatch;
  * @date 5/11/17
  */
 public class NIO04_SocketChannel_ServerSocketChannel {
-    ServerSocketChannelDemo serverSocketChannelDemo = new ServerSocketChannelDemo();
-    SocketChannelDemo socketChannelDemo = new SocketChannelDemo();
+    Server server = new Server();
+    Client client = new Client();
 
     @Test
     public void server() throws IOException, InterruptedException {
-        serverSocketChannelDemo.open();
-        serverSocketChannelDemo.listen();
+        server.open();
+        server.listen();
     }
 
     @Test
     public void client() throws IOException {
         SocketChannel socketChannel = null;
-        socketChannel = socketChannelDemo.init();
-        socketChannelDemo.connect(socketChannel, "127.0.0.1", 9999);
-        socketChannelDemo.write(socketChannel, new String("New String to write to file..." + System.currentTimeMillis()));
+        socketChannel = client.init();
+        client.connect(socketChannel, "127.0.0.1", 9999);
+        client.write(socketChannel, new String("New String to write to file..." + System.currentTimeMillis()));
     }
 
-    class ServerSocketChannelDemo {
+    /**
+     * ServerSocketChannel
+     */
+    class Server {
 
         ServerSocketChannel serverSocketChannel = null;
 
@@ -80,7 +82,10 @@ public class NIO04_SocketChannel_ServerSocketChannel {
         }
     }
 
-    class SocketChannelDemo {
+    /**
+     * SocketChannel
+     */
+    class Client {
 
         public SocketChannel init() throws IOException {
             SocketChannel socketChannel = SocketChannel.open();

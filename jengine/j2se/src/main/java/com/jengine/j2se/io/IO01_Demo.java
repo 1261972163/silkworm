@@ -20,7 +20,7 @@ import java.io.IOException;
  * @date 5/11/2017
  * @since 0.1.0
  */
-public class IO {
+public class IO01_Demo {
 
     @Test
     public void byteArrayInputOutputStream() throws IOException {
