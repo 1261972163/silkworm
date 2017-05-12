@@ -1,5 +1,8 @@
 package com.jengine.j2se.nio;
 
+import org.junit.Test;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -10,21 +13,55 @@ import java.nio.channels.FileChannel;
  *
  * FileChannel是用于连接文件的通道。通过文件通道可以读、写文件的数据。
  * FileChannel不可以设置为非阻塞模式，只能在阻塞模式下运行。
- *
- * @author bl07637
- * @date 9/23/2016
- * @since 0.1.0
+ *  @author nouuid
+ * @description
+ * @date 5/11/17
  */
-public class FileChannelDemo {
+public class NIO02_FileChannel {
 
-    public FileChannel open(String filePath) throws FileNotFoundException {
+    @Test
+    public void writeRead() throws IOException {
+        String filePath = NIO02_FileChannel.class.getResource("/").getPath() + "nio/FileChannelDemo1";
+        delete(filePath);
+
+        FileChannel fileChannel = open(filePath);
+        String newData = "New String to write to file..." + System.currentTimeMillis();
+        write(fileChannel, newData);
+        fileChannel = open(filePath);
+        read(fileChannel);
+        close(fileChannel);
+        delete(filePath);
+    }
+
+    @Test
+    public void transfer() throws Exception {
+        String fromFilePath = NIO02_FileChannel.class.getResource("/").getPath() + "nio/FileChannelDemoFrom";
+        String toFilePath1 = NIO02_FileChannel.class.getResource("/").getPath() + "nio/FileChannelDemoTo1";
+        String toFilePath2 = NIO02_FileChannel.class.getResource("/").getPath() + "nio/FileChannelDemoTo2";
+        delete(fromFilePath);
+        delete(toFilePath1);
+        delete(toFilePath2);
+
+        transferFrom(fromFilePath, toFilePath1);
+        transferTo(fromFilePath, toFilePath2);
+        delete(fromFilePath);
+        delete(toFilePath1);
+        delete(toFilePath2);
+    }
+
+    private void delete(String filePath) {
+        File file = new File(filePath);
+        file.deleteOnExit();
+    }
+
+    private FileChannel open(String filePath) throws FileNotFoundException {
         // 在使用FileChannel前必须打开通道，打开一个文件通道需要通过输入/输出流或者RandomAccessFile
         RandomAccessFile aFile = new RandomAccessFile(filePath, "rw");
         FileChannel channel = aFile.getChannel();
         return channel;
     }
 
-    public void read(FileChannel channel) throws IOException {
+    private void read(FileChannel channel) throws IOException {
         ByteBuffer buf = ByteBuffer.allocate(48);
         int bytesRead = channel.read(buf);
         while (bytesRead != -1) {
@@ -37,7 +74,7 @@ public class FileChannelDemo {
         }
     }
 
-    public void write(FileChannel channel, String newData) throws IOException {
+    private void write(FileChannel channel, String newData) throws IOException {
         int length = newData.getBytes().length;
         int capacity = 10;
         ByteBuffer buf = ByteBuffer.allocate(capacity);
@@ -58,11 +95,11 @@ public class FileChannelDemo {
         }
     }
 
-    public void close(FileChannel channel) throws IOException {
+    private void close(FileChannel channel) throws IOException {
         channel.close();
     }
 
-    public void transferFrom(String fromFilePath, String toFilePath1) throws IOException {
+    private void transferFrom(String fromFilePath, String toFilePath1) throws IOException {
         RandomAccessFile fromFile = new RandomAccessFile(fromFilePath, "rw");
         FileChannel fromChannel = fromFile.getChannel();
         RandomAccessFile toFile = new RandomAccessFile(toFilePath1, "rw");
@@ -72,7 +109,7 @@ public class FileChannelDemo {
         toChannel.transferFrom(fromChannel, position, count);
     }
 
-    public void transferTo(String fromFilePath, String toFilePath2) throws Exception {
+    private void transferTo(String fromFilePath, String toFilePath2) throws Exception {
         RandomAccessFile fromFile = new RandomAccessFile(fromFilePath, "rw");
         FileChannel fromChannel = fromFile.getChannel();
         RandomAccessFile toFile = new RandomAccessFile(toFilePath2, "rw");
