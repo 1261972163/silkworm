@@ -1,7 +1,5 @@
-package com.jengine.serializer;
+package com.jengine.serializer.avro;
 
-import com.jengine.serializer.avro.AvroRpcRunner;
-import com.jengine.serializer.avro.AvroRunner;
 import org.junit.Test;
 
 /**
