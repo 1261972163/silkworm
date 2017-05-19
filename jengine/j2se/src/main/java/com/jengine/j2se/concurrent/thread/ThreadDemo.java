@@ -197,4 +197,37 @@ public class ThreadDemo extends ConcurrentTest {
         System.out.println(count2);
         System.out.println(count3);
     }
+
+    @Test
+    public void test() throws InterruptedException {
+        class Task implements Runnable {
+
+            private volatile boolean flag = true;
+
+            @Override
+            public void run() {
+                while(flag) {
+                    System.out.println("in " + Thread.currentThread().getName());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            public void stop() {
+                System.out.println("stop " + Thread.currentThread().getName());
+            }
+        }
+        Task task = new Task();
+        Thread thread = new Thread(task, "t1");
+        thread.start();
+
+        Thread.sleep(5000);
+        task.stop();
+        Thread.sleep(5000);
+        System.out.println("end");
+
+    }
 }

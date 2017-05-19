@@ -25,6 +25,14 @@ import java.util.concurrent.ConcurrentHashMap;
  *              对value和next属性设置了volatile同步锁，
  *              不允许调用setValue方法直接改变Node的value域，
  *              增加了find方法辅助map.get()方法。
+ *          casTabAt方法利用CAS算法设置i位置上的Node节点
+ *              // U.compareAndSwapObject(tab, 内存位置, 期望值, 新值)
+ *              U.compareAndSwapObject(tab, ((long)i << ASHIFT) + ABASE, c, v);
+ *          tabAt方法利用volatile获得在i位置上的Node节点
+ *              (Node<K,V>)U.getObjectVolatile(tab, ((long)i << ASHIFT) + ABASE);
+ *          setTabAt方法利用volatile方法设置节点位置的值
+ *              U.putObjectVolatile(tab, ((long)i << ASHIFT) + ABASE, v);
+ *
  *          put操作时，
  *              根据Key计算hash值，选择table中相应的Node，
  *              然后对Node加synchronized锁，将数据封装到Node中，插入到链表头部。
@@ -32,6 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *              并将该链表转换成TreeBin，由TreeBin完成对红黑树的包装，加入到table中。
  *              也就是说在实际的ConcurrentHashMap“数组”中，此位置存放的是TreeBin对象，而不是TreeNode对象，
  *              这是与HashMap的区别。
+
+ *
  * @author nouuid
  * @description
  * @date 5/11/17
@@ -40,5 +50,7 @@ public class C13_ConcurrentHashMap {
 
     public void test() {
         ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<String, String>();
+        concurrentHashMap.put("", "");
+        concurrentHashMap.get("");
     }
 }

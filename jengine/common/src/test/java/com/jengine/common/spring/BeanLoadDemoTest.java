@@ -9,11 +9,11 @@ import org.junit.Test;
  */
 public class BeanLoadDemoTest {
 
-    private BeanLoadDemo beanLoadDemo = new BeanLoadDemo();
+    private Spring_2_container beanLoadDemo = new Spring_2_container();
 
     @Test
     public void load() throws InterruptedException {
         beanLoadDemo.load();
-        Thread.sleep(30*1000);
+        Thread.sleep(30 * 1000);
     }
 }

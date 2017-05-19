@@ -54,7 +54,7 @@
         <httpclient.version>4.5.2</httpclient.version>
         <netty.all.version>4.0.24.Final</netty.all.version>
         <amqp.version>3.6.1</amqp.version>
-        <kafka.version>0.9.0.1</kafka.version>
+        <kafka.version>0.10.0.1</kafka.version>
         <jersey.version>2.23.2</jersey.version>
         <!-- rpc -->
         <xingng.version>4.5.15</xingng.version>
