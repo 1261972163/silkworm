@@ -1,20 +1,17 @@
-package com.jengine.cluster.distributedlock;
+package com.jengine.cluster;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.EnsurePath;
 import org.apache.zookeeper.CreateMode;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -24,15 +21,17 @@ import java.util.TreeSet;
  * @date 5/19/2017
  * @since 0.1.0
  */
-public class ZkDisLock {
+public class LeaderElection {
 
     @Test
     public void test() throws InterruptedException {
+        // 5个节点Node
         ArrayList<Node> nodes = new ArrayList<Node>();
         for (int i=1; i<5; i++) {
             Node node = new Node("NODE" + i);
             nodes.add(node);
         }
+        // Node启动
         for (Node node : nodes) {
             final Node nodeTmp = node;
             Thread thread = new Thread(new Runnable() {
@@ -48,24 +47,34 @@ public class ZkDisLock {
             });
             thread.start();
         }
-
         Thread.sleep(10*1000);
+        // 只有一个Leader
+        System.out.println("-----------------------");
+        for (Node node : nodes) {
+            System.out.println(node.getName() + ":" + node.isLeader());
+        }
+        System.out.println("-----------------------");
+        // 将Leader节点关闭掉
         for (Node node : nodes) {
             if (node.isLeader()) {
                 node.stop();
             }
         }
-        Thread.sleep(60*1000);
+        Thread.sleep(60 * 1000);
+        // 重新选出Leader，只有一个Leader
+        System.out.println("-----------------------");
+        for (Node node : nodes) {
+            System.out.println(node.getName() + ":" + node.isLeader());
+        }
+        System.out.println("-----------------------");
         System.out.println("end.");
-
-
     }
 
     private CuratorFramework getClient() throws Exception {
         ExponentialBackoffRetry retryPolicy = new ExponentialBackoffRetry(1000, 3);
-        CuratorFramework client = CuratorFrameworkFactory.newClient("127.0.0.1", 5000, 5000, retryPolicy);
+        CuratorFramework client = CuratorFrameworkFactory.newClient("10.45.11.84", 5000, 5000, retryPolicy);
         client.start();
-        EnsurePath ensurePath = client.newNamespaceAwareEnsurePath("/create/test");
+        EnsurePath ensurePath = client.newNamespaceAwareEnsurePath("/app/nodes");
         ensurePath.ensure(client.getZookeeperClient());
         return client;
     }
@@ -98,10 +107,17 @@ public class ZkDisLock {
                 throw new Exception("Already in running.");
             }
             running = true;
-            PathChildrenCache cache = pathChildrenCache(client, "/create/nodes", true);
+            PathChildrenCache cache = pathChildrenCache(client, "/app/nodes", true);
             cache.start(PathChildrenCache.StartMode.BUILD_INITIAL_CACHE);
             registry();
-            work();
+            while (running) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            isLeader = false;
             cache.close();
             client.close();
         }
@@ -138,7 +154,7 @@ public class ZkDisLock {
             try {
                 client.create().creatingParentsIfNeeded()
                         .withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
-                        .forPath("/create/nodes/node", name.getBytes());
+                        .forPath("/app/nodes/node", name.getBytes());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -147,34 +163,21 @@ public class ZkDisLock {
         private void updateLeader() {
             System.out.println(name + " update");
             try {
-                List<String> nodes = client.getChildren().forPath("/create/nodes");
+                List<String> nodes = client.getChildren().forPath("/app/nodes");
                 // 排序
                 TreeSet<String> treeSet = new TreeSet<String>();
                 treeSet.addAll(nodes);
                 String first = treeSet.first();
-                byte[] bytes = client.getData().forPath("/create/nodes/" + first);
-                String leader = new String(bytes);
+                byte[] bytes = client.getData().forPath("/app/nodes/" + first);
+                String leaderName = new String(bytes);
                 // 验证
-                if (name.equals(leader)) {
+                if (name.equals(leaderName)) {
                     isLeader = true;
                 } else {
                     isLeader = false;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        }
-
-        private void work() {
-            while (running) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (isLeader) {
-                    System.out.println("#####" + name + ": I'm leader.");
-                }
             }
         }
 

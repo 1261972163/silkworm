@@ -2,7 +2,10 @@ package com.jengine.cluster.zk;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.recipes.cache.*;
+import org.apache.curator.framework.recipes.cache.ChildData;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.CloseableUtils;
 import org.apache.curator.utils.EnsurePath;
@@ -15,10 +18,10 @@ import java.util.List;
  * content
  *
  * @author bl07637
- * @date 12/20/2016
+ * @date 5/20/2017
  * @since 0.1.0
  */
-public class CacheDemo {
+public class PathChildrenCacheDemo {
     private CuratorFramework client;
 
     @Before
@@ -49,22 +52,7 @@ public class CacheDemo {
         CloseableUtils.closeQuietly(client);
     }
 
-    @Test
-    public void nodeCache() throws Exception {
-        NodeCache nodeCache = nodeCache(client, "/create/test");
-        nodeCache.start(true);
-
-        client.setData().forPath("/create/test", "1111".getBytes());
-
-        System.out.println(new String(nodeCache.getCurrentData().getData()));
-
-        Thread.sleep(10000);
-        CloseableUtils.closeQuietly(nodeCache);
-        CloseableUtils.closeQuietly(client);
-    }
-
-
-    public static PathChildrenCache pathChildrenCache(CuratorFramework client, String path, Boolean cacheData) throws Exception {
+    public PathChildrenCache pathChildrenCache(CuratorFramework client, String path, Boolean cacheData) throws Exception {
         final PathChildrenCache cached = new PathChildrenCache(client, path, cacheData);
         cached.getListenable().addListener(new PathChildrenCacheListener() {
             @Override
@@ -97,18 +85,5 @@ public class CacheDemo {
             }
         });
         return cached;
-    }
-
-
-    public static NodeCache nodeCache(CuratorFramework client, String path) {
-        final NodeCache cache = new NodeCache(client, path);
-        cache.getListenable().addListener(new NodeCacheListener() {
-            @Override
-            public void nodeChanged() throws Exception {
-                System.out.println("NodeCache changed, data is: " + new String(cache.getCurrentData().getData()));
-            }
-        });
-
-        return cache;
     }
 }
