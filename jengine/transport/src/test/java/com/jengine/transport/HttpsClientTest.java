@@ -1,6 +1,6 @@
 package com.jengine.transport;
 
-import com.jengine.transport.https.HttpsClient;
+import com.jengine.transport.protocol.https.HttpsClient;
 import org.junit.Test;
 
 /**

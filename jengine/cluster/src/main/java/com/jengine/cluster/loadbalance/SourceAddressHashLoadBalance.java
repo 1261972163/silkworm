@@ -1,6 +1,6 @@
 package com.jengine.cluster.loadbalance;
 
-import com.jengine.common.NetworkUtil;
+import com.jengine.common.utils.NetworkUtil;
 
 import java.util.LinkedList;
 import java.util.List;

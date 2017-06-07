@@ -1,7 +1,7 @@
 package com.jengine.transport;
 
-import com.jengine.transport.netty.remote.NettyClient;
-import com.jengine.transport.netty.remote.NettyServer;
+import com.jengine.transport.protocol.netty.remote.NettyClient;
+import com.jengine.transport.protocol.netty.remote.NettyServer;
 import org.junit.Test;
 
 /**
