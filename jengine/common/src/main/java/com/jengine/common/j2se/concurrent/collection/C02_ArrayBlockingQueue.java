@@ -21,7 +21,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * 6. 通常情况下为了保证公平性会降低吞吐量。我们可以使用以下代码创建一个公平的阻塞队列：
  *      ArrayBlockingQueue fairQueue = new  ArrayBlockingQueue(1000,true);
  *
- * @author bl07637
+ * @author nouuid
  * @date 1/22/2017
  * @since 0.1.0
  */

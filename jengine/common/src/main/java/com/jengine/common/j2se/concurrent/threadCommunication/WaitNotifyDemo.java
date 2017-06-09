@@ -10,7 +10,7 @@ import org.junit.Test;
  * 4. notifyAll()唤醒所有wait状态线程
  * 5. timedWait()使当前线程阻塞一段时间
  *
- * @author bl07637
+ * @author nouuid
  * @date 1/18/2017
  * @since 0.1.0
  */

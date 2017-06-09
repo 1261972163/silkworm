@@ -8,7 +8,7 @@ import java.util.concurrent.Semaphore;
 /**
  * 用信号量实现的有界阻塞容器
  *
- * @author bl07637
+ * @author nouuid
  * @date 5/10/2017
  * @since 0.1.0
  */

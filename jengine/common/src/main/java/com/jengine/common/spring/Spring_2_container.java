@@ -36,7 +36,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * 6. Bean的生命周期
  *
  *
- * @author bl07637
+ * @author nouuid
  * @date 8/19/2016
  * @description
  */

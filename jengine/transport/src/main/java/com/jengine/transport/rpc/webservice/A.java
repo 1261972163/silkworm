@@ -1,7 +1,7 @@
 package com.jengine.transport.rpc.webservice;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/25/2017
  */
 public interface A {

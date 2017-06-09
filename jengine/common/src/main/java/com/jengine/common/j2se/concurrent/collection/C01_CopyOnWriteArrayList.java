@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
  * 6. 综合上述特性，CopyOnWriteArrayList多线程安全，写操作复制和加锁导致效率较低，读操作序号读取效率高，
  * 适合使用在多线程、读操作远远大于写操作的场景里，比如缓存。
  *
- * @author bl07637
+ * @author nouuid
  * @date 12/7/2016
  * @since 0.1.0
  */

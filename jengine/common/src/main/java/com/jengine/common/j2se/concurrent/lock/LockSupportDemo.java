@@ -11,7 +11,7 @@ import java.util.concurrent.locks.LockSupport;
  * 4. “许可”是不能叠加，是一次性的，
  *      比如线程B连续调用了三次unpark函数，当线程A调用park函数就使用掉这个“许可”，如果线程A再次调用park，则进入等待状态。
  *
- * @author bl07637
+ * @author nouuid
  * @date 5/10/2017
  * @since 0.1.0
  */

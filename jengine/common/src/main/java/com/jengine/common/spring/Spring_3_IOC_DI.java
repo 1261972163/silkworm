@@ -9,7 +9,7 @@ package com.jengine.common.spring;
  * (3)IOC容器支持加载服务时的饿汉式初始化和懒加载。
  *
  *
- * @author bl07637
+ * @author nouuid
  * @date 5/17/2017
  * @since 0.1.0
  */

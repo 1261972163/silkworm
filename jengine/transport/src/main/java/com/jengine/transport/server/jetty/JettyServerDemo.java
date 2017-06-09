@@ -7,7 +7,7 @@ import org.mortbay.resource.Resource;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 1/10/2017
  * @since 0.1.0
  */

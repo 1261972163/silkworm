@@ -17,7 +17,7 @@ import java.net.URI;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 12/15/2016
  * @since 0.1.0
  */

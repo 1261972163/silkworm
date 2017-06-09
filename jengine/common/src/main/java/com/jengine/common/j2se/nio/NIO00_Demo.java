@@ -23,7 +23,7 @@ import java.nio.file.Paths;
  * （3）Selector是Channel的管理器，实现单线程操作多个Channel。
  *
  *
- * @author bl07637
+ * @author nouuid
  * @date 2/10/2017
  * @since 0.1.0
  */

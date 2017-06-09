@@ -3,7 +3,7 @@ package com.jengine.data.search.es;
 /**
  * IndexMessage
  *
- * @author bl07637
+ * @author nouuid
  * @date 4/12/2017
  * @since 0.1.0
  */

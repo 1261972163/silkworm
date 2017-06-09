@@ -10,7 +10,7 @@ import java.net.URLClassLoader;
  *
  * 本实例需要在e:/test下准备com.jengine.Test类，里面有个方法printString，参数为两个String，输出结果为两个String的连接
  *
- * @author bl07637
+ * @author nouuid
  * @date 11/22/2016
  * @since 0.1.0
  */

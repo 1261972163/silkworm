@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 12/15/2016
  * @since 0.1.0
  */
@@ -21,7 +21,7 @@ public class NettyRemoteDemo {
 
     @Test
     public void client() throws Throwable {
-        NettyClient nettyClient = new NettyClient("bl07637", 2000);
+        NettyClient nettyClient = new NettyClient("nouuid", 2000);
         nettyClient.open();
         nettyClient.doConnect();
     }

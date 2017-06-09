@@ -29,7 +29,7 @@ import java.util.concurrent.CountDownLatch;
  *      需要注意：子线程取值x1的同时，主线程修改值为x2，则子线程获取的仍然是x1
  *
  *
- * @author bl07637
+ * @author nouuid
  * @date 1/17/2017
  * @since 0.1.0
  */

@@ -3,7 +3,7 @@ package com.jengine.data.database.rqlite;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 1/18/2017
  * @since 0.1.0
  */

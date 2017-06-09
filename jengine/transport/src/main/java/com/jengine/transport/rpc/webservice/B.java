@@ -3,7 +3,7 @@ package com.jengine.transport.rpc.webservice;
 import javax.jws.WebService;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 4/25/2017
  */
 @WebService

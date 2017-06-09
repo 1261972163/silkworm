@@ -16,7 +16,7 @@ import java.io.IOException;
  *      网络操作：【Socket】
  * 3. 读写文件
  *
- * @author bl07637
+ * @author nouuid
  * @date 5/11/2017
  * @since 0.1.0
  */

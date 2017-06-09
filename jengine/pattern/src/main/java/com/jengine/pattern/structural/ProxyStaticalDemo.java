@@ -3,7 +3,7 @@ package com.jengine.pattern.structural;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 11/14/2016
  * @since 0.1.0
  */

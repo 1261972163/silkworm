@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 与轮询法类似，只是在获取服务器地址之前增加了一段权重计算的代码，根据权重的大小，将地址重复地增加到服务器地址列表中，
  * 权重越大，该服务器每轮所获得的请求数量越多。
  *
- * @author bl07637
+ * @author nouuid
  * @date 12/30/2016
  * @since 0.1.0
  */

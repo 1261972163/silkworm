@@ -16,7 +16,7 @@ import java.util.TreeMap;
  * 2、Data如何寻找Node？Data存储在环上顺时针方向最近的Node
  * 3、防止雪崩？在环上设置很多“虚拟节点”，数据的存储是沿着环的顺时针方向找一个虚拟节点，每个虚拟节点都会关联到一个真实节点
  *
- * @author bl07637
+ * @author nouuid
  * @date 5/15/2017
  * @since 0.1.0
  */

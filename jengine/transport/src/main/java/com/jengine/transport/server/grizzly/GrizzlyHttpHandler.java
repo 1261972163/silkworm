@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 10/25/2016
  * @since 0.1.0
  */

@@ -9,7 +9,7 @@ import java.util.Properties;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 9/29/2016
  * @since 0.1.0
  */

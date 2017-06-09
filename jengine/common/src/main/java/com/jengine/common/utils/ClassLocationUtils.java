@@ -9,7 +9,7 @@ import java.security.ProtectionDomain;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 10/27/2016
  * @since 0.1.0
  */

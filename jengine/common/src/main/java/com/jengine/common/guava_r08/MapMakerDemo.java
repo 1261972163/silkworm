@@ -3,7 +3,7 @@ package com.jengine.common.guava_r08;
 /**
  * 超级强大的 Map 构造工具
  *
- * @author bl07637
+ * @author nouuid
  * @date 9/30/2016
  * @since 0.1.0
  */

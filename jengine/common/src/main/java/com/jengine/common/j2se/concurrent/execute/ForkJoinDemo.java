@@ -8,7 +8,7 @@ import java.util.concurrent.*;
  * fork将大任务分割成子任务
  * join将子任务执行完的结果都统一放在一个队列里，启动一个线程从队列里拿数据，然后合并这些数据。
  *
- * @author bl07637
+ * @author nouuid
  * @date 11/23/2016
  * @since 0.1.0
  */

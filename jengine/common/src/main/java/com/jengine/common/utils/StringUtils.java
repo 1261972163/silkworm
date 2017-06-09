@@ -3,7 +3,7 @@ package com.jengine.common.utils;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 6/5/2017
  * @since 0.1.0
  */

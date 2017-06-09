@@ -11,7 +11,7 @@ import java.nio.channels.FileChannel;
  * Scattering Reads 是指数据从一个 channel 读取到多个 buffer 中。
  * Gathering Writes 是指数据从多个 buffer 写入到同一个 channel。
  *
- * @author bl07637
+ * @author nouuid
  * @date 9/22/2016
  * @since 0.1.0
  */

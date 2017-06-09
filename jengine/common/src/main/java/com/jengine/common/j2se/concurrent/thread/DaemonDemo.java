@@ -10,7 +10,7 @@ import org.junit.Test;
  * 4. 主线程结束后用户线程还会继续运行，JVM存活。
  * 5. 如果没有用户线程，都是守护线程，那么JVM结束
  *
- * @author bl07637
+ * @author nouuid
  * @date 5/9/2017
  * @since 0.1.0
  */

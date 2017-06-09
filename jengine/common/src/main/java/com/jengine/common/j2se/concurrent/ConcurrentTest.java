@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.After;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 12/7/2016
  */
 public abstract class ConcurrentTest {

@@ -46,7 +46,7 @@ import java.io.IOException;
  * ③ 创建DatagramSocket
  * ④ 发送数据
  *
- * @author bl07637
+ * @author nouuid
  * @date 9/23/2016
  * @since 0.1.0
  */

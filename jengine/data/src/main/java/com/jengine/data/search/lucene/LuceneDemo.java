@@ -31,7 +31,7 @@ import java.nio.file.Paths;
  * <4> 调用search()方法，将查询的结果返回给ScoreDoc ，迭代里面所有的Document对象，显示查询结果；
  * <5> 关闭IndexWriter 写入器，关闭RAMDirectory目录对象。
  *
- * @author bl07637
+ * @author nouuid
  * @date 10/25/2016
  * @since 0.1.0
  */

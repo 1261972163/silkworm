@@ -14,7 +14,7 @@ import java.util.Properties;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 12/21/2016
  * @since 0.1.0
  */

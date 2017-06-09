@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * 基于概率统计的理论，吞吐量越大，随机算法的效果越接近于轮询算法的效果。
  *
- * @author bl07637
+ * @author nouuid
  * @date 12/30/2016
  * @since 0.1.0
  */
