@@ -147,9 +147,9 @@ date: 2017/6/3 11:59:00
 		</html>
 
 	# 本地搜索
-  	npm install hexo-generator-searchdb --save
-  	vim _config.yml
-  		search:
+	npm install hexo-generator-searchdb --save
+	vim _config.yml
+		search:
 		  path: search.xml
 		  field: post
 		  format: html
