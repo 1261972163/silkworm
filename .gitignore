@@ -17,11 +17,6 @@ out/*
 target
 target/*
 
-demos
-jsdemo
-zooExplore
-webarchetype
-
 .DS_Store
 Thumbs.db
 db.json

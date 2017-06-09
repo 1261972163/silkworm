@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hz.wy.dao.UserDao">
+	<insert id="insert" parameterType="com.hz.wy.model.User">
+		insert into user (
+			version,
+			createTime,
+			lastUpdateTime,
+			name,
+			password,
+			email
+		) values (
+			0,
+			now(),
+			now(),
+			#{name,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{email,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="update" parameterType="com.hz.wy.model.User">
+		update user 
+		set
+			version=version+1,
+    		lastUpdateTime=now(),
+    		name=#{name,jdbcType=VARCHAR},
+    		password=#{password,jdbcType=VARCHAR},
+    		email=#{email,jdbcType=VARCHAR}
+    	where id=#{id} and version=#{version}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Long">
+		delete from user where id=#{id}
+	</delete>
+	
+	<select id="get" resultType="com.hz.wy.model.User" parameterType="java.lang.Long">
+		select * from user where id=#{id}
+	</select>
+	
+	<select id="getByUserName" resultType="com.hz.wy.model.User" parameterType="java.lang.String">
+		select * from user where name=#{userName}
+	</select>
+	
+</mapper>

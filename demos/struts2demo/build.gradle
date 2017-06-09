@@ -1,0 +1,56 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'war'
+
+//jar {
+//    manifest {
+//        attributes 'Main-Class': 'com.javachen.gradle.HelloWorld'
+//    }
+//}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    //mavenRepo urls: "http://repository.sonatype.org/content/groups/forge/"
+}
+
+dependencies {
+    compile 'org.apache.struts:struts2-core:2.3.20',
+			'log4j:log4j:1.2.17'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+buildscript {  
+    repositories {  
+        mavenLocal()
+        mavenCentral()
+        //mavenRepo urls: "http://repository.sonatype.org/content/groups/forge/"
+    }  
+    dependencies {  
+        classpath group: 'commons-codec', name: 'commons-codec', version: '1.2'  
+    }  
+}  
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'war'
+
+task createJavaProject << {
+  sourceSets*.java.srcDirs*.each { it.mkdirs() }
+  sourceSets*.resources.srcDirs*.each { it.mkdirs()}
+}
+
+task createWebProject(dependsOn: 'createJavaProject') << {
+  def webAppDir = file("$webAppDirName")
+  webAppDir.mkdirs()
+}

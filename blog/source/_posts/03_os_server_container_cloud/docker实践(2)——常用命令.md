@@ -3,7 +3,7 @@ title: docker实践(2)——常用命令
 categories: container
 tags:
     - docker
-date: 2016/6/1 20:46:25
+date: 2016/5/1 12:31:25
 ---
 
 [dock所有命令](https://docs.docker.com/engine/reference/commandline/cli/)可以分为以下几类：
