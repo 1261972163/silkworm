@@ -1,9 +1,12 @@
-
-git使用笔记
-===============
-
-[Reference Manual](https://git-scm.com/docs)
-[Pro Git](https://git-scm.com/book/en/v2)
+---
+title: Git使用笔记
+categories: 工程管理
+tags: 
+	- 工具
+	- 代码管理
+	- git
+date: 2012/1/13 20:03:00
+---
 
 # 1. 本地配置
 
@@ -27,3 +30,8 @@ git使用笔记
 # 3. 工作区
 
 # 4. 仓库
+
+# 参考文献
+
+[Reference Manual](https://git-scm.com/docs)
+[Pro Git](https://git-scm.com/book/en/v2)

@@ -1,3 +1,15 @@
+--
+title: Zookeeper总结（未完成）
+categories: 大数据
+tags: 
+	- 大数据
+	- 分布式
+	- 协调
+	- zookeeper
+date: 2017/5/17 20:42:00
+---
+
+
 zookeeper
 ==================
 

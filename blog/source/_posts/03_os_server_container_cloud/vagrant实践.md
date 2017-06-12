@@ -1,9 +1,9 @@
 ---
 title: vagrant实践
-categories: container
+categories: 虚拟化
 tags:
 	- vagrant
-date: 2016/6/1 20:46:25
+date: 2014/6/18 20:46:25
 ---
 
 [官方文档](http://docs-v1.vagrantup.com/v1/docs/getting-started/index.html)

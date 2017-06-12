@@ -1,6 +1,6 @@
 ---
 title: JVM总结(1)——自动内存管理机制
-categories: java
+categories: 编程语言
 tags: 
   - java
   - jvm

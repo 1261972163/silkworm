@@ -1,6 +1,6 @@
 ---
 title: Ruby实践(1)——安装
-categories: ruby
+categories: 编程语言
 tags: 
   - ruby
 date: 2016/6/3 17:37:25

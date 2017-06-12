@@ -1,4 +1,12 @@
-Sonarqube指南
+---
+title: Sonarqube指南
+categories: 工程管理
+tags: 
+	- 工具
+	- 代码质量
+	- sonarqube
+date: 2014/10/3 08:59:00
+---
 
 # 1 准备工作
 

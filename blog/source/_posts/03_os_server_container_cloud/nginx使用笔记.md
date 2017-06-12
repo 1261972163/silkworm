@@ -1,9 +1,9 @@
 ---
-title: nginx使用笔记
-categories: server
+title: Nginx使用笔记
+categories: 服务器
 tags: 
-  - nginx
-date: 2016/6/3 17:57:25
+	- nginx
+date: 2017/2/3 17:57:25
 ---
 
 # 1. 安装

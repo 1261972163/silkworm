@@ -1,6 +1,6 @@
 ---
 title: java基础总结(2)——常用数据结构
-categories: java
+categories: 编程语言
 tags: 
   - java
   - j2se

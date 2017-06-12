@@ -1,9 +1,9 @@
 ---
 title: CXF实践(1)——WSDL开发
-categories: soa
+categories: 服务化
 tags: 
   - cxf
-date: 2016/6/3 17:37:25
+date: 2015/7/3 17:37:25
 ---
 
 wsdl文件中存放了service的相关信息，client端通过wsdl文件获取service。wsdl文件是server端生成的，如果没有wsdl文件，自己通过server端生成一个。

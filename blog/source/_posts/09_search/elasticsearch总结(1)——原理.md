@@ -1,3 +1,13 @@
+---
+title: Elasticsearch总结(1)——原理
+categories: search
+tags: 
+	- data
+	- search
+	- elasticsearch
+date: 2017/3/13 20:03:00
+---
+
 
 Lucene可以说是当今最先进，最高效的全功能开源搜索引擎框架。但Lucene只是一个框架，要充分利用它的功能，必须使用Java将其直接集成到应用中，更糟糕的是，Lucene非常复杂，需要深入学习检索的相关知识才能理解它。
 

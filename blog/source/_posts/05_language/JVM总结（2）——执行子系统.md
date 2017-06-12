@@ -1,6 +1,6 @@
 ---
 title: JVM总结(2)——执行子系统
-categories: java
+categories: 编程语言
 tags: 
   - java
   - jvm

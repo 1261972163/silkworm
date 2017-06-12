@@ -1,36 +1,12 @@
 ---
-title: Kafka实践（2）——原理
-categories: 
+title: Kafka实践(3)——原理
+categories: 大数据
 tags: 
-	- bigdata
+	- 大数据
+	- 消息队列
 	- kafka
-date: 2017/6/4 09:51:25
+date: 2016/11/6 09:51:25
 ---
-
-
-# Kafka是什么
-
-Kafka是最初由Linkedin公司开发，是一个分布式、分区的、多副本的、多订阅者，基于zookeeper协调的分布式日志系统(也可以当做MQ系统)，常见可以用于web/nginx日志、访问日志，消息服务等等，Linkedin于2010年贡献给了Apache基金会并成为顶级开源项目。
-
-主要设计目标如下：
-
-* 以时间复杂度为O(1)的方式提供消息持久化能力，即使对TB级以上数据也能保证常数时间复杂度的访问性能。
-* 高吞吐率。即使在非常廉价的商用机器上也能做到单机支持每秒100K条以上消息的传输。
-* 支持Kafka Server间的消息分区，及分布式消费，同时保证每个Partition内的消息顺序传输。
-* 同时支持离线数据处理和实时数据处理。
-* Scale out：支持在线水平扩展。
-
-# 组件框架
-
-kafka的核心组件是Broker、Producer和consumer。
-
-![](/resources/kafka/kafka_architecture.png)
-
-* Producer。向Kafka服务器发送/生产消息的组件。
-* Consumer。从Kafka服务器取出/消费消息的组件。
-* Broker。kafka服务器。接收Producer和Consumer的请求，并把Message持久化到本地磁盘。Cluster会选举出一个Broker来担任Controller，负责处理Partition的Leader选举，协调Partition迁移等工作。
-
-以上组件在分布式环境下均可以是多个，支持故障转移。同时ZK仅和broker和consumer相关。值得注意的是broker的设计是无状态的，消费的状态信息依靠消费者自己维护，通过一个offset偏移量。
 
 # 文件存储机制
 

@@ -1,10 +1,10 @@
 ---
 title: ActiveMQ实践
-categories: bigdata
+categories: 大数据
 tags: 
 	- 消息队列
 	- activemq
-date: 2016/6/3 17:37:25
+date: 2014/7/3 17:37:25
 ---
 
 # 1. apache-activemq安装

@@ -1,8 +1,9 @@
 ---
 title: latex新人教程，30分钟从完全陌生到基本入门【转】
-categories: default
+categories: office
 tags: 
-  - latex
+	- 工具
+	- latex
 date: 2014/6/3 08:59:00
 ---
 

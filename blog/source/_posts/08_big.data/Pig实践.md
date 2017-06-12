@@ -1,10 +1,11 @@
 ---
 title: Pig实践
-categories: bigdata
+categories: 大数据
 tags: 
-	- bigdata
+	- 大数据
+	- hadoop
 	- pig
-date: 2016/6/3 17:37:25
+date: 2017/6/9 23:37:25
 ---
 
 pig,基于Hadoop的大规模数据分析工具

@@ -1,7 +1,7 @@
 ---
 title: Mysql实践(2)——配置
-categories: database
-date: 2016/6/1 20:46:25
+categories: 数据库
+date: 2016/11/1 20:46:25
 tags:
 	- mysql
 ---

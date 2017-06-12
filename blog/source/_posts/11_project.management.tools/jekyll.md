@@ -1,4 +1,12 @@
-# 安装
+---
+title: jekyll实践
+categories: 工程管理
+tags: 
+	- 工具
+	- 个人博客
+	- jekyll
+date: 2015/6/3 11:59:00
+---
 
 win7下安装
 

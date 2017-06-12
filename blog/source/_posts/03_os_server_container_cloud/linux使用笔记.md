@@ -1,9 +1,9 @@
 ---
-title: linux使用笔记
+title: Linux使用笔记
 categories: os
 tags: 
   - linux
-date: 2016/6/3 17:37:25
+date: 2011/2/23 17:37:25
 ---
 
 * [Linux教程](http://c.biancheng.net/cpp/html/2726.html)

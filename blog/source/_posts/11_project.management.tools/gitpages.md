@@ -1,3 +1,13 @@
+---
+title: Gitpages使用笔记
+categories: 工程管理
+tags: 
+	- 工具
+	- 个人博客
+	- gitpages
+date: 2012/3/13 20:03:00
+---
+
 
 # git命令
 

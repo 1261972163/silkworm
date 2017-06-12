@@ -1,6 +1,6 @@
 ---
 title: JVM总结(4)——性能监控和优化
-categories: java
+categories: 编程语言
 tags: 
   - java
   - jvm

@@ -1,6 +1,6 @@
 ---
-title: docker实践(2)——常用命令
-categories: container
+title: Docker实践(2)——常用命令
+categories: 容器
 tags:
     - docker
 date: 2016/5/1 12:31:25

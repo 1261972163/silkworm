@@ -1,6 +1,6 @@
 ---
-title: docker实践(3)——使用笔记
-categories: container
+title: Docker实践(3)——使用笔记
+categories: 容器
 tags:
     - docker
 date: 2016/5/1 20:31:25

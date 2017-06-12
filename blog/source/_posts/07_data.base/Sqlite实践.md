@@ -1,9 +1,9 @@
 ---
 title: Sqlite实践
-categories: database
+categories: 数据库
 tags: 
 	- sqlite
-date: 2016/6/3 17:37:25
+date: 2016/11/18 17:37:25
 ---
 
 # 1 认识

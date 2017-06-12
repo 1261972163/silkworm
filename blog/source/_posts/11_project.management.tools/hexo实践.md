@@ -1,15 +1,12 @@
 ---
 title: hexo实践
-categories: default
+categories: 工程管理
 tags: 
-  - hexo
+	- 工具
+	- 个人博客
+	- hexo
 date: 2017/6/3 11:59:00
 ---
-
-[hexo-theme-next](https://github.com/iissnan/hexo-theme-next)
-
-[hexo使用指南](https://hexo.io/zh-cn/docs/index.html)
-
 
 # 安装Hexo
 
@@ -188,3 +185,8 @@ date: 2017/6/3 11:59:00
 	1. 确认 _config.yml 中有 post_asset_folder:true 
 	2. hexo 目录执行
 		npm install https://github.com/CodeFalling/hexo-asset-image --save
+
+# 参考资料
+
+[hexo-theme-next](https://github.com/iissnan/hexo-theme-next)
+[hexo使用指南](https://hexo.io/zh-cn/docs/index.html)

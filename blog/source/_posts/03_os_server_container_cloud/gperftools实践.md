@@ -4,7 +4,7 @@ categories: os
 tags: 
   - gperftools
   - 性能分析
-date: 2016/6/3 17:37:25
+date: 2016/11/3 17:37:25
 ---
 
 gperftools是Google提供的一套工具，其中的一个功能是CPU profiler，用于分析程序性能，找到程序的性能瓶颈。

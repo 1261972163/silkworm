@@ -3,7 +3,7 @@ title: ubuntu常用维护
 categories: os
 tags: 
   - ubuntu
-date: 2016/6/3 17:57:25
+date: 2007/6/3 17:57:25
 ---
 
 设置启动进入命令行

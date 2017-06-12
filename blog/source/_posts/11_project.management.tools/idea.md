@@ -1,10 +1,15 @@
-idea IntelliJ常用配置
+---
+title: IntelliJ常用配置
+categories: 工程管理
+tags: 
+	- 工具
+	- ide
+	- intellij
+	- idea
+date: 2016/1/15 11:59:00
+---
 
-	1 常用插件
-	2 常用快捷键
-	3 其他
-
-1 常用插件
+# 1 常用插件
 
 	Identifier Highlighter： 高亮显示选中变量
 	Key Promoter： 快捷键提示
@@ -24,22 +29,22 @@ idea IntelliJ常用配置
 	FileBrowser： 在IDEA中查看项目外的文件
 	GenerateToString： 自动生成toString方法, toString方法是可定制的
 	
-2 常用快捷键
+# 2 常用快捷键
 
-1 智能提示
+## 智能提示
 
 	Ctrl+Space，代码提示（与系统输入法快捷键冲突）
 	Ctrl+Shift+Space，更智能地按类型信息提示，但因为Intellij总是随着我们敲击而自动提示，所以很多时候都不会手动敲这两个快捷键(除非提示框消失了)。
 	F2/Shift+F2，移动到有错误的代码
 	Alt+Enter，快速修复。当智能提示为我们自动补全方法名时，我们通常要自己补上行尾的反括号和分号，当括号嵌套很多层时会很麻烦，这时我们只需敲Ctrl+Shift+Enter就能自动补全末尾的字符。而且不只是括号，例如敲完if/for时也可以自动补上{}花括号。
 
-2 重构
+## 重构
 
 	Ctrl+Shift+Alt+T，重构功能大汇总菜单
 	Shift+F6，重命名
 	Alt+Delete，安全删除
 
-3 代码生成
+## 代码生成
 
 	Ctrl+J，自动代码（例如：fori/sout/psvm+Tab，生成循环，System.out、main方法等）
 	后面“辅助”一节中将会讲到Alt+Insert，在编辑窗口中点击可以生成构造函数、toString、getter/setter、重写父类方法等。
@@ -57,7 +62,7 @@ idea IntelliJ常用配置
 	Ctrl+Alt+V，可以引入变量。例如：new String();  自动导入变量定义
 	Alt+Insert，可以生成构造器/Getter/Setter等
 	
-4 编辑
+## 编辑
 
 	Ctrl+W，可以选择单词继而语句继而行继而函数
 	Ctrl+Shift+W，取消选择光标所在词
@@ -85,7 +90,7 @@ idea IntelliJ常用配置
 	Ctrl+Shift+U，大小写转化
 	Ctrl+Shift+V，打开剪贴板内容，选择插入项
 	
-5 查找打开
+## 查找打开
 
 	Ctrl+N/Ctrl+Shift+N，可以打开类或资源
 	Shift+Shift，可在一个弹出框中搜索任何东西，包括类、资源、配置项、方法等等
@@ -133,7 +138,7 @@ idea IntelliJ常用配置
 	ctrl+F12，类方法列表
 	ctrl+shift+H，查看类或方法被调用情况
 	
-6 其他辅助
+## 其他辅助
 
 	以上这些神键配上一些辅助快捷键，即可让你的双手90%以上的时间摆脱鼠标，专注于键盘仿佛在进行钢琴表演。这些不起眼却是至关重要的最后一块拼图有：
 	命令：Ctrl+Shift+A可以查找所有Intellij的命令，并且每个命令后面还有其快捷键。所以它不仅是一大神键，也是查找学习快捷键的工具。
@@ -145,7 +150,7 @@ idea IntelliJ常用配置
 	调试：F7/F8/F9分别对应Step into，Step over，Continue。
 	此外还有些我自定义的，例如水平分屏Ctrl+|等，和一些神奇的小功能Ctrl+Shift+V粘贴很早以前拷贝过的，Alt+Shift+Insert进入到列模式进行按列选中。
 	
-7 调试部分、编译
+## 调试部分、编译
 
 	1. Ctrl+F2，停止
 	2. Alt+Shift+F9，选择 Debug
@@ -180,7 +185,7 @@ idea IntelliJ常用配置
 	31. Ctrl+Tab，转到下一个拆分器
 	32. Ctrl+Shift+Tab，转到上一个拆分器
 	
-8 最终榜单
+## 最终榜单
 
 	Top #10切来切去：Ctrl+Tab
 	Top #9选你所想：Ctrl+W
@@ -193,7 +198,7 @@ idea IntelliJ常用配置
 	Top #1自我修复：Alt+Enter
 	Top #1重构一切：Ctrl+Shift+Alt+T
 	
-3 其他
+# 其他
 
 	主题：File > Settings > Apperence > theme里选择 Darcula，我的是V12
 	编辑器背景：File > Settings > Editor > Colors & Fonts > General > Added lines in gutter > Background R:201, G:222, B:193

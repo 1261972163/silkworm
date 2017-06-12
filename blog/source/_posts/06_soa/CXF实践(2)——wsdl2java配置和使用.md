@@ -1,9 +1,9 @@
 ---
 title: CXF实践(2)——wsdl2java配置和使用
-categories: soa
+categories: 服务化
 tags: 
-  - cxf
-date: 2016/6/3 17:37:25
+	- cxf
+date: 2016/7/3 17:37:25
 ---
 
 

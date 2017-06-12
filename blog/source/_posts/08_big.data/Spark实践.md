@@ -1,10 +1,10 @@
 ---
 title: Spark实践
-categories: bigdata
+categories: 大数据
 tags: 
-	- bigdata
+	- 大数据
 	- spark
-date: 2016/6/3 17:37:25
+date: 2016/6/10 17:37:25
 ---
 
 

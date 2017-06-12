@@ -1,3 +1,13 @@
+---
+title: Eclipse使用记录
+categories: 工程管理
+tags: 
+	- 工具
+	- ide
+	- eclispe
+date: 2012/1/13 20:03:00
+---
+
 Eclipse设置
 
 	1 关闭验证

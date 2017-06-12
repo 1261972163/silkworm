@@ -1,6 +1,16 @@
-iTerm2
+---
+title: iTerm2使用笔记
+categories: office
+tags: 
+	- 工具
+	- ide
+	- iterm2
+	- mac
+date: 2014/10/15 11:59:00
+---
 
-	一些基本功能如下： 
+一些基本功能如下：
+
 	1、分窗口操作：shift+command+d（横向）command+d（竖向） 
 	2、查找和粘贴：command+f，呼出查找功能，tab 键选中找到的文本，option+enter 粘贴 
 	3、自动完成：command+; 根据上下文呼出自动完成窗口，上下键选择 4、粘贴历史：shift+command+h

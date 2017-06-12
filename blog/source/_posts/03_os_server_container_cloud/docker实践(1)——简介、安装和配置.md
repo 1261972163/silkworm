@@ -1,6 +1,6 @@
 ---
-title: docker实践
-categories: container
+title: Docker实践(1)——简介、安装和配置
+categories: 容器
 tags:
     - docker
 date: 2016/5/1 08:31:25

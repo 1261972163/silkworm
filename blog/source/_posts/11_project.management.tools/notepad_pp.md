@@ -1,3 +1,13 @@
+---
+title: notepad++使用笔记
+categories: office
+tags: 
+	- 工具
+	- notepad++
+date: 2014/6/3 08:59:00
+---
+
+
 notepad++
 	
 	文档关联

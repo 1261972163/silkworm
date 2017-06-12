@@ -1,7 +1,14 @@
-Kafka原理——基于客户端的partition分配方案（0.9）
-====================================
+---
+title: Kafka实践(4)——基于客户端的分配方案
+categories: 大数据
+tags: 
+    - 大数据
+    - 消息队列
+    - kafka
+date: 2016/11/7 09:51:25
+---
 
-![](https://raw.githubusercontent.com/nouuid/mind-manager/master/resources/db/kafka/Kafka_Client-side_Assignment_Proposal.png)
+![](/resources/kafka/Kafka_Client-side_Assignment_Proposal.png)
 
 # 1 协议
 

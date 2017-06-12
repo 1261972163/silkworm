@@ -1,10 +1,11 @@
 ---
 title: Kafka实践(1)——《Kafka Documentation》笔记
-categories: bigdata
+categories: 大数据
 tags: 
-	- bigdata
+	- 大数据
+	- 消息队列
 	- kafka
-date: 2017/6/4 09:37:25
+date: 2016/11/4 09:37:25
 ---
 
 

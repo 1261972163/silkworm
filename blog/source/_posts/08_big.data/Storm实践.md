@@ -1,10 +1,11 @@
 ---
 title: Storm实践
-categories: bigdata
+categories: 大数据
 tags: 
-	- bigdata
+	- 大数据
 	- storm
-date: 2016/6/3 17:37:25
+	- 流处理
+date: 2016/11/3 17:37:25
 ---
 
 

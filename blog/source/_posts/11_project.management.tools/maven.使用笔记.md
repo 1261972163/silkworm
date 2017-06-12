@@ -1,3 +1,13 @@
+---
+title: Maven使用笔记
+categories: 工程管理
+tags: 
+	- 工具
+	- 代码管理
+	- maven
+date: 2013/10/13 20:03:00
+---
+
 
 * maven快速生成项目
 * 下载源码包

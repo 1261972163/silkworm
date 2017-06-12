@@ -1,10 +1,12 @@
-Gradle指南
-
-1 简述
-2 安装
-3 快速开始
-4 创建项目目录结构
-5 将Java项目从maven迁移到gradle
+---
+title: Gradle指南
+categories: 工程管理
+tags: 
+    - 工具
+    - 代码管理
+    - gradle
+date: 2014/10/13 20:03:00
+---
 
 # 1 简述
 
@@ -39,7 +41,7 @@ Gradle 的默认构建脚本文件为工程根目录下的 build.gradle。
     JVM:          1.7.0_60 (Oracle Corporation 24.60-b09)
     OS:           Mac OS X 10.9.4 x86_64
 
-3 快速开始
+# 3 快速开始
 
 作为测试，创建一个 test 目录，然后通过下面命令来初始化一个项目：
 

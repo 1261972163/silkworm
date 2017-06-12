@@ -1,10 +1,10 @@
 ---
 title: 《SOA实践指南》读书笔记
-categories: soa
+categories: 服务化
 tags: 
   - soa
   - 读书笔记
-date: 2016/6/3 17:37:25
+date: 2015/3/3 17:37:25
 ---
 
 

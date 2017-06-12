@@ -1,7 +1,7 @@
 ---
 title: Oracle实践(1)——安装
-categories: database
-date: 2016/6/1 20:46:25
+categories: 数据库
+date: 2014/6/18 20:46:25
 tags:
 	- oracle
 ---

@@ -1,10 +1,10 @@
 ---
 title: Redis实践
-categories: database
+categories: 数据库
 tags: 
 	- redis
 	- nosql
-date: 2016/6/3 17:37:25
+date: 2015/7/3 17:37:25
 ---
 
 # 1 认识

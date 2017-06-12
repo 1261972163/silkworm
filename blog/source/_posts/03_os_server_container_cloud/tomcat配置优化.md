@@ -1,9 +1,9 @@
 ---
 title: tomcat配置优化
-categories: server
+categories: 服务器
 tags: 
   - nodejs
-date: 2016/6/3 17:57:25
+date: 2011/1/3 17:57:25
 ---
 
 # 1 tomcat/conf/server.xml配置

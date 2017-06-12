@@ -1,9 +1,9 @@
 ---
-title: nodejs实践
-categories: server
+title: Nodejs实践
+categories: 服务器
 tags: 
-  - nodejs
-date: 2016/6/3 17:57:25
+	- nodejs
+date: 2017/4/3 17:57:25
 ---
 
 # 1. 安装（Linux）

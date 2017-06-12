@@ -1,6 +1,6 @@
 ---
 title: JVM总结(3)——内存模型
-categories: java
+categories: 编程语言
 tags: 
   - java
   - jvm

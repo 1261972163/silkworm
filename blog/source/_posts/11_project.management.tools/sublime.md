@@ -1,3 +1,12 @@
+---
+title: Sublime使用笔记
+categories: office
+tags: 
+	- 工具
+	- sublime
+date: 2015/7/3 08:59:00
+---
+
 Sublime
 
 	# 1 安装sublime-evernote

@@ -1,6 +1,6 @@
 ---
 title: java基础总结(3)——并发
-categories: java
+categories: 编程语言
 tags: 
   - java
   - j2se

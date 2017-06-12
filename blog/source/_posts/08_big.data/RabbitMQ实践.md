@@ -1,6 +1,6 @@
 ---
 title: RabbitMQ实践
-categories: bigdata
+categories: 大数据
 tags: 
 	- 消息队列
 	- rabbitmq

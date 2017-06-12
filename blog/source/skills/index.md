@@ -12,7 +12,14 @@ date: 2017-06-03 09:56:00
 * 方法论。批判性思考、任务拆分、SMART原则。
 * 价值观。研发武器，拒绝玩具。实践是检验真理的唯一标准。
 * 时间管理。四象限、专注力。
-* Office能力。Word、PPT、Excel、yEd/Visio、markdown、MindManager/Freemind/Xmind、VIM。
+* Office能力。
+	* Word，能够写出专业的文档，尤其是对外文档。
+	* PPT，如何做好PPT，自行百度
+	* Excel，善用内置的大量统计和图表功能
+	* yEd/Visio 
+	* markdown
+	* MindManager/Freemind/Xmind
+	* 熟练[使用VIM](http://coolshell.cn/articles/5426.html)
 * 完成的定义。弄懂原理、解决了问题、拥有足够的测试、及时反馈进度、更新相关文档、沉淀。
 * 熟练的定义。
 	* 可以脱离文档操作、重要特性了如指掌。
@@ -23,10 +30,31 @@ date: 2017-06-03 09:56:00
 
 # 专业基础
 
-* 算法。熟练**快排**和**二分**。
+* 算法。
+	* 必须要熟练**快排**和**二分**。
+	* [八大排序算法](http://blog.csdn.net/hguisu/article/details/7776068)
+	* [稳定排序和不稳定排序](http://www.cnblogs.com/codingmylife/archive/2012/10/21/2732980.html)
+	* [视觉直观感受7种常用的排序算法](http://blog.jobbole.com/11745/)
+	* [真正统治世界的十大算法](http://blog.jobbole.com/70639/)
+	* 递归和尾递归
+		* [递归与尾递归总结](http://www.cnblogs.com/Anker/archive/2013/03/04/2943498.html)
+		* [说说尾递归](http://www.cnblogs.com/catch/p/3495450.html)
+		* [什么是尾递归？](https://www.zhihu.com/question/20761771/answer/19996299)
+		* nouuid说：尾递归是因为编译器做了预处理，所以才解决了递归的缺点。
 * 网络。
 	* TCP/IP协议栈、OSI参考模型、TCP的三次握手与四次分手。
-	* HTTP抓包和调试。
+	* HTTP抓包与调试工具
+		* [Firefox插件](http://www.cnblogs.com/dyakira/p/4320710.html)。
+			Firebug抓包与各种调试； Tamper Data拦截修改； Live Http Header重放功能； Hackbar编码解码/POST提交； Modify Headers修改头部；
+		* [Fiddler](http://kb.cnblogs.com/page/130367/)。
+			浏览器代理神器。重点掌握拦截请求或响应、抓包、重放、模拟请求、编码解码，使用第三方插件（Watcher）进行Web前端安全的自动审计。
+		* [Wireshark]()。
+			各种强大的过滤器语法。
+		* [Tcpdump](http://www.cnblogs.com/ggjucheng/archive/2012/01/14/2322659.html)。
+			命令行的类Wireshark抓包神器。
+		* [聊聊 tcpdump 与 Wireshark 抓包分析](http://www.jianshu.com/p/a62ed1bb5b20)
+		* [Python]()。
+			重点掌握urllib2、打开请求响应调试、编辑urllib2的do_open里的h.set_debuglevel、改为h.set_debuglevel(1)，这时可以清晰看到请求响应数据，包括https。
 	* 什么是跳转。服务端跳转、客户端跳转。
 * Linux。
 	* 文件操作、scp、sz、rz、ssl、netstat、top、iostat、crontab、ps、nslookup等。
@@ -117,6 +145,28 @@ date: 2017-06-03 09:56:00
 	
 
 # 软件工程
+
+* 瀑布模型
+	* 需求->需求分析->设计->开发->测试->上线->运维/运营
+* 需求分析能力
+	* 给你一个需求，如何给出一个优美的执行思路——方法论
+	* 这个能力非常非常非常的关键
+* 调试能力
+	* 只要定位出，就没有解决不了的Bugs
+	* 肉眼看到的都是假象
+		* 一定要专业的工具与经验配合
+	* Bugs在哪出现，最终就在哪进行真实模拟调试
+	* 缩小范围
+		* 构建自己的测试样例
+		* 排除网络复杂未知情况
+		* 关联模块一个个排除
+		* 单步调试
+		* 粗暴调试：打印到控制台
+* 敏捷思想
+	* 快速迭代
+	* 任务拆细
+	* v1原则：定义好v1的目标，快速完成v1为优先
+	* 习惯Wiki记录，利于沉淀与分享
 
 
 # 机器学习

@@ -1,8 +1,9 @@
 ---
 title: HBase实践
-categories: bigdata
+categories: 大数据
 tags: 
-	- bigdata
+	- 大数据
+	- hadoop
 	- hbase
 date: 2016/6/3 17:37:25
 ---

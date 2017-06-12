@@ -1,9 +1,9 @@
 ---
 title: Web Service实践
-categories: soa
+categories: 服务化
 tags: 
-  - Web Service
-date: 2016/6/3 17:37:25
+	- Web Service
+date: 2015/6/3 17:37:25
 ---
 
 # 1. Web Service定义

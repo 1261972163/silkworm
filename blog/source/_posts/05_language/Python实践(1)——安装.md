@@ -1,6 +1,6 @@
 ---
 title: Python实践(1)——安装
-categories: python
+categories: 编程语言
 tags: 
   - python
 date: 2016/6/3 17:37:25
