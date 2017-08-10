@@ -12,7 +12,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * 是否需要按格式输出文本：public boolean requiresLayout()
  * 正常情况下我们只需要覆盖append方法即可。然后就可以在log4j中使用了
  *
- * @author bl07637
+ * @author nouuid
  * @date 8/10/2017
  * @since 0.1.0
  */

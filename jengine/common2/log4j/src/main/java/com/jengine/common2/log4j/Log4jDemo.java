@@ -21,7 +21,7 @@ package com.jengine.common2.log4j;
  * log4j.additivity.* = false : 表示当前logger不需要打到父层级所指定的appender，只打到当前的appender；
  * 默认true：表示当前logger将打印日志到当前的appender及所有的父层级所指定的appender
  *
- * @author bl07637
+ * @author nouuid
  * @date 8/10/2017
  * @since 0.1.0
  */

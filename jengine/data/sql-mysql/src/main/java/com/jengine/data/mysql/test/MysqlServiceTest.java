@@ -1,7 +1,7 @@
 package com.jengine.data.mysql.test;
 
 
-import com.jengine.data.database.mysql.MysqlService;
+import com.jengine.data.mysql.MysqlService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

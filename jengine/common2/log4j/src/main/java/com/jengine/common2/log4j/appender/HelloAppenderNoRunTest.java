@@ -8,7 +8,7 @@ import org.apache.log4j.PropertyConfigurator;
 /**
  * content
  *
- * @author bl07637
+ * @author nouuid
  * @date 8/10/2017
  * @since 0.1.0
  */

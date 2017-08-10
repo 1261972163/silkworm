@@ -41,10 +41,12 @@
             <groupId>com.jengine</groupId>
             <artifactId>jengine-common</artifactId>
         </dependency>
-        <dependency>
+        <!--
+	<dependency>
             <groupId>com.jengine</groupId>
             <artifactId>jengine-transport</artifactId>
         </dependency>
+	-->
     </dependencies>
 
 </project>

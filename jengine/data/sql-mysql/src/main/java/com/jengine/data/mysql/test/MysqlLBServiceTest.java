@@ -1,6 +1,6 @@
 package com.jengine.data.mysql.test;
 
-import com.jengine.data.database.mysql.MysqlLBService;
+import com.jengine.data.mysql.MysqlLBService;
 
 /**
  * @author nouuid

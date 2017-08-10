@@ -1,7 +1,7 @@
 package com.jengine.data.mysql.test;
 
 
-import com.jengine.data.database.mysql.MysqlBench;
+import com.jengine.data.mysql.MysqlBench;
 
 /**
  * @author nouuid

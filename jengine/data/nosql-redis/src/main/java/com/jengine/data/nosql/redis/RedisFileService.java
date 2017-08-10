@@ -1,5 +1,6 @@
 package com.jengine.data.nosql.redis;
 
+
 import com.jengine.transport.serialize.SerializeStrategy;
 
 /**

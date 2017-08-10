@@ -90,7 +90,11 @@
                 <artifactId>jengine-transport</artifactId>
                 <version>0.1.0-SNAPSHOT</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.jengine</groupId>
+                <artifactId>jengine-serialize</artifactId>
+                <version>0.1.0-SNAPSHOT</version>
+            </dependency>
             <!-- ########## Log libs ########## -->
             <!-- log -->
             <dependency>
