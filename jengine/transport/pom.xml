@@ -6,102 +6,34 @@
 		<artifactId>jengine-parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
-    <artifactId>jengine-transport</artifactId>
-	<packaging>jar</packaging>
+
+	<groupId>com.jengine</groupId>
+	<artifactId>jengine-transport</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
-	
+	<description>The jengine-transport module of jengine project</description>
+	<url></url>
+
+	<modules>
+		<module>protocal</module>
+		<module>restful</module>
+		<module>rpc</module>
+		<module>serialize</module>
+		<module>server</module>
+	</modules>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.jengine</groupId>
 			<artifactId>jengine-common</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
-
-		<!-- ########## serialize ########## -->
-		<!-- dom -->
 		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
+			<groupId>com.jengine</groupId>
+			<artifactId>jengine-transport</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom2</artifactId>
-		</dependency>
-
-		<!-- json -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-		</dependency>
-
-		<!-- avro -->
-		<dependency>
-			<groupId>org.apache.avro</groupId>
-			<artifactId>avro</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.avro</groupId>
-			<artifactId>avro-ipc</artifactId>
-		</dependency>
-
-		<!-- yaml -->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-		</dependency>
-
-		<!-- ########## server ########## -->
-
-
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-		</dependency>
-		<!-- Jersey -->
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<artifactId>jersey-container-grizzly2-http</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.curator</groupId>
-			<artifactId>curator-recipes</artifactId>
-		</dependency>
-
-		<!-- tomcat -->
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-util</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-logging-juli</artifactId>
-		</dependency>
-
 	</dependencies>
 
 </project>

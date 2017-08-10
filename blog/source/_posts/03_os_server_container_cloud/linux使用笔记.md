@@ -1,7 +1,7 @@
 ---
 title: Linux使用笔记
 categories: os
-tags: 
+tags:
   - linux
 date: 2011/2/23 17:37:25
 ---
@@ -22,13 +22,13 @@ date: 2011/2/23 17:37:25
 机器间文件拷贝scp
 
 	格式：
-	本机到远程机器：scp localpath remoteuser@remotehost:remotepath 
+	本机到远程机器：scp localpath remoteuser@remotehost:remotepath
 	远程机器到本机：scp remoteuser@remotehost:remotepath localpath
-	
+
 	示例：
 	scp -r /home/wwwroot/www/charts/util root@192.168.1.65:/home/wwwroot/limesurvey_back/scp
 	scp -r root@192.168.1.65:/home/wwwroot/limesurvey_back/scp /home/wwwroot/www/charts/util
-	
+
 	注意两点：
 	1.如果远程服务器防火墙有特殊限制，scp便要走特殊端口，具体用什么端口视情况而定，命令格式如下：
 	#scp -p 4588 remote@www.abc.com:/usr/local/sin.sh /home/administrator
@@ -37,7 +37,7 @@ date: 2011/2/23 17:37:25
 计算指定模式文件的大小（单位：kb）
 
 	du -sk my-*-20160307 | awk '{sum+=$1};END{print sum}'
-	
+
 查找文件名中包含某字符（如"elm"）的文件
 
 	find / -name '*elm*'
@@ -78,7 +78,7 @@ date: 2011/2/23 17:37:25
 	ulimit -n
 	# 修改，假设用户为nouuid
 	vim /etc/security/limits.conf
-	> 
+	>
 		nouuid soft nofile 10240
    		nouuid hard nofile 10240
 
@@ -164,14 +164,14 @@ date: 2011/2/23 17:37:25
 
 	vim /etc/security/limits.conf
 
-	limits.conf的格式如下： 
+	limits.conf的格式如下：
 	    <domain> <type>  <item> <value>
 
-	<domain> :可以指定单个用户名、@组名、所有用户（*）
+	<domain> :可以指定单个用户名、@组名、所有用户（\*）
 	type：有 soft（指的是当前系统生效的设置值），hard（表明系统中所能设定的最大值）和 -（表明同时设置了 soft 和 hard 的值）
 
 打印进程号为pid的进程个线程的cpu，内存等资源占用情况
-    
+
     top -Hp pid -d 1 -n 1
 
 查看CPU信息
@@ -189,11 +189,11 @@ date: 2011/2/23 17:37:25
     注释掉export TMOUT
 
 查看操作系统版本
-    
-    cat /etc/issue 或 cat /etc/redhat-release 
+
+    cat /etc/issue 或 cat /etc/redhat-release
 
 查看64/32位
-    
+
     getconf LONG_BIT
 
 查看系统约束
@@ -205,3 +205,12 @@ date: 2011/2/23 17:37:25
 	[参考](http://xiezhenye.com/2013/02/%E5%8A%A8%E6%80%81%E4%BF%AE%E6%94%B9%E8%BF%90%E8%A1%8C%E4%B8%AD%E8%BF%9B%E7%A8%8B%E7%9A%84-rlimit.html)
 
     echo -n 'Max open files=655350:655350' > /proc/<PID>/limits
+
+
+# Linux服务器设置ssh超时自动注销
+
+  vi /etc/profile
+
+    HISTFILESIZE=5 #history command
+    HISTSIZE=5             #history command
+    TMOUT=300              #ssh timeout(sec)

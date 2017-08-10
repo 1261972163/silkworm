@@ -1,7 +1,7 @@
 ---
 title: JVM总结(4)——性能监控和优化
 categories: 编程语言
-tags: 
+tags:
   - java
   - jvm
 date: 2016/6/3 17:37:25
@@ -31,7 +31,7 @@ date: 2016/6/3 17:37:25
 
 同时，还可以用于列出已装载的JVM。下面两条命令效果一致：
 
-	jps -l -m 
+	jps -l -m
 	jcmd
 
 ## 1.2 运行状态统计
@@ -60,7 +60,7 @@ date: 2016/6/3 17:37:25
 
 	-XX:+PrintGCDetails
 	-XX:+PrintGCTimeStamps
-	-XX:+PrintHeapAtGC 
+	-XX:+PrintHeapAtGC
 	-XX:+PrintGCDateStamps       (from JDK 6 update 4)
 	-Xloggc:$LOG_FILE_PATH       (注：$LOG_FILE_PATH为日志文件路径)
 
@@ -70,12 +70,12 @@ gc发生时，gc日志格式为：
 
 | Collector	| Name of Collector Used for minor gc |
 | :------------- |:-------------|
-| starting occupancy1	| GC前年轻代大小 | 
-| ending occupancy1	| GC后年轻代大小 | 
-| pause time1	| minor GC时，Java应用停顿的时刻| 
-| starting occupancy3	| GC前堆大小| 
-| ending occupancy3	| GC后对大小| 
-| pause time3	| 堆GC使，Java应用停顿的时刻| 
+| starting occupancy1	| GC前年轻代大小 |
+| ending occupancy1	| GC后年轻代大小 |
+| pause time1	| minor GC时，Java应用停顿的时刻|
+| starting occupancy3	| GC前堆大小|
+| ending occupancy3	| GC后对大小|
+| pause time3	| 堆GC使，Java应用停顿的时刻|
 
 ## 1.4 内存分析
 
@@ -95,7 +95,7 @@ gc发生时，gc日志格式为：
 
 	jmap -histo[:live] [-F] [pid]
 
-这个命令执行，JVM会先触发gc，然后再统计信息,打印每个class的实例数目、内存占用、类全名信息。VM的内部类名字开头会加上前缀“*”。如果live子参数加上后,只统计活的对象数量。-F可选，在pid没有响应的时候强制使用-histo参数。在这个模式下，live子参数无效。
+这个命令执行，JVM会先触发gc，然后再统计信息,打印每个class的实例数目、内存占用、类全名信息。VM的内部类名字开头会加上前缀“\*”。如果live子参数加上后,只统计活的对象数量。-F可选，在pid没有响应的时候强制使用-histo参数。在这个模式下，live子参数无效。
 
 在对象被回收之前，需要执行finalize方法，而finalize方法的执行又是需要排着队由某个线程来一个个消费的。可以通过
 
@@ -135,7 +135,7 @@ heap如果比较大的话，jmap -dump 就会导致这个过程比较耗时，�
 
 在排查问题的时候，对于保留现场信息的操作，可以用gcore [pid]直接保留，这个的执行速度会比jmap -dump快不少，之后可以再用jmap/jstack等从core dump文件里提取相应的信息。
 
-另外，在socket，nio中的有些API中，申请的内存是直接向OS要的，在堆中分析内存是查看不到的，可以通过-XX:MaxDirectMemorySize=来设置应用向OS直接申请的最大内存数。 
+另外，在socket，nio中的有些API中，申请的内存是直接向OS要的，在堆中分析内存是查看不到的，可以通过-XX:MaxDirectMemorySize=来设置应用向OS直接申请的最大内存数。
 
 ## 1.5 堆栈跟踪
 

@@ -28,6 +28,8 @@ date: 2016/1/15 11:59:00
 	unitTest： 在指定的方法上按下shift+cmd+t 即可为这个方法生成单元测试代码模板。
 	FileBrowser： 在IDEA中查看项目外的文件
 	GenerateToString： 自动生成toString方法, toString方法是可定制的
+	Maven Helper
+	Bitbucket Linky
 	
 # 2 常用快捷键
 

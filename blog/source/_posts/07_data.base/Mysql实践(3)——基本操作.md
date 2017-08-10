@@ -13,6 +13,12 @@ tags:
 状态：sudo service mysqld status
 重启：sudo service mysqld restart
 
+登录：
+
+	mysql -uroot -p
+
+# 用户管理
+
 root密码：
 
 	（1）获取临时密码：sudo grep 'temporary password' /var/log/mysqld.log
@@ -42,19 +48,19 @@ mysql账户远程访问授权，默认只能在localhost访问。其他机器使
 	show table status from sbtest where name='sbtest1';
 
 查看表创建命令（有可能出错）：
-	
+
 	show create table sbtest1;
 
 查看innodb_buffer_pool的使用情况：
 
 	show engine innodb status\G;
 
-进去指定schema 数据库（存放了其他的数据库的信息） 
-	
+进去指定schema 数据库（存放了其他的数据库的信息）
+
 	mysql> use information_schema;
 	Database changed
 
-查询所有数据的大小 
+查询所有数据的大小
 
 	mysql> select concat(round(sum(DATA_LENGTH/1024/1024), 2), 'MB')
 	    -> as data from TABLES;
@@ -76,7 +82,7 @@ mysql账户远程访问授权，默认只能在localhost访问。其他机器使
 	+-----------+
 	1 row inset(7.47 sec)
 
-查看指定数据库的表的大小，比如说数据库 forexpert 中的 member 表 
+查看指定数据库的表的大小，比如说数据库 forexpert 中的 member 表
 
 	mysql> select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data
 	    -> from TABLES where table_schema='forexpert'
