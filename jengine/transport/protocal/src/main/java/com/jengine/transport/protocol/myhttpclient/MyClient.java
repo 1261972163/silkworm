@@ -6,6 +6,7 @@ import org.apache.http.client.entity.EntityBuilder;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,10 @@ public class MyClient {
     protected ContentType requestContentType = ContentType.APPLICATION_JSON.withCharset("utf-8");
 
     private CloseableHttpClient httpClient;
+
+    public MyClient() {
+        httpClient = HttpClients.createDefault();
+    }
 
     public String execute(String restMethodName, String url, String data) throws IOException {
         HttpUriRequest request = constructHttpMethod(restMethodName, url, data);
