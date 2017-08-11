@@ -6,6 +6,6 @@ package com.jengine.pattern.structural.adapter.objectadapter;
  */
 public class Adaptee {
     public void specificRequest() {
-        System.out.println("�Ѵ��ڵĽӿ�");
+        System.out.println("object adaptee");
     }
 }

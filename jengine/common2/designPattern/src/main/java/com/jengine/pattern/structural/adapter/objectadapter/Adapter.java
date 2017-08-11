@@ -1,10 +1,11 @@
 package com.jengine.pattern.structural.adapter.objectadapter;
 
+import com.jengine.pattern.structural.adapter.AdapterTarget;
+
 /**
- * �ṩ��������Ľӿ�
  * Created by nouuid on 2015/5/25.
  */
-public class Adapter implements Target {
+public class Adapter implements AdapterTarget {
     private Adaptee adaptee;
 
     public Adapter(Adaptee adaptee) {

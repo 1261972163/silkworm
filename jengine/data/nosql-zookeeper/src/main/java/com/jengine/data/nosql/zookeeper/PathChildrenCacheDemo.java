@@ -1,4 +1,4 @@
-package com.jengine.cluster.zk;
+package com.jengine.data.nosql.zookeeper;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;

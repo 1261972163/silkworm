@@ -22,13 +22,13 @@
 		<module>spring</module>
 		<module>logback</module>
 		<module>log4j</module>
+		<module>designPattern</module>
 	</modules>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.jengine</groupId>
 			<artifactId>jengine-common</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

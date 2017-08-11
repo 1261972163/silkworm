@@ -8,7 +8,7 @@
 	</parent>
 
 	<groupId>com.jengine</groupId>
-    <artifactId>jengine-data-sqlite</artifactId>
+    <artifactId>jengine-sqlite</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	

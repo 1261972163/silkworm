@@ -8,7 +8,7 @@
 	</parent>
 
 	<groupId>com.jengine</groupId>
-    <artifactId>jengine-search-elasticsearch</artifactId>
+    <artifactId>jengine-elasticsearch</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 	
