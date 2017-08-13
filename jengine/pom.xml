@@ -87,7 +87,7 @@
             </dependency>
             <dependency>
                 <groupId>com.jengine</groupId>
-                <artifactId>jengine-transport</artifactId>
+                <artifactId>jengine-protocal</artifactId>
                 <version>0.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>

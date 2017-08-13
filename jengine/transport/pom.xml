@@ -17,7 +17,8 @@
 
 	<modules>
 		<module>protocal</module>
-		<module>restful</module>
+		<module>restful-jersey</module>
+		<!--<module>restful-springboot</module>-->
 		<module>rpc</module>
 		<module>serialize</module>
 		<module>server</module>
