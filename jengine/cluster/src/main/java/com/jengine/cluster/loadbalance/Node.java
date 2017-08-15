@@ -8,22 +8,22 @@ package com.jengine.cluster.loadbalance;
  * @since 0.1.0
  */
 public class Node {
-    private String hostIp;
-    private int weight;
+  private String hostIp;
+  private int weight;
 
-    public String getHostIp() {
-        return hostIp;
-    }
+  public String getHostIp() {
+    return hostIp;
+  }
 
-    public void setHostIp(String hostIp) {
-        this.hostIp = hostIp;
-    }
+  public void setHostIp(String hostIp) {
+    this.hostIp = hostIp;
+  }
 
-    public int getWeight() {
-        return weight;
-    }
+  public int getWeight() {
+    return weight;
+  }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
+  public void setWeight(int weight) {
+    this.weight = weight;
+  }
 }

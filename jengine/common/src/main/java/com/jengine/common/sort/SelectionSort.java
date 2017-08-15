@@ -7,19 +7,19 @@ package com.jengine.common.sort;
  */
 public class SelectionSort extends Sort {
 
-    public void sort() {
-        for(int i=0; i<data.length; i++) {
-            int pos = i;
-            for(int j=i+1; j<data.length; j++) {
-                if(data[j]<data[pos]) {
-                    pos = j;
-                }
-            }
-
-            if(pos!=i) {
-                exchange(i, pos);
-            }
+  public void sort() {
+    for (int i = 0; i < data.length; i++) {
+      int pos = i;
+      for (int j = i + 1; j < data.length; j++) {
+        if (data[j] < data[pos]) {
+          pos = j;
         }
+      }
 
+      if (pos != i) {
+        exchange(i, pos);
+      }
     }
+
+  }
 }

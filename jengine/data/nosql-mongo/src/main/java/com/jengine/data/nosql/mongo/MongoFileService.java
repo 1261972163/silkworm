@@ -8,23 +8,23 @@ import com.jengine.transport.serialize.SerializeStrategy;
  */
 public class MongoFileService {
 
-    private MongoService mongoService;
-    SerializeStrategy serializeStrategy = null;
+  SerializeStrategy serializeStrategy = null;
+  private MongoService mongoService;
 
-    public MongoFileService(MongoService mongoService, SerializeStrategy serializeStrategy) {
-        this.mongoService = mongoService;
-        this.serializeStrategy = serializeStrategy;
-    }
+  public MongoFileService(MongoService mongoService, SerializeStrategy serializeStrategy) {
+    this.mongoService = mongoService;
+    this.serializeStrategy = serializeStrategy;
+  }
 
-    public void save(String filename, Object fileData) {
-        mongoService.set(filename, serializeStrategy.toByte(fileData));
-    }
+  public void save(String filename, Object fileData) {
+    mongoService.set(filename, serializeStrategy.toByte(fileData));
+  }
 
-    public void remove(String filename) {
-        mongoService.remove(filename);
-    }
+  public void remove(String filename) {
+    mongoService.remove(filename);
+  }
 
-    public Object get(String filename) {
-       return mongoService.get(filename);
-    }
+  public Object get(String filename) {
+    return mongoService.get(filename);
+  }
 }

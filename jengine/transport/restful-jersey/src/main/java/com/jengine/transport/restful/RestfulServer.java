@@ -9,6 +9,7 @@ import java.io.IOException;
  */
 public interface RestfulServer {
 
-    void start() throws IOException;
-    void stop() throws IOException;
+  void start() throws IOException;
+
+  void stop() throws IOException;
 }

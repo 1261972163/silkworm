@@ -7,6 +7,7 @@ package com.jengine.data.compress;
  */
 public interface CompressStrategy {
 
-    String compress(String str);
-    String decompress(String compressedStr);
+  String compress(String str);
+
+  String decompress(String compressedStr);
 }

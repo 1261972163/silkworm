@@ -8,27 +8,23 @@ import org.apache.solr.client.solrj.response.QueryResponse;
  */
 public interface SolrService {
 
-    /**
-     * 是否存在配置信息
-     * @return
-     */
-    public boolean isConfigurated();
+  /**
+   * 是否存在配置信息
+   */
+  public boolean isConfigurated();
 
-    /**
-     * 查询
-     * @param query
-     * @return
-     */
-    public QueryResponse query(SolrQuery query);
+  /**
+   * 查询
+   */
+  public QueryResponse query(SolrQuery query);
 
-    /**
-     * 创建collection
-     * @param collectionName
-     */
-    public void createCollection(String collectionName);
+  /**
+   * 创建collection
+   */
+  public void createCollection(String collectionName);
 
-    /**
-     * 创建将来的5个collection，每天1个
-     */
-    public void createCollectionPerDay();
+  /**
+   * 创建将来的5个collection，每天1个
+   */
+  public void createCollectionPerDay();
 }

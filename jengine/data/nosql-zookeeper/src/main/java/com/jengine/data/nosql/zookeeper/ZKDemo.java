@@ -1,13 +1,12 @@
 package com.jengine.data.nosql.zookeeper;
 
+import java.util.List;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.EnsurePath;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * content
@@ -18,26 +17,26 @@ import java.util.List;
  */
 public class ZKDemo {
 
-    private CuratorFramework client;
+  private CuratorFramework client;
 
-    @Before
-    public void before() throws Exception {
-        ExponentialBackoffRetry retryPolicy = new ExponentialBackoffRetry(1000, 3);
+  @Before
+  public void before() throws Exception {
+    ExponentialBackoffRetry retryPolicy = new ExponentialBackoffRetry(1000, 3);
 
-        client = CuratorFrameworkFactory.newClient("10.45.11.84", retryPolicy);
-        client.start();
+    client = CuratorFrameworkFactory.newClient("10.45.11.84", retryPolicy);
+    client.start();
 
-        EnsurePath ensurePath = client.newNamespaceAwareEnsurePath("/create/test");
-        ensurePath.ensure(client.getZookeeperClient());
+    EnsurePath ensurePath = client.newNamespaceAwareEnsurePath("/create/test");
+    ensurePath.ensure(client.getZookeeperClient());
+  }
+
+  @Test
+  public void test1() throws Exception {
+    System.out.println("-------------");
+    List<String> childPathList = client.getChildren().forPath("/create");
+    for (String child : childPathList) {
+      System.out.println(child);
     }
-
-    @Test
-    public void test1() throws Exception {
-        System.out.println("-------------");
-        List<String> childPathList = client.getChildren().forPath("/create");
-        for (String child : childPathList) {
-            System.out.println(child);
-        }
-    }
+  }
 
 }

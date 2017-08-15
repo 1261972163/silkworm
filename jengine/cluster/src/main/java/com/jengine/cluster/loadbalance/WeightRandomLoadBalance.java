@@ -14,23 +14,23 @@ import java.util.Random;
  */
 public class WeightRandomLoadBalance extends LoadBalanceStrategy {
 
-    @Override
-    protected List<Node> rebuildNodes(List<Node> nodes) {
-        List<Node> nodeListTmp = new LinkedList<Node>();
-        nodeListTmp.addAll(nodes);
-        List<Node> nodeList = new ArrayList<Node>();
-        for (Node node : nodeListTmp) {
-            for (int i = 0; i < node.getWeight(); i++) {
-                nodeList.add(node);
-            }
-        }
-        return nodeList;
+  @Override
+  protected List<Node> rebuildNodes(List<Node> nodes) {
+    List<Node> nodeListTmp = new LinkedList<Node>();
+    nodeListTmp.addAll(nodes);
+    List<Node> nodeList = new ArrayList<Node>();
+    for (Node node : nodeListTmp) {
+      for (int i = 0; i < node.getWeight(); i++) {
+        nodeList.add(node);
+      }
     }
+    return nodeList;
+  }
 
-    @Override
-    protected Node getNode(List<Node> nodeList) {
-        Random random = new Random();
-        int randomPos = random.nextInt(nodeList.size());
-        return nodeList.get(randomPos);
-    }
+  @Override
+  protected Node getNode(List<Node> nodeList) {
+    Random random = new Random();
+    int randomPos = random.nextInt(nodeList.size());
+    return nodeList.get(randomPos);
+  }
 }

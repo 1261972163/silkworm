@@ -13,17 +13,17 @@ import java.util.Random;
  */
 public class RandomLoadBalance extends LoadBalanceStrategy {
 
-    @Override
-    protected List<Node> rebuildNodes(List<Node> nodes) {
-        List<Node> nodeListTmp = new LinkedList<Node>();
-        nodeListTmp.addAll(nodes);
-        return nodeListTmp;
-    }
+  @Override
+  protected List<Node> rebuildNodes(List<Node> nodes) {
+    List<Node> nodeListTmp = new LinkedList<Node>();
+    nodeListTmp.addAll(nodes);
+    return nodeListTmp;
+  }
 
-    @Override
-    protected Node getNode(List<Node> nodeList) {
-        Random random = new Random();
-        int randomPos = random.nextInt(nodeList.size());
-        return nodeList.get(randomPos);
-    }
+  @Override
+  protected Node getNode(List<Node> nodeList) {
+    Random random = new Random();
+    int randomPos = random.nextInt(nodeList.size());
+    return nodeList.get(randomPos);
+  }
 }

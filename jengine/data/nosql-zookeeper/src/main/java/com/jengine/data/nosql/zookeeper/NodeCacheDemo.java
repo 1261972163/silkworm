@@ -18,36 +18,38 @@ import org.junit.Test;
  * @since 0.1.0
  */
 public class NodeCacheDemo {
-    private CuratorFramework client;
 
-    @Before
-    public void before() throws Exception {
-        ExponentialBackoffRetry retryPolicy = new ExponentialBackoffRetry(1000, 3);
+  private CuratorFramework client;
 
-        client = CuratorFrameworkFactory.newClient("10.45.11.84", retryPolicy);
-        client.start();
+  @Before
+  public void before() throws Exception {
+    ExponentialBackoffRetry retryPolicy = new ExponentialBackoffRetry(1000, 3);
 
-        EnsurePath ensurePath = client.newNamespaceAwareEnsurePath("/create/test");
-        ensurePath.ensure(client.getZookeeperClient());
-    }
+    client = CuratorFrameworkFactory.newClient("10.45.11.84", retryPolicy);
+    client.start();
 
-    @Test
-    public void nodeCache() throws Exception {
-        NodeCache nodeCache = new NodeCache(client, "/create/test");
-        nodeCache.getListenable().addListener(new NodeCacheListener() {
-            @Override
-            public void nodeChanged() throws Exception {
-                System.out.println("NodeCache changed, data is: " + new String(nodeCache.getCurrentData().getData()));
-            }
-        });
-        nodeCache.start(true);
+    EnsurePath ensurePath = client.newNamespaceAwareEnsurePath("/create/test");
+    ensurePath.ensure(client.getZookeeperClient());
+  }
 
-        client.setData().forPath("/create/test", "1111".getBytes());
-        System.out.println(new String(nodeCache.getCurrentData().getData()));
+  @Test
+  public void nodeCache() throws Exception {
+    NodeCache nodeCache = new NodeCache(client, "/create/test");
+    nodeCache.getListenable().addListener(new NodeCacheListener() {
+      @Override
+      public void nodeChanged() throws Exception {
+        System.out.println(
+            "NodeCache changed, data is: " + new String(nodeCache.getCurrentData().getData()));
+      }
+    });
+    nodeCache.start(true);
 
-        Thread.sleep(10000);
-        CloseableUtils.closeQuietly(nodeCache);
-        CloseableUtils.closeQuietly(client);
-    }
+    client.setData().forPath("/create/test", "1111".getBytes());
+    System.out.println(new String(nodeCache.getCurrentData().getData()));
+
+    Thread.sleep(10000);
+    CloseableUtils.closeQuietly(nodeCache);
+    CloseableUtils.closeQuietly(client);
+  }
 
 }

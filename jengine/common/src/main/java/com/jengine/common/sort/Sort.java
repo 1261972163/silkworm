@@ -6,15 +6,16 @@ package com.jengine.common.sort;
  * @description
  */
 public abstract class Sort {
-    protected int[] data;
 
-    public abstract void sort();
+  protected int[] data;
 
-    public void exchange(int i, int j) {
-        if((i>0 && i<data.length) && (j>0 && j<data.length)) {
-            int tmp = data[i];
-            data[i] = data[j];
-            data[j] = tmp;
-        }
+  public abstract void sort();
+
+  public void exchange(int i, int j) {
+    if ((i > 0 && i < data.length) && (j > 0 && j < data.length)) {
+      int tmp = data[i];
+      data[i] = data[j];
+      data[j] = tmp;
     }
+  }
 }

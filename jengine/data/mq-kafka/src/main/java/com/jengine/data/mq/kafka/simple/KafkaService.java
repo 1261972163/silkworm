@@ -1,10 +1,9 @@
 package com.jengine.data.mq.kafka.simple;
 
+import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-
-import java.util.Properties;
 
 /**
  * @author nouuid
@@ -12,13 +11,16 @@ import java.util.Properties;
  * @description
  */
 public interface KafkaService {
-    public void initProducer(Properties producerProps);
-    public void initConsumer(Properties consumerProps);
 
-    public void send(ProducerRecord producerRecord);
-    public ConsumerRecords<String, String> poll();
+  public void initProducer(Properties producerProps);
 
-    public void closeProducer();
+  public void initConsumer(Properties consumerProps);
 
-    public KafkaConsumer<String, String> getConsumer();
+  public void send(ProducerRecord producerRecord);
+
+  public ConsumerRecords<String, String> poll();
+
+  public void closeProducer();
+
+  public KafkaConsumer<String, String> getConsumer();
 }

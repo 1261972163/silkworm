@@ -6,31 +6,31 @@ package com.jengine.cluster.discovery;
  * @description
  */
 public class HostConfig {
-    private long hostId;
-    private String hostName;
-    private String ip;
+  private long hostId;
+  private String hostName;
+  private String ip;
 
-    public long getHostId() {
-        return hostId;
-    }
+  public long getHostId() {
+    return hostId;
+  }
 
-    public void setHostId(long hostId) {
-        this.hostId = hostId;
-    }
+  public void setHostId(long hostId) {
+    this.hostId = hostId;
+  }
 
-    public String getHostName() {
-        return hostName;
-    }
+  public String getHostName() {
+    return hostName;
+  }
 
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
+  public void setHostName(String hostName) {
+    this.hostName = hostName;
+  }
 
-    public String getIp() {
-        return ip;
-    }
+  public String getIp() {
+    return ip;
+  }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+  public void setIp(String ip) {
+    this.ip = ip;
+  }
 }

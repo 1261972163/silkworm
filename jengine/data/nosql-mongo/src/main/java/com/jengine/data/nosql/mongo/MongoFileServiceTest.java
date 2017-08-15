@@ -7,10 +7,10 @@ import org.junit.Test;
  */
 public class MongoFileServiceTest {
 
-    @Test
-    public void connectTest() {
+  @Test
+  public void connectTest() {
 
 //        FileService fs = new MongoFileService(databaseName, host, port, username, password, table);
 
-    }
+  }
 }

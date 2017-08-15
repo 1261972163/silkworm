@@ -10,40 +10,41 @@ import java.util.Properties;
  * @since 0.1.0
  */
 public class ConsumerConfig {
-    private Properties consumerProperties = null;
-    private String     topic              = null;
-    private int        partition          = -1;
-    private boolean    autoConsume        = true;
 
-    public Properties getConsumerProperties() {
-        return consumerProperties;
-    }
+  private Properties consumerProperties = null;
+  private String topic = null;
+  private int partition = -1;
+  private boolean autoConsume = true;
 
-    public void setConsumerProperties(Properties consumerProperties) {
-        this.consumerProperties = consumerProperties;
-    }
+  public Properties getConsumerProperties() {
+    return consumerProperties;
+  }
 
-    public String getTopic() {
-        return topic;
-    }
+  public void setConsumerProperties(Properties consumerProperties) {
+    this.consumerProperties = consumerProperties;
+  }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+  public String getTopic() {
+    return topic;
+  }
 
-    public int getPartition() {
-        return partition;
-    }
+  public void setTopic(String topic) {
+    this.topic = topic;
+  }
 
-    public void setPartition(int partition) {
-        this.partition = partition;
-    }
+  public int getPartition() {
+    return partition;
+  }
 
-    public boolean isAutoConsume() {
-        return autoConsume;
-    }
+  public void setPartition(int partition) {
+    this.partition = partition;
+  }
 
-    public void setAutoConsume(boolean autoConsume) {
-        this.autoConsume = autoConsume;
-    }
+  public boolean isAutoConsume() {
+    return autoConsume;
+  }
+
+  public void setAutoConsume(boolean autoConsume) {
+    this.autoConsume = autoConsume;
+  }
 }

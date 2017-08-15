@@ -14,28 +14,28 @@ import java.util.concurrent.atomic.AtomicLong;
  * @description Round-Robin, do loop from 1 to N
  */
 public class RoundRobinLoadBalance extends LoadBalanceStrategy {
-    private final AtomicLong sequences = new AtomicLong();
+  private final AtomicLong sequences = new AtomicLong();
 
-    @Override
-    protected List<Node> rebuildNodes(List<Node> nodes) {
-        List<Node> nodeListTmp = new LinkedList<Node>();
-        nodeListTmp.addAll(nodes);
-        return nodeListTmp;
-    }
+  @Override
+  protected List<Node> rebuildNodes(List<Node> nodes) {
+    List<Node> nodeListTmp = new LinkedList<Node>();
+    nodeListTmp.addAll(nodes);
+    return nodeListTmp;
+  }
 
-    @Override
-    protected Node getNode(List<Node> nodeList) {
-        long index = getNodeNumber();
-        return nodeList.get((int)((index) % nodeList.size()));
-    }
+  @Override
+  protected Node getNode(List<Node> nodeList) {
+    long index = getNodeNumber();
+    return nodeList.get((int) ((index) % nodeList.size()));
+  }
 
-    private long getNodeNumber() {
-        long index = sequences.incrementAndGet();
-        if (index < 0) {
-            index = 0;
-            sequences.set(0);
-        }
-        return index;
+  private long getNodeNumber() {
+    long index = sequences.incrementAndGet();
+    if (index < 0) {
+      index = 0;
+      sequences.set(0);
     }
+    return index;
+  }
 
 }

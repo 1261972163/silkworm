@@ -8,67 +8,68 @@ package com.jengine.data.mq.kafka.monitor;
  * @since 0.1.0
  */
 public class OffsetInfo {
-    private String group;
-    private String topic;
-    private int    partition;
-    private long   logSize;
-    private long   consumerOffset;
-    private long   lag;
-    private String owner;
 
-    public String getGroup() {
-        return group;
-    }
+  private String group;
+  private String topic;
+  private int partition;
+  private long logSize;
+  private long consumerOffset;
+  private long lag;
+  private String owner;
 
-    public void setGroup(String group) {
-        this.group = group;
-    }
+  public String getGroup() {
+    return group;
+  }
 
-    public String getTopic() {
-        return topic;
-    }
+  public void setGroup(String group) {
+    this.group = group;
+  }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
+  public String getTopic() {
+    return topic;
+  }
 
-    public int getPartition() {
-        return partition;
-    }
+  public void setTopic(String topic) {
+    this.topic = topic;
+  }
 
-    public void setPartition(int partition) {
-        this.partition = partition;
-    }
+  public int getPartition() {
+    return partition;
+  }
 
-    public long getLogSize() {
-        return logSize;
-    }
+  public void setPartition(int partition) {
+    this.partition = partition;
+  }
 
-    public void setLogSize(long logSize) {
-        this.logSize = logSize;
-    }
+  public long getLogSize() {
+    return logSize;
+  }
 
-    public long getConsumerOffset() {
-        return consumerOffset;
-    }
+  public void setLogSize(long logSize) {
+    this.logSize = logSize;
+  }
 
-    public void setConsumerOffset(long consumerOffset) {
-        this.consumerOffset = consumerOffset;
-    }
+  public long getConsumerOffset() {
+    return consumerOffset;
+  }
 
-    public long getLag() {
-        return lag;
-    }
+  public void setConsumerOffset(long consumerOffset) {
+    this.consumerOffset = consumerOffset;
+  }
 
-    public void setLag(long lag) {
-        this.lag = lag;
-    }
+  public long getLag() {
+    return lag;
+  }
 
-    public String getOwner() {
-        return owner;
-    }
+  public void setLag(long lag) {
+    this.lag = lag;
+  }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
 }

@@ -12,16 +12,17 @@ import org.junit.Test;
  */
 public class CanalEmbedSelectorDemo {
 
-    @Test
-    public void test() {
-        Long pipelineId = 1L;
-        String destination = "test";
-        short clientId = 1;
-        String zkClustersString = "10.45.11.84:2181/test";
-        Long   zkClusterId = 1L;
-        CanalEmbedSelector canalEmbedSelector = new CanalEmbedSelector(pipelineId, destination, clientId, zkClustersString, zkClusterId);
+  @Test
+  public void test() {
+    Long pipelineId = 1L;
+    String destination = "test";
+    short clientId = 1;
+    String zkClustersString = "10.45.11.84:2181/test";
+    Long zkClusterId = 1L;
+    CanalEmbedSelector canalEmbedSelector = new CanalEmbedSelector(pipelineId, destination,
+        clientId, zkClustersString, zkClusterId);
 
-        Message message = canalEmbedSelector.selector();
-        System.out.println("---------" + message.getId());
-    }
+    Message message = canalEmbedSelector.selector();
+    System.out.println("---------" + message.getId());
+  }
 }

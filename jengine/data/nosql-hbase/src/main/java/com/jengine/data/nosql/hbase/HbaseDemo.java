@@ -8,4 +8,5 @@ package com.jengine.data.nosql.hbase;
  * @since 0.1.0
  */
 public class HbaseDemo {
+
 }

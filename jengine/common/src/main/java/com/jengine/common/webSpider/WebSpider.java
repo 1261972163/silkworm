@@ -16,28 +16,27 @@ import java.net.URLConnection;
  */
 public class WebSpider {
 
-    /**
-     * 抓取网页内容
-     * @param urlName
-     */
-    public static StringBuffer readByURL(String urlName){
-        StringBuffer result = new StringBuffer();
-        try{
-            URL url = new URL(urlName);//由网址创建URL对象
-            URLConnection tc = url.openConnection();//获得URLConnection对象
-            tc.connect();//设置网络连接
-            InputStreamReader in = new InputStreamReader(tc.getInputStream());
-            BufferedReader dis = new BufferedReader(in);//采用缓冲式输入
-            String inline;
-            while((inline = dis.readLine())!=null){
-                result.append(inline+"\n");
-            }
-            dis.close();//网上资源使用结束后，数据流及时关闭
-        }catch(MalformedURLException e){
-            e.printStackTrace();
-        } catch(IOException e2) {
-            e2.printStackTrace();
-        }
-        return result;
+  /**
+   * 抓取网页内容
+   */
+  public static StringBuffer readByURL(String urlName) {
+    StringBuffer result = new StringBuffer();
+    try {
+      URL url = new URL(urlName);//由网址创建URL对象
+      URLConnection tc = url.openConnection();//获得URLConnection对象
+      tc.connect();//设置网络连接
+      InputStreamReader in = new InputStreamReader(tc.getInputStream());
+      BufferedReader dis = new BufferedReader(in);//采用缓冲式输入
+      String inline;
+      while ((inline = dis.readLine()) != null) {
+        result.append(inline + "\n");
+      }
+      dis.close();//网上资源使用结束后，数据流及时关闭
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    } catch (IOException e2) {
+      e2.printStackTrace();
     }
+    return result;
+  }
 }

@@ -6,58 +6,59 @@ package com.jengine.data.nosql.mongo;
  * @description
  */
 public class MongoConfig {
-    private String database;
-    private String host;
-    private String port;
-    private String username;
-    private String password;
-    private String table;
 
-    public String getDatabase() {
-        return database;
-    }
+  private String database;
+  private String host;
+  private String port;
+  private String username;
+  private String password;
+  private String table;
 
-    public void setDatabaseName(String database) {
-        this.database = database;
-    }
+  public String getDatabase() {
+    return database;
+  }
 
-    public String getHost() {
-        return host;
-    }
+  public void setDatabaseName(String database) {
+    this.database = database;
+  }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
+  public String getHost() {
+    return host;
+  }
 
-    public String getPort() {
-        return port;
-    }
+  public void setHost(String host) {
+    this.host = host;
+  }
 
-    public void setPort(String port) {
-        this.port = port;
-    }
+  public String getPort() {
+    return port;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setPort(String port) {
+    this.port = port;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getTable() {
-        return table;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setTable(String table) {
-        this.table = table;
-    }
+  public String getTable() {
+    return table;
+  }
+
+  public void setTable(String table) {
+    this.table = table;
+  }
 }

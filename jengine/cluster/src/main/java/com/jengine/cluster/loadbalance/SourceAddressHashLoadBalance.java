@@ -1,7 +1,6 @@
 package com.jengine.cluster.loadbalance;
 
 import com.jengine.common.utils.NetworkUtil;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,16 +16,31 @@ import java.util.List;
  */
 public class SourceAddressHashLoadBalance extends LoadBalanceStrategy {
 
-    @Override
-    protected List<Node> rebuildNodes(List<Node> nodes) {
-        List<Node> nodeListTmp = new LinkedList<Node>();
-        nodeListTmp.addAll(nodes);
-        return nodeListTmp;
-    }
+  @Override
+  protected List<Node> rebuildNodes(List<Node> nodes) {
+    List<Node> nodeListTmp = new LinkedList<Node>();
+    nodeListTmp.addAll(nodes);
+    return nodeListTmp;
+  }
 
-    @Override
-    protected Node getNode(List<Node> nodeList) {
-        int hashCode = NetworkUtil.getHostIp().hashCode();
-        return nodeList.get(hashCode%nodeList.size());
+  @Override
+  protected Node getNode(List<Node> nodeList) {
+    return  null;
+  }
+
+  protected Node getNode2(List<Node> nodeList) {
+    if (nodeList == null || nodeList.size() <= 0) {
+      return null;
     }
+    int hashCode = NetworkUtil.getHostIp().hashCode();
+    if (hashCode < 0) {
+      return null;
+    }
+    int res = hashCode % nodeList.size();
+    if (res >= 0 && res <= nodeList.size() - 1) {
+      return nodeList.get(res);
+    } else {
+      return null;
+    }
+  }
 }

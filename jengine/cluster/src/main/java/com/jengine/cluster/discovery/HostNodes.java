@@ -6,17 +6,16 @@ import org.slf4j.LoggerFactory;
 /**
  * @author nouuid
  * @date 4/18/2016
- * @description
- * realtime update
+ * @description realtime update
  */
 public class HostNodes implements Nodes {
-    private static final Logger logger = LoggerFactory.getLogger(HostNodes.class);
+  private static final Logger logger = LoggerFactory.getLogger(HostNodes.class);
 
-    public HostNodes() {
+  public HostNodes() {
 
-    }
+  }
 
-    @Override
-    public void run() {
-    }
+  @Override
+  public void run() {
+  }
 }

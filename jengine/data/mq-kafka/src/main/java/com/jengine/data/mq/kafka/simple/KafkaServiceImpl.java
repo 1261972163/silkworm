@@ -1,13 +1,12 @@
 package com.jengine.data.mq.kafka.simple;
 
+import java.util.Arrays;
+import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-
-import java.util.Arrays;
-import java.util.Properties;
 
 /**
  * @author nouuid
@@ -16,12 +15,12 @@ import java.util.Properties;
  */
 public class KafkaServiceImpl implements KafkaService {
 
-    private Producer<String, String> producer;
+  private Producer<String, String> producer;
 
-    private KafkaConsumer<String, String> consumer;
+  private KafkaConsumer<String, String> consumer;
 
-    @Override
-    public void initProducer(Properties producerProps) {
+  @Override
+  public void initProducer(Properties producerProps) {
 //        producerProps.put("bootstrap.servers", "xingng-test-kafka01.800best.com:9092,xingng-test-kafka02.800best.com:9092,xingng-test-kafka03.800best.com:9092,xingng-test-kafka04.800best.com:9092");
 //        producerProps.put("acks", "all");
 //        producerProps.put("retries", 0);
@@ -30,11 +29,11 @@ public class KafkaServiceImpl implements KafkaService {
 //        producerProps.put("buffer.memory", 33554432);
 //        producerProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 //        producerProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        producer = new KafkaProducer<String, String>(producerProps);
-    }
+    producer = new KafkaProducer<String, String>(producerProps);
+  }
 
-    @Override
-    public void initConsumer(Properties consumerProps) {
+  @Override
+  public void initConsumer(Properties consumerProps) {
 //        consumerProps.put("bootstrap.servers", "xingng-test-kafka01.800best.com:9092,xingng-test-kafka02.800best.com:9092,xingng-test-kafka03.800best.com:9092,xingng-test-kafka04.800best.com:9092");
 //        consumerProps.put("group.id", "test");
 //        consumerProps.put("auto.offset.reset", "earliest");
@@ -43,29 +42,29 @@ public class KafkaServiceImpl implements KafkaService {
 //        consumerProps.put("session.timeout.ms", "30000");
 //        consumerProps.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 //        consumerProps.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        consumer = new KafkaConsumer<String, String>(consumerProps);
-        consumer.subscribe(Arrays.asList("topic-test"));
-    }
+    consumer = new KafkaConsumer<String, String>(consumerProps);
+    consumer.subscribe(Arrays.asList("topic-test"));
+  }
 
-    @Override
-    public void send(ProducerRecord producerRecord) {
-        producer.send(producerRecord);
-    }
+  @Override
+  public void send(ProducerRecord producerRecord) {
+    producer.send(producerRecord);
+  }
 
-    @Override
-    public ConsumerRecords<String, String> poll() {
-        return consumer.poll(100);
-    }
+  @Override
+  public ConsumerRecords<String, String> poll() {
+    return consumer.poll(100);
+  }
 
-    @Override
-    public void closeProducer() {
-        if (producer!=null) {
-            producer.close();
-        }
+  @Override
+  public void closeProducer() {
+    if (producer != null) {
+      producer.close();
     }
+  }
 
-    public KafkaConsumer<String, String> getConsumer() {
-        return consumer;
-    }
+  public KafkaConsumer<String, String> getConsumer() {
+    return consumer;
+  }
 }
 

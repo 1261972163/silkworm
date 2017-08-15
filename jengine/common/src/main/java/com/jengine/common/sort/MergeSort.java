@@ -6,8 +6,9 @@ package com.jengine.common.sort;
  * @description merge sort
  */
 public class MergeSort extends Sort {
-    @Override
-    public void sort() {
 
-    }
+  @Override
+  public void sort() {
+
+  }
 }

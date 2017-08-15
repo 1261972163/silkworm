@@ -8,13 +8,14 @@ package com.jengine.data.mq.kafka;
  * @since 0.1.0
  */
 public class Message {
-    private String content;
 
-    public String getContent() {
-        return content;
-    }
+  private String content;
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
 }

@@ -9,57 +9,57 @@ package com.jengine.search;
  */
 public class IndexMessage {
 
-    private String index;
-    private String type;
-    private String routing;
-    private String id;
-    private String source;
+  private String index;
+  private String type;
+  private String routing;
+  private String id;
+  private String source;
 
-    public IndexMessage(String index, String type, String routing, String id, String source) {
-        this.index = index;
-        this.type = type;
-        this.routing = routing;
-        this.id = id;
-        this.source = source;
-    }
+  public IndexMessage(String index, String type, String routing, String id, String source) {
+    this.index = index;
+    this.type = type;
+    this.routing = routing;
+    this.id = id;
+    this.source = source;
+  }
 
-    public String getIndex() {
-        return index;
-    }
+  public String getIndex() {
+    return index;
+  }
 
-    public void setIndex(String index) {
-        this.index = index;
-    }
+  public void setIndex(String index) {
+    this.index = index;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public String getRouting() {
-        return routing;
-    }
+  public String getRouting() {
+    return routing;
+  }
 
-    public void setRouting(String routing) {
-        this.routing = routing;
-    }
+  public void setRouting(String routing) {
+    this.routing = routing;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getSource() {
-        return source;
-    }
+  public String getSource() {
+    return source;
+  }
 
-    public void setSource(String source) {
-        this.source = source;
-    }
+  public void setSource(String source) {
+    this.source = source;
+  }
 }

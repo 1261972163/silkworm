@@ -1,5 +1,8 @@
 package com.jengine.search;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
@@ -15,10 +18,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
-
 /**
  * EsClient
  *
@@ -27,91 +26,96 @@ import java.util.List;
  * @since 0.1.0
  */
 public class Es5Client {
-    private static final Logger logger = LoggerFactory.getLogger(Es5Client.class);
 
-    private TransportClient client;
+  private static final Logger logger = LoggerFactory.getLogger(Es5Client.class);
 
-    @Before
-    public void buildTransportClient() throws Exception {
-        String cluster = "es5-test";
-        String url = "10.45.11.87:9305";
+  private TransportClient client;
 
-        if (StringUtils.isBlank(cluster) || StringUtils.isBlank(url)) {
-            throw new Exception("cluster or url is blank");
-        }
+  @Before
+  public void buildTransportClient() throws Exception {
+    String cluster = "es5-test";
+    String url = "10.45.11.87:9305";
 
-        Settings settings = Settings.builder().put("cluster.name", cluster).build();
-        client = new PreBuiltTransportClient(settings);
-        String[] servers = url.split(",");
-        for (String server : servers) {
-            String[] hostPort = server.split(":");
-            if (hostPort == null) {
-                continue;
-            }
-            String host = null;
-            String port = null;
-            if (hostPort.length == 0) {
-                host = hostPort[0];
-                port = "9300";
-            } else if (hostPort.length > 1) {
-                host = hostPort[0];
-                port = hostPort[1];
-            }
-            try {
-                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(host), Integer.parseInt(port)));
-            } catch (UnknownHostException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    if (StringUtils.isBlank(cluster) || StringUtils.isBlank(url)) {
+      throw new Exception("cluster or url is blank");
     }
 
-    @Test
-    public void createIndex() {
-        CreateIndexResponse response = client.admin().indices().prepareCreate("test1").get();
-        logger.debug(response.toString());
+    Settings settings = Settings.builder().put("cluster.name", cluster).build();
+    client = new PreBuiltTransportClient(settings);
+    String[] servers = url.split(",");
+    for (String server : servers) {
+      String[] hostPort = server.split(":");
+      if (hostPort == null) {
+        continue;
+      }
+      String host = null;
+      String port = null;
+      if (hostPort.length == 0) {
+        host = hostPort[0];
+        port = "9300";
+      } else if (hostPort.length > 1) {
+        host = hostPort[0];
+        port = hostPort[1];
+      }
+      try {
+        client.addTransportAddress(
+            new InetSocketTransportAddress(InetAddress.getByName(host), Integer.parseInt(port)));
+      } catch (UnknownHostException e) {
+        throw new RuntimeException(e);
+      }
     }
+  }
 
-    @Test
-    public void delIndex() {
-        DeleteIndexResponse response = client.admin().indices().prepareDelete("test1").get();
-        logger.debug(response.toString());
+  @Test
+  public void createIndex() {
+    CreateIndexResponse response = client.admin().indices().prepareCreate("test1").get();
+    logger.debug(response.toString());
+  }
+
+  @Test
+  public void delIndex() {
+    DeleteIndexResponse response = client.admin().indices().prepareDelete("test1").get();
+    logger.debug(response.toString());
+  }
+
+
+  public void index(String index, String type, String id, String source) throws Exception {
+    IndexResponse response = client.prepareIndex(index, type, id)
+        .setSource(source)
+        .setSource()
+        .get();
+    logger.debug(response.toString());
+  }
+
+
+  public void index(List<IndexMessage> indexMessages) throws Exception {
+    if (indexMessages.size() <= 0) {
+      return;
     }
-
-
-    public void index(String index, String type, String id, String source) throws Exception {
-        IndexResponse response = client.prepareIndex(index, type, id)
-                .setSource(source)
-                .setSource()
-                .get();
-        logger.debug(response.toString());
+    BulkRequestBuilder bulkRequest = client.prepareBulk();
+    for (IndexMessage indexMessage : indexMessages) {
+      if (StringUtils.isBlank(indexMessage.getRouting())) {
+        bulkRequest.add(client
+            .prepareIndex(indexMessage.getIndex(), indexMessage.getType(), indexMessage.getId())
+            .setSource(indexMessage.getSource()));
+      } else {
+        bulkRequest.add(client
+            .prepareIndex(indexMessage.getIndex(), indexMessage.getType(), indexMessage.getId())
+            .setRouting(indexMessage.getRouting()).setSource(indexMessage.getSource()));
+      }
     }
-
-
-
-    public void index(List<IndexMessage> indexMessages) throws Exception {
-        if (indexMessages.size()<=0) {
-            return;
-        }
-        BulkRequestBuilder bulkRequest = client.prepareBulk();
-        for (IndexMessage indexMessage : indexMessages) {
-            if (StringUtils.isBlank(indexMessage.getRouting())) {
-                bulkRequest.add(client.prepareIndex(indexMessage.getIndex(), indexMessage.getType(), indexMessage.getId()).setSource(indexMessage.getSource()));
-            } else {
-                bulkRequest.add(client.prepareIndex(indexMessage.getIndex(), indexMessage.getType(), indexMessage.getId()).setRouting(indexMessage.getRouting()).setSource(indexMessage.getSource()));
-            }
-        }
-        BulkResponse bulkResponse = bulkRequest.get();
-        if (bulkResponse.hasFailures()) {
-            throw new Exception(bulkResponse.buildFailureMessage());
-        }
+    BulkResponse bulkResponse = bulkRequest.get();
+    if (bulkResponse.hasFailures()) {
+      throw new Exception(bulkResponse.buildFailureMessage());
     }
+  }
 
-    public void stop() {
-        if (client == null) {
-            client.close();
-            client = null;
-        }
+  public void stop() {
+    if (client == null) {
+      client.close();
+      client = null;
     }
+  }
 
 
 }

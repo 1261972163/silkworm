@@ -42,17 +42,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class Spring_2_container {
 
-    public void test1() {
+  public void test1() {
 
-    }
+  }
 
-    @Test
-    public void load() throws InterruptedException {
-        System.out.println("before appContext.");
-        ApplicationContext appContext = new ClassPathXmlApplicationContext("spring/context2-1.xml");
-        System.out.println("after appContext.");
-        Thread.sleep(30*1000);
-    }
+  @Test
+  public void load() throws InterruptedException {
+    System.out.println("before appContext.");
+    ApplicationContext appContext = new ClassPathXmlApplicationContext("META-INF/spring/context2-1.xml");
+    System.out.println("after appContext.");
+    Thread.sleep(30 * 1000);
+  }
 
 }
 
