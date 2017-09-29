@@ -1,6 +1,7 @@
 package com.jengine.common.utils;
 
 import com.sun.management.OperatingSystemMXBean;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +22,7 @@ public class SystemUtil {
 
   public static SystemInfo getSystemInfo() throws Exception {
     int kb = 1024;
-    int mb = kb * 1024;
+//    int mb = kb * 1024;
     int unit = kb;
 
     // os
@@ -30,7 +31,7 @@ public class SystemUtil {
     // cpu
     ThreadGroup parentThread;
     for (parentThread = Thread.currentThread().getThreadGroup(); parentThread.getParent() != null;
-        parentThread = parentThread.getParent()) {
+         parentThread = parentThread.getParent()) {
       ;
     }
     int threadNum = parentThread.activeCount();
@@ -76,7 +77,7 @@ public class SystemUtil {
       System.out.println("Get usage rate of CUP , linux version: " + linuxVersion);
       Process process = Runtime.getRuntime().exec("top -b -n 1");
       is = process.getInputStream();
-      isr = new InputStreamReader(is);
+      isr = new InputStreamReader(is, "UTF-8");
       brStat = new BufferedReader(isr);
       if (linuxVersion.equals("2.4")) {
         brStat.readLine();
@@ -125,7 +126,7 @@ public class SystemUtil {
   }
 
   private static void freeResource(InputStream is, InputStreamReader isr,
-      BufferedReader br) {
+                                   BufferedReader br) {
     try {
       if (is != null) {
         is.close();
@@ -148,13 +149,13 @@ public class SystemUtil {
       long[] c0 = readCpu(Runtime.getRuntime().exec(procCmd));
       Thread.sleep(CPUTIME);
       long[] c1 = readCpu(Runtime.getRuntime().exec(procCmd));
+      double res = 0.0;
       if (c0 != null && c1 != null) {
         long idletime = c1[0] - c0[0];
         long busytime = c1[1] - c0[1];
-        return Double.valueOf(PERCENT * (busytime) / (busytime + idletime)).doubleValue();
-      } else {
-        return 0.0;
+        res = (double) (PERCENT * (busytime)) / (busytime + idletime);
       }
+      return res;
     } catch (Exception ex) {
       ex.printStackTrace();
       return 0.0;
@@ -163,10 +164,10 @@ public class SystemUtil {
 
   private static long[] readCpu(final Process proc) {
     long[] retn = new long[2];
+    LineNumberReader input = null;
     try {
       proc.getOutputStream().close();
-      InputStreamReader ir = new InputStreamReader(proc.getInputStream());
-      LineNumberReader input = new LineNumberReader(ir);
+      input = new LineNumberReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
       String line = input.readLine();
       if (line == null || line.length() < FAULTLENGTH) {
         return null;
@@ -193,18 +194,18 @@ public class SystemUtil {
         String s2 = StringUtils.substring(line, umtidx, wocidx - 1).trim();
         if (caption.equals("System Idle Process") || caption.equals("System")) {
           if (s1.length() > 0) {
-            idletime += Long.valueOf(s1).longValue();
+            idletime += Long.parseLong(s1);
           }
           if (s2.length() > 0) {
-            idletime += Long.valueOf(s2).longValue();
+            idletime += Long.parseLong(s2);
           }
           continue;
         }
         if (s1.length() > 0) {
-          kneltime += Long.valueOf(s1).longValue();
+          kneltime += Long.parseLong(s1);
         }
         if (s2.length() > 0) {
-          usertime += Long.valueOf(s2).longValue();
+          usertime += Long.parseLong(s2);
         }
       }
       retn[0] = idletime;
@@ -214,7 +215,9 @@ public class SystemUtil {
       ex.printStackTrace();
     } finally {
       try {
-        proc.getInputStream().close();
+        if (input != null) {
+          input.close();
+        }
       } catch (Exception e) {
         e.printStackTrace();
       }

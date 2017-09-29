@@ -32,6 +32,14 @@ public class PropertiesUtil {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      try {
+        if (fis != null) {
+          fis.close();
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -60,6 +68,14 @@ public class PropertiesUtil {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      try {
+        if (out != null) {
+          out.close();
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     printProperties();
   }

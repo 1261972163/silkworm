@@ -25,10 +25,6 @@ public class SourceAddressHashLoadBalance extends LoadBalanceStrategy {
 
   @Override
   protected Node getNode(List<Node> nodeList) {
-    return  null;
-  }
-
-  protected Node getNode2(List<Node> nodeList) {
     if (nodeList == null || nodeList.size() <= 0) {
       return null;
     }

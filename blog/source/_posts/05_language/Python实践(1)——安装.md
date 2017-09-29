@@ -154,3 +154,10 @@ date: 2016/6/3 17:37:25
 
 	模块安装：pip install module_name
 	模块卸载：pip uninstall module_name
+
+常用模块（使用豆瓣的源）：
+
+	pip install matplotlib -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+	pip install numpy -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+	pip install pandas -i http://pypi.douban.com/simple --trusted-host pypi.douban.com
+	pip install seaborn scipy  -i http://pypi.douban.com/simple --trusted-host pypi.douban.com

@@ -1,5 +1,7 @@
 package com.jengine.common.utils;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * content
  *
@@ -24,11 +26,16 @@ public class StringUtils {
    * String.subString has wrong in dealing with chinese
    */
   public static String substring(String src, int start_idx, int end_idx) {
-    byte[] b = src.getBytes();
-    String tgt = "";
-    for (int i = start_idx; i <= end_idx; i++) {
-      tgt += (char) b[i];
+    byte[] b = new byte[0];
+    try {
+      b = src.getBytes("UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
     }
-    return tgt;
+    StringBuilder stringBuilder = new StringBuilder();
+    for (int i = start_idx; i <= end_idx; i++) {
+      stringBuilder.append((char) b[i]);
+    }
+    return stringBuilder.toString();
   }
 }

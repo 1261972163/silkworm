@@ -33,6 +33,7 @@ public class HeapSort extends Sort {
 
   public void adjust(int s) {
     int child = 2 * s + 1;
+    //TODO
   }
 
 
