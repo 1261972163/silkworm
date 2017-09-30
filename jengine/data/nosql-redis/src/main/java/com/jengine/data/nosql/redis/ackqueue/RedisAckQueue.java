@@ -21,7 +21,6 @@ public class RedisAckQueue<T> {
   private static final Log logger = LogFactory.getLog(RedisAckQueue.class);
 
   public static JedisPool redisPool;
-  private Jedis jedis;
   private String queuename;
 
 
@@ -38,52 +37,110 @@ public class RedisAckQueue<T> {
     this.queuename = queuename;
   }
 
-  public void stop() {
+  public void destory() {
     try {
       redisPool.destroy();
     } catch (Exception e) {
-      logger.error("set value to redis. Error!", e);
+      logger.error("Could not destory RedisAckQueue.", e);
     }
-    logger.info(" redis has been shut down!");
+    logger.info("RedisAckQueue has been shut down!");
   }
 
-  public void put(T value) {
-    Jedis jedis = redisPool.getResource();
-    try {
-      jedis.rpush(queuename.getBytes(), SimpleSerializer.toBytes(value));
-    } catch (Exception e) {
-      logger.error("set value to redis. Error!", e);
-    } finally {
-      redisPool.returnResource(jedis);
-    }
-  }
-
-  public T getNext() {
-    Jedis jedis = redisPool.getResource();
-    List<byte[]> values = null;
-    try {
-      values = jedis.lrange(queuename.getBytes(), 0, 0);
-    } catch (Exception e) {
-      logger.error("get value from redis. Error!", e);
-    } finally {
-      redisPool.returnResource(jedis);
-    }
-    return (T)SimpleSerializer.toObject(values.get(0));
-  }
-
-  public boolean ack() {
+  public boolean put(T value) throws InterruptedException {
     boolean ok = false;
-    Jedis jedis = redisPool.getResource();
-    byte[] value = null;
+    Jedis jedis = getJedis();
     try {
-      value = jedis.lpop(queuename.getBytes());
-      ok = (value==null) ? ok : true;
-    } catch (Exception e) {
-      logger.error("ack redis. Error!", e);
+      int retry = 0;
+      while (true) {
+        try {
+          jedis.rpush(queuename.getBytes(), SimpleSerializer.toBytes(value));
+          ok = true;
+          break;
+        } catch (Exception e) {
+          retry++;
+          retry = (retry<=3) ? retry : 0;
+          logger.error("Could not put value to RedisAckQueue. " + retry*1000 + "s later retry.", e);
+          Thread.sleep(1000*retry);
+        }
+      }
     } finally {
-      redisPool.returnResource(jedis);
+      jedisRelease(jedis);
     }
     return ok;
+  }
+
+  public T get() throws InterruptedException {
+    T nextValue = null;
+    Jedis jedis = getJedis();
+    int retry = 0;
+    List<byte[]> values = null;
+    try {
+      while (true) {
+        try {
+          values = jedis.lrange(queuename.getBytes(), 0, 0);
+          if (values!=null && !values.isEmpty()) {
+            nextValue = (T)SimpleSerializer.toObject(values.get(0));
+            break;
+          }
+        } catch (Exception e) {
+          retry++;
+          retry = (retry <= 3) ? retry : 0;
+          logger.error("Could not get next value from RedisAckQueue. " + retry * 1000 + "s later retry.", e);
+          Thread.sleep(1000 * retry);
+        }
+      }
+    } finally {
+      jedisRelease(jedis);
+    }
+
+    return nextValue;
+  }
+
+  public boolean ack() throws InterruptedException {
+    boolean ok = false;
+    Jedis jedis = getJedis();
+    byte[] value = null;
+    try {
+      int retry = 0;
+      while (true) {
+        try {
+          value = jedis.lpop(queuename.getBytes());
+          ok = (value==null) ? ok : true;
+          break;
+        } catch (Exception e) {
+          retry++;
+          retry = (retry <= 3) ? retry : 0;
+          logger.error("Could not ack RedisAckQueue. " + retry * 1000 + "s later retry.", e);
+          Thread.sleep(1000 * retry);
+        }
+      }
+    } finally {
+      jedisRelease(jedis);
+    }
+    return ok;
+  }
+
+  private Jedis getJedis() throws InterruptedException {
+    int retry = 0;
+    Jedis jedis = null;
+    while (true) {
+      try {
+        jedis = redisPool.getResource();
+        break;
+      } catch (Exception e) {
+        retry++;
+        retry = (retry <= 3) ? retry : 0;
+        logger.error("Could not get redis resource. " + retry * 1000 + "s later retry.", e);
+        Thread.sleep(1000 * retry);
+      }
+    }
+    return jedis;
+  }
+
+  private void jedisRelease(Jedis jedis) {
+    if (jedis!=null) {
+      redisPool.returnResourceObject(jedis);
+    }
   }
 
 }
