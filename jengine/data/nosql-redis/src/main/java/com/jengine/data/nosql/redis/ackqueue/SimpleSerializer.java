@@ -15,8 +15,8 @@ import java.io.ObjectOutputStream;
 /**
  * @author bl07637
  */
-public class SimpleSerializer {
-  public static byte[] toBytes(Object object) throws IOException {
+public class SimpleSerializer<T> implements Serializer<T>  {
+  public byte[] toBytes(T object) throws IOException {
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
     ObjectOutput out = null;
     byte[] bytes = null;
@@ -33,7 +33,7 @@ public class SimpleSerializer {
     return bytes;
   }
 
-  public static Object toObject(byte[] bytes) throws IOException, ClassNotFoundException {
+  public T toObject(byte[] bytes) throws Exception {
     ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
     ObjectInput in = null;
     Object object = null;
@@ -46,7 +46,6 @@ public class SimpleSerializer {
         in.close();
       }
     }
-
-    return object;
+    return (T)object;
   }
 }

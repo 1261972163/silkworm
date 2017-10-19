@@ -20,7 +20,8 @@ public class RedisAckQueueDemo {
     int port = 6379;
     String pwd = null;
     int timeout = 5000;
-    RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, host, port , pwd, timeout);
+    Serializer<String> serializer = new SimpleSerializer<String>();
+    RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, host, port , pwd, timeout, serializer);
     produce(redisAckQueue);
     consume(redisAckQueue);
     System.out.println("end.");
@@ -33,7 +34,8 @@ public class RedisAckQueueDemo {
     int port = 6379;
     String pwd = null;
     int timeout = 5000;
-    final RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, host, port , pwd, timeout);
+    Serializer<String> serializer = new SimpleSerializer<String>();
+    final RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, host, port , pwd, timeout, serializer);
     CountDownLatch countDownLatch = new CountDownLatch(60);
     Thread consumer = new Thread(new Runnable() {
       @Override
@@ -85,10 +87,12 @@ public class RedisAckQueueDemo {
 
   private void consume(RedisAckQueue<String> redisAckQueue) throws InterruptedException {
     String value = null;
-    while ((value = redisAckQueue.get())!=null) {
+    int count = 1;
+    while (count<=10 && (value = redisAckQueue.get())!=null) {
       System.out.println(value);
       Thread.sleep(1000);
       redisAckQueue.ack();
+      count++;
     }
   }
 

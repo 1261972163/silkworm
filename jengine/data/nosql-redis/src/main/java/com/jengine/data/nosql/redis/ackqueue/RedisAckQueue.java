@@ -14,6 +14,8 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
+ * 使用redis实现阻塞queue.
+ * 需要借助redis的一个配置，设置过期不删除策略：maxmemory-policy noeviction
  * @author nouuid
  */
 public class RedisAckQueue<T> {
@@ -22,9 +24,10 @@ public class RedisAckQueue<T> {
 
   public static JedisPool redisPool;
   private String queuename;
+  private Serializer<T> serializer;
 
 
-  public RedisAckQueue(String queuename, String host, int port, String pwd, int timeout) {
+  public RedisAckQueue(String queuename, String host, int port, String pwd, int timeout, Serializer<T> serializer) {
     JedisPoolConfig config = new JedisPoolConfig();
     config.setMaxTotal(100);
     config.setMaxIdle(100);
@@ -35,6 +38,7 @@ public class RedisAckQueue<T> {
       this.redisPool = new JedisPool(config, host, port, timeout, pwd);
     }
     this.queuename = queuename;
+    this.serializer = serializer;
   }
 
   public void destory() {
@@ -53,7 +57,7 @@ public class RedisAckQueue<T> {
       int retry = 0;
       while (true) {
         try {
-          jedis.rpush(queuename.getBytes(), SimpleSerializer.toBytes(value));
+          jedis.rpush(queuename.getBytes(), serializer.toBytes(value));
           ok = true;
           break;
         } catch (Exception e) {
@@ -79,7 +83,7 @@ public class RedisAckQueue<T> {
         try {
           values = jedis.lrange(queuename.getBytes(), 0, 0);
           if (values!=null && !values.isEmpty()) {
-            nextValue = (T)SimpleSerializer.toObject(values.get(0));
+            nextValue = serializer.toObject(values.get(0));
             break;
           }
         } catch (Exception e) {

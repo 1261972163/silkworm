@@ -23,6 +23,7 @@
 		<module>logback</module>
 		<module>log4j</module>
 		<module>designPattern</module>
+		<module>loggerDynamicLevel</module>
 	</modules>
 
 	<dependencies>

@@ -21,7 +21,9 @@
 		<!--<module>restful-springboot</module>-->
 		<module>rpc</module>
 		<module>serialize</module>
-		<module>server</module>
+		<module>server-jetty</module>
+		<module>server-grizzly</module>
+		<module>server-tomcat</module>
 	</modules>
 
 	<dependencies>

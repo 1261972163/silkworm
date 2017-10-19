@@ -55,6 +55,11 @@
       <version>2.8.6</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.jengine</groupId>
+      <artifactId>jengine-serialize</artifactId>
+    </dependency>
+
   </dependencies>
 
 </project>
