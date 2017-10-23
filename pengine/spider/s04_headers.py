@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# -*- coding: UTF-8 -*-
 
 
 # User-Agent : 有些服务器或 Proxy 会通过该值来判断是否是浏览器发出的请求

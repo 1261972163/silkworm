@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+# -*- coding: UTF-8 -*-
 
 import re
 
@@ -33,7 +33,7 @@ printres(matchres4, 4)
 re.search(pattern, string[, flags])
 '''
 
-print "-----re.search(pattern, string[, flags])"
+print "----- re.search(pattern, string[, flags])"
 
 searchres1 = re.search(pattern,'hello world!')
 searchres2 = re.search(pattern,'Hi, hello world!')
@@ -43,14 +43,47 @@ printres(searchres1, 1)
 printres(searchres2, 2)
 printres(searchres3, 3)
 
-'''
-re.split(pattern, string[, maxsplit])
-'''
+print "----- re.split(pattern, string[, maxsplit])  "
+print "----- 按照能够匹配的子串将 string 分割后返回列表。maxsplit 用于指定最大分割次数，不指定将全部分割。"
+pattern = re.compile(r'\d+')
+print re.split(pattern,'one1two2three3four4')
 
-print "-----re.split(pattern, string[, maxsplit])"
 
-pattern2 = re.compile(r'\d+')
-print re.split(pattern2,'one1two2three3four4')
+print "----- re.findall(pattern, string[, flags]) "
+print "----- 搜索 string，以列表形式返回全部能匹配的子串。"
+pattern = re.compile(r'\d+')
+print re.findall(pattern,'one1two2three3four4')
 
-### 输出 ###
-# ['one', 'two', 'three', 'four', '']
+print "----- re.finditer(pattern, string[, flags])"
+print "----- 搜索 string，返回一个顺序访问每一个匹配结果（Match对象）的迭代器。"
+pattern = re.compile(r'\d+')
+for m in re.finditer(pattern,'one1two2three3four4'):
+    print m.group(),
+
+print "----- re.sub(pattern, repl, string[, count])"
+print "----- 使用 repl 替换 string 中每一个匹配的子串后返回替换后的字符串。"
+pattern = re.compile(r'(\w+) (\w+)')
+s = 'i say, hello world!'
+print re.sub(pattern,r'\2 \1', s)
+
+def func(m):
+    return m.group(1).title() + ' ' + m.group(2).title()
+print re.sub(pattern,func, s)
+
+
+print "----- re.subn(pattern, repl, string[, count])"
+print "----- 返回 (sub(repl, string[, count]), 替换次数)。"
+pattern = re.compile(r'(\w+) (\w+)')
+s = 'i say, hello world!'
+print re.subn(pattern,r'\2 \1', s)
+def func(m):
+    return m.group(1).title() + ' ' + m.group(2).title()
+print re.subn(pattern,func, s)
+
+
+
+
+
+
+
+
