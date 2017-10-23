@@ -16,6 +16,7 @@
 	<url></url>
 
 	<modules>
+		<module>asm</module>
 		<module>guava08</module>
 		<module>guava18</module>
 		<module>j2se</module>
