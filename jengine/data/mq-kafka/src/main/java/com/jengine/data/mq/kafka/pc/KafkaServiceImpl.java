@@ -1,4 +1,4 @@
-package com.jengine.data.mq.kafka.simple;
+package com.jengine.data.mq.kafka.pc;
 
 import java.util.Arrays;
 import java.util.Properties;

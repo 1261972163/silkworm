@@ -1,4 +1,4 @@
-package com.jengine.data.mq.kafka.simple;
+package com.jengine.data.mq.kafka.pc;
 
 import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
