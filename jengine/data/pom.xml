@@ -26,6 +26,7 @@
     <module>nosql-mongo</module>
     <module>nosql-redis</module>
     <module>nosql-zookeeper</module>
+    <module>nosql-influxdb</module>
     <module>search-elasticsearch</module>
     <module>search-lucene</module>
     <module>search-solr</module>

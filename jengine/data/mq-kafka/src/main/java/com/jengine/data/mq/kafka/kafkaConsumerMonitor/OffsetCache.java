@@ -1,13 +1,7 @@
-package com.jengine.data.mq.kafka.monitor;
+package com.jengine.data.mq.kafka.kafkaConsumerMonitor;
 
 import com.google.common.collect.MapMaker;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
-
+import com.jengine.data.mq.kafka.monitor.KafkaMonitor;
 import kafka.common.OffsetAndMetadata;
 import kafka.coordinator.GroupMetadataManager;
 import kafka.coordinator.OffsetKey;
@@ -18,6 +12,13 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
+
 /**
  * content
  *
@@ -25,16 +26,16 @@ import org.slf4j.LoggerFactory;
  * @date 4/20/2017
  * @since 0.1.0
  */
-public class KafkaMonitorOffsetCache {
+public class OffsetCache {
 
   private static final Logger logger = LoggerFactory.getLogger(KafkaMonitor.class);
-  private static KafkaMonitorOffsetCache kafkaMonitorOffsetCache = null;
+  private static OffsetCache offsetCache = null;
   private KafkaConsumer kafkaConsumer = null;
   private Map<String, String> offsetCahe = new MapMaker().makeMap();
   private volatile boolean active = false;
   private volatile boolean hasRunning = false;
 
-  private KafkaMonitorOffsetCache(String bootstrapServers) {
+  private OffsetCache(String bootstrapServers) {
     Properties consumerProps = new Properties();
     consumerProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     consumerProps.put(ConsumerConfig.GROUP_ID_CONFIG, "MyKafkaManagerOffsetCache");
@@ -52,31 +53,36 @@ public class KafkaMonitorOffsetCache {
     logger.info("init OffsetCache cost: " + (System.currentTimeMillis() - start));
   }
 
-  public static KafkaMonitorOffsetCache getInstance(String bootstrapServers) {
-    if (kafkaMonitorOffsetCache == null) {
-      synchronized (KafkaMonitorOffsetCache.class) {
-        if (kafkaMonitorOffsetCache == null) {
-          kafkaMonitorOffsetCache = new KafkaMonitorOffsetCache(bootstrapServers);
+  public static OffsetCache getInstance(String bootstrapServers) {
+    if (offsetCache == null) {
+      synchronized (OffsetCache.class) {
+        if (offsetCache == null) {
+          offsetCache = new OffsetCache(bootstrapServers);
         }
       }
     }
-    return kafkaMonitorOffsetCache;
+    return offsetCache;
   }
 
   public Map<String, String> getOffsetCahe() {
     return offsetCahe;
   }
 
-  public void start() {
+  public void start(CountDownLatch cacheCountDownLatch) {
     if (active) {
       throw new RuntimeException("This OffsetCache is already active.");
     }
     active = true;
     logger.info("OffsetCache started.");
     ConsumerRecords<byte[], byte[]> consumerRecords = null;
+    boolean firstRound = true;
     while (active) {
       hasRunning = true;
       consumerRecords = kafkaConsumer.poll(100);
+      if (firstRound) {
+        cacheCountDownLatch.countDown();
+        firstRound = false;
+      }
       Iterator<ConsumerRecord<byte[], byte[]>> iterator = consumerRecords.iterator();
       while (iterator.hasNext()) {
         ConsumerRecord<byte[], byte[]> consumerRecord = iterator.next();
@@ -98,7 +104,7 @@ public class KafkaMonitorOffsetCache {
             if (groupTopicPartition.startsWith("[MyKafkaManagerOffsetCache")) {
               continue;
             }
-            System.out.println(groupTopicPartition + " / " + offsetAndMetadataItems[2]);
+//            System.out.println(groupTopicPartition + " / " + offsetAndMetadataItems[2]);
             // consumergroup, topic, partition, offset
             offsetCahe.put(groupTopicPartition, offsetAndMetadataItems[2]);
           }

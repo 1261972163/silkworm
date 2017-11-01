@@ -4,6 +4,10 @@ import numpy as np
 # numpy是一个操作多维数组对象的包
 # 使用numpy需要引入包，import numpy as np
 
+'''
+数组对象 ndarray
+'''
+
 # numpy中的数组对象是ndarray，ndarray中的每个元素在内存中使用相同大小的块。
 # 生成ndarry的方法：
 # numpy.array(object, dtype = None, copy = True, order = None, subok = False, ndmin = 0)
@@ -26,6 +30,10 @@ print a
 a = np.array([1,  2, 0], dtype = np.bool_)
 print a
 
+'''
+数据类型 dtype
+'''
+
 # dtype可由以下语法构造：
 # numpy.dtype(object, align, copy)
 # （1）Object 被转换为数据类型的对象。
@@ -38,6 +46,9 @@ print dt
 dt = np.dtype([('age',np.int8)])
 a = np.array([(10,),(20,),(30,)], dtype = dt)
 print a
+
+dt = np.dtype(('age',np.int8))
+print dt
 
 # 定义名为 student 的结构化数据类型
 student = np.dtype([('name','S20'),  ('age',  'i1'),  ('marks',  'f4')])
