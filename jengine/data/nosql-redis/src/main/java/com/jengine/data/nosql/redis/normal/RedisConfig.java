@@ -8,6 +8,7 @@ package com.jengine.data.nosql.redis.normal;
 public class RedisConfig {
 
   private String host;
+  private int port;
   private String pwd;
   private int timeout = 2000;
 
@@ -17,6 +18,14 @@ public class RedisConfig {
 
   public void setHost(String host) {
     this.host = host;
+  }
+
+  public int getPort() {
+    return port;
+  }
+
+  public void setPort(int port) {
+    this.port = port;
   }
 
   public String getPwd() {

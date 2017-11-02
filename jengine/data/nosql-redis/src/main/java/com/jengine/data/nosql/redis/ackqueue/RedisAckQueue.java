@@ -11,7 +11,6 @@ import java.util.List;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * 使用redis实现阻塞queue.
@@ -22,23 +21,19 @@ public class RedisAckQueue<T> {
 
   private static final Log logger = LogFactory.getLog(RedisAckQueue.class);
 
-  public static JedisPool redisPool;
+  public JedisPool redisPool;
   private String queuename;
   private Serializer<T> serializer;
 
 
-  public RedisAckQueue(String queuename, String host, int port, String pwd, int timeout, Serializer<T> serializer) {
-    JedisPoolConfig config = new JedisPoolConfig();
-    config.setMaxTotal(100);
-    config.setMaxIdle(100);
-    config.setMaxWaitMillis(1000);
-    if (pwd == null || pwd.isEmpty()) {
-      this.redisPool = new JedisPool(config, host, port);
-    } else {
-      this.redisPool = new JedisPool(config, host, port, timeout, pwd);
-    }
+  public RedisAckQueue(String queuename, JedisPool redisPool, Serializer<T> serializer) {
     this.queuename = queuename;
+    this.redisPool = redisPool;
     this.serializer = serializer;
+  }
+
+  public String getQueuename() {
+    return queuename;
   }
 
   public void destory() {
@@ -50,76 +45,109 @@ public class RedisAckQueue<T> {
     logger.info("RedisAckQueue has been shut down!");
   }
 
-  public boolean put(T value) throws InterruptedException {
+  public boolean put(T value) {
     boolean ok = false;
-    Jedis jedis = getJedis();
     try {
       int retry = 0;
+      Jedis jedis = null;
       while (true) {
+        boolean hasError = false;
         try {
+          jedis = getJedis();
           jedis.rpush(queuename.getBytes(), serializer.toBytes(value));
           ok = true;
           break;
         } catch (Exception e) {
+          if (e instanceof InterruptedException) {
+            throw (InterruptedException) e;
+          }
+          hasError = true;
           retry++;
-          retry = (retry<=3) ? retry : 0;
-          logger.error("Could not put value to RedisAckQueue. " + retry*1000 + "s later retry.", e);
-          Thread.sleep(1000*retry);
+          retry = (retry <= 3) ? retry : 0;
+          logger.error("Could not put value to RedisAckQueue. " + retry * 1000 + "s later retry.", e);
+          Thread.sleep(1000 * retry);
+        } finally {
+          if (jedis != null) {
+            if (hasError) {
+              jedis.close();
+            } else {
+              jedisRelease(jedis);
+            }
+          }
         }
       }
-    } finally {
-      jedisRelease(jedis);
+    } catch (InterruptedException sleepInteruptedExp) {
+      logger.info("put sleep is interrupted.");
     }
     return ok;
   }
 
   public T get() throws InterruptedException {
     T nextValue = null;
-    Jedis jedis = getJedis();
+    Jedis jedis = null;
     int retry = 0;
     List<byte[]> values = null;
-    try {
-      while (true) {
-        try {
-          values = jedis.lrange(queuename.getBytes(), 0, 0);
-          if (values!=null && !values.isEmpty()) {
-            nextValue = serializer.toObject(values.get(0));
-            break;
+    while (true) {
+      boolean hasError = false;
+      try {
+        jedis = getJedis();
+        values = jedis.lrange(queuename.getBytes(), 0, 0);
+        if (values != null && !values.isEmpty()) {
+          nextValue = serializer.toObject(values.get(0));
+          break;
+        }
+      } catch (Exception e) {
+        if (e instanceof InterruptedException) {
+          throw (InterruptedException) e;
+        }
+        hasError = true;
+        retry++;
+        retry = (retry <= 3) ? retry : 0;
+        logger.error("Could not get next value from RedisAckQueue. " + retry * 1000 + "s later retry.", e);
+        Thread.sleep(1000 * retry);
+      } finally {
+        if (jedis != null) {
+          if (hasError) {
+            jedis.close();
+          } else {
+            jedisRelease(jedis);
           }
-        } catch (Exception e) {
-          retry++;
-          retry = (retry <= 3) ? retry : 0;
-          logger.error("Could not get next value from RedisAckQueue. " + retry * 1000 + "s later retry.", e);
-          Thread.sleep(1000 * retry);
         }
       }
-    } finally {
-      jedisRelease(jedis);
     }
-
     return nextValue;
   }
 
   public boolean ack() throws InterruptedException {
     boolean ok = false;
-    Jedis jedis = getJedis();
+    Jedis jedis = null;
     byte[] value = null;
-    try {
-      int retry = 0;
-      while (true) {
-        try {
-          value = jedis.lpop(queuename.getBytes());
-          ok = (value==null) ? ok : true;
-          break;
-        } catch (Exception e) {
-          retry++;
-          retry = (retry <= 3) ? retry : 0;
-          logger.error("Could not ack RedisAckQueue. " + retry * 1000 + "s later retry.", e);
-          Thread.sleep(1000 * retry);
+    int retry = 0;
+    while (true) {
+      boolean hasError = false;
+      try {
+        jedis = getJedis();
+        value = jedis.lpop(queuename.getBytes());
+        ok = (value == null) ? ok : true;
+        break;
+      } catch (Exception e) {
+        if (e instanceof InterruptedException) {
+          throw (InterruptedException) e;
+        }
+        hasError = true;
+        retry++;
+        retry = (retry <= 3) ? retry : 0;
+        logger.error("Could not ack RedisAckQueue. " + retry * 1000 + "s later retry.", e);
+        Thread.sleep(1000 * retry);
+      } finally {
+        if (jedis != null) {
+          if (hasError) {
+            jedis.close();
+          } else {
+            jedisRelease(jedis);
+          }
         }
       }
-    } finally {
-      jedisRelease(jedis);
     }
     return ok;
   }
@@ -128,21 +156,29 @@ public class RedisAckQueue<T> {
     int retry = 0;
     Jedis jedis = null;
     while (true) {
+      boolean hasError = false;
       try {
         jedis = redisPool.getResource();
         break;
       } catch (Exception e) {
+        hasError = true;
         retry++;
         retry = (retry <= 3) ? retry : 0;
         logger.error("Could not get redis resource. " + retry * 1000 + "s later retry.", e);
         Thread.sleep(1000 * retry);
+      } finally {
+        if (jedis != null) {
+          if (hasError) {
+            jedis.close();
+          }
+        }
       }
     }
     return jedis;
   }
 
   private void jedisRelease(Jedis jedis) {
-    if (jedis!=null) {
+    if (jedis != null) {
       redisPool.returnResourceObject(jedis);
     }
   }
