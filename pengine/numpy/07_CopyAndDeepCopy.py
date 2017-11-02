@@ -10,3 +10,12 @@ print b
 a[0]=2
 print a
 print b
+
+print "copy() 的赋值方式没有关联性"
+a=np.arange(1,5)
+b=a.copy()
+print a
+print b
+a[0]=2
+print a
+print b

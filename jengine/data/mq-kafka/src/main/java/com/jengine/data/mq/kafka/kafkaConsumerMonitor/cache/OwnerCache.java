@@ -18,6 +18,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import kafka.admin.AdminClient;
 import kafka.coordinator.GroupOverview;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.collection.JavaConversions;
 import scala.collection.immutable.List;
 
@@ -25,6 +27,8 @@ import scala.collection.immutable.List;
  * @author bl07637
  */
 class OwnerCache {
+  private static final Logger logger = LoggerFactory.getLogger(OwnerCache.class);
+
   private AdminClient client;
   private Map<String, String> partitionOwnerMap = new MapMaker().makeMap();
   private Lock partitionOwnerMapLock = new ReentrantLock();
@@ -38,6 +42,7 @@ class OwnerCache {
   }
 
   protected void start() {
+    logger.info("OwnerCache is starting...");
     scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
       @Override
       public void run() {
@@ -68,6 +73,7 @@ class OwnerCache {
       partitionOwnerMapLock.unlock();
     }
     if(first) {
+      logger.info("ownerCacheCountDownLatch...");
       Cache.ownerCacheCountDownLatch.countDown();
       first = false;
     }

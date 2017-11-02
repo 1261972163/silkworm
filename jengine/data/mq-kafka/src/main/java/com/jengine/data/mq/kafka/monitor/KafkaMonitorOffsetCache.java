@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
 
 import kafka.common.OffsetAndMetadata;
 import kafka.coordinator.GroupMetadataManager;

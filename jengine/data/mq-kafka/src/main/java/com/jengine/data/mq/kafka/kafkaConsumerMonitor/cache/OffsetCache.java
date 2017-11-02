@@ -30,7 +30,7 @@ import kafka.coordinator.OffsetKey;
  */
 class OffsetCache {
 
-  private static final Logger logger = LoggerFactory.getLogger(KafkaMonitor.class);
+  private static final Logger logger = LoggerFactory.getLogger(OffsetCache.class);
   private KafkaConsumer kafkaConsumer = null;
   private volatile boolean active = false;
   private volatile boolean hasRunning = false;

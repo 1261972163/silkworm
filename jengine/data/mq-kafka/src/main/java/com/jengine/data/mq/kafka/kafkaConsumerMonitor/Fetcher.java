@@ -47,10 +47,18 @@ public class Fetcher {
     }
     kafkaMetricConsumer.assign(topicPartitionList);
     kafkaMetricConsumer.seekToEnd(topicPartitionList);
+    ArrayList<Metric> metrics = new ArrayList<Metric>();
     for (String key : keys) {
       Metric metric = CacheUtils.parseKey(key);
       fillLogLagOwner(metric);
-      sink.save(metric);
+      metrics.add(metric);
+      if (metrics.size()==1000) {
+        sink.save(metrics);
+        metrics.clear();
+      }
+    }
+    if (metrics.size()>0) {
+      sink.save(metrics);
     }
   }
 

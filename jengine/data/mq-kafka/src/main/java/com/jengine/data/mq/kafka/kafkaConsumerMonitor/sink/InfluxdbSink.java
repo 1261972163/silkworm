@@ -1,7 +1,7 @@
 package com.jengine.data.mq.kafka.kafkaConsumerMonitor.sink;
 
+import com.jengine.common.utils.StringUtils;
 import com.jengine.data.mq.kafka.kafkaConsumerMonitor.Metric;
-
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -9,18 +9,13 @@ import org.influxdb.dto.Point;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by weiyang on 10/30/17.
  */
 public class InfluxdbSink implements Sink {
   private InfluxDB influxDB;
-  private AtomicInteger batchPointCount = new AtomicInteger(0);
   private String dbName;
-
-  private ReentrantLock batchLock = new ReentrantLock();
 
   public InfluxdbSink(String host, String user, String pwd, String db) {
     influxDB = InfluxDBFactory.connect(host, user, pwd);
@@ -30,10 +25,34 @@ public class InfluxdbSink implements Sink {
     }
   }
 
+  public static void main(String[] args) {
+    String url = "http://10.45.11.84:8086";
+    String user = "root";
+    String pwd = "root";
+    String db = "test1";
+    InfluxdbSink influxdbSink = new InfluxdbSink(url, user, pwd, db);
+    Metric metric = new Metric();
+    metric.setGroup("1");
+    metric.setTopic("2");
+    metric.setPartition(0);
+    metric.setLogSize(100);
+    metric.setConsumerOffset(10);
+    metric.setLag(90);
+//    metric.setOwner("3");
+    influxdbSink.save(metric);
+    System.out.printf("----");
+  }
+
   @Override
   public void save(Metric metric) {
+    BatchPoints batchPoints = BatchPoints
+            .database(dbName)
+//                .retentionPolicy(rpName)
+            .consistency(InfluxDB.ConsistencyLevel.ALL)
+            .build();
     Point point = toPoint(metric);
-    influxDB.write(point);
+    batchPoints.point(point);
+    influxDB.write(batchPoints);
   }
 
   @Override
@@ -56,7 +75,7 @@ public class InfluxdbSink implements Sink {
         .tag("group", metric.getGroup())
         .tag("topic", metric.getTopic())
         .tag("partition", metric.getPartition() + "")
-        .tag("owner", metric.getOwner())
+        .tag("owner", StringUtils.isBlank(metric.getOwner()) ? "NULL" : metric.getOwner())
         .addField("log", metric.getLogSize())
         .addField("offset", metric.getConsumerOffset())
         .addField("lag", metric.getLag())
