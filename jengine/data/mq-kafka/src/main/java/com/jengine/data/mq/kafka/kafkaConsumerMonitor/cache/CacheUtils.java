@@ -7,7 +7,7 @@ package com.jengine.data.mq.kafka.kafkaConsumerMonitor.cache;
 import com.jengine.data.mq.kafka.kafkaConsumerMonitor.Metric;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class CacheUtils {
   public static String buildKey(String group, String topic, String partition) {

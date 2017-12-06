@@ -3,7 +3,7 @@ package com.jengine.data.elasticsearch.mydataframe.so;
 /**
  * 指定数据域进行范围查询
  *
- * @author bl07637
+ * @author nouuid
  * @date 8/11/2016
  * @description
  */

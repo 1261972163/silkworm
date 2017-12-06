@@ -24,7 +24,7 @@ import scala.collection.JavaConversions;
 import scala.collection.immutable.List;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 class OwnerCache {
   private static final Logger logger = LoggerFactory.getLogger(OwnerCache.class);

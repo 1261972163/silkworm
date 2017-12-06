@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.Map;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/5/2016
  * @description
  */

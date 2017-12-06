@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/8/2016
  * @description es field types
  */

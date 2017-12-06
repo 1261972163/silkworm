@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class RedisAckQueueDemo {
 

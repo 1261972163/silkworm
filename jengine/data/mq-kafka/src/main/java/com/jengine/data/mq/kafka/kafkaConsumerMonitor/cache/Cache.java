@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class Cache {
   private static final Logger logger = LoggerFactory.getLogger(Cache.class);

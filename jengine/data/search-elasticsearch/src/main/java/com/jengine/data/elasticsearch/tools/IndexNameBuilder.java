@@ -4,7 +4,7 @@ import com.best.bingo.common.exception.BingoException;
 import com.best.bingo.common.utils.StringUtils;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/11/2016
  * @description
  */

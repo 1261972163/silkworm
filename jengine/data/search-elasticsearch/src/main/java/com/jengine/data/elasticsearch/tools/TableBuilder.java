@@ -5,7 +5,7 @@ import com.best.bingo.common.dataframe.Table;
 import com.best.bingo.common.dataframe.schema.TableStructure;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/9/2016
  * @description
  */

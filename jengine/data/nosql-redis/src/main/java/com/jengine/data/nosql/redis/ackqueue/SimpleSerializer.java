@@ -13,7 +13,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class SimpleSerializer<T> implements Serializer<T>  {
   public byte[] toBytes(T object) throws IOException {

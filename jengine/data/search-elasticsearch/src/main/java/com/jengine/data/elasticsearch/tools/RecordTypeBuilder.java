@@ -12,7 +12,7 @@ import com.jengine.data.elasticsearch.mydataframe.StoreType;
 import java.util.Map;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/10/2016
  * @description
  */

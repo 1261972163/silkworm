@@ -7,7 +7,7 @@ package com.jengine.data.nosql.redis.ackqueue;
 import java.io.IOException;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public interface Serializer<T> {
   byte[] toBytes(T string) throws Exception;

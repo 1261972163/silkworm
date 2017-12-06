@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/4/2016
  * @description es analyzer types
  */

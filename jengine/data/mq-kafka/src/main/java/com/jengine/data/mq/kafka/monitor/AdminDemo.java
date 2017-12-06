@@ -15,7 +15,7 @@ import scala.collection.JavaConversions;
 import scala.collection.immutable.List;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class AdminDemo {
   public static void main(String[] args) {

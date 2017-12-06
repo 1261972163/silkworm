@@ -1,7 +1,7 @@
 package com.jengine.data.elasticsearch.mydataframe.so;
 
 /**
- * @author bl07637
+ * @author nouuid
  * @date 8/11/2016
  * @description A sorting order.
  */
