@@ -1,10 +1,9 @@
-/**
- * Copyright (C) 2017 The BEST Authors
- */
-
 package com.jengine.data.nosql.redis.ackqueue;
 
+import com.jengine.data.nosql.redis.normal.RedisConfig;
 import org.junit.Test;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -20,11 +19,26 @@ public class RedisAckQueueDemo {
     int port = 6379;
     String pwd = null;
     int timeout = 5000;
+    JedisPool jedisPool = initRedisPool(host, port, pwd, timeout);
     Serializer<String> serializer = new SimpleSerializer<String>();
-    RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, host, port , pwd, timeout, serializer);
+    RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, jedisPool, serializer);
     produce(redisAckQueue);
     consume(redisAckQueue);
     System.out.println("end.");
+  }
+
+  private JedisPool initRedisPool(String host, int port , String pwd, int timeout) {
+    JedisPool jedisPool = null;
+    JedisPoolConfig config = new JedisPoolConfig();
+    config.setMaxTotal(100);
+    config.setMaxIdle(100);
+    config.setMaxWaitMillis(1000);
+    if (pwd == null || pwd.isEmpty()) {
+      jedisPool = new JedisPool(config, host, port);
+    } else {
+      jedisPool = new JedisPool(config, host, port, timeout, pwd);
+    }
+    return jedisPool;
   }
 
   @Test
@@ -34,8 +48,9 @@ public class RedisAckQueueDemo {
     int port = 6379;
     String pwd = null;
     int timeout = 5000;
+    JedisPool jedisPool = initRedisPool(host, port, pwd, timeout);
     Serializer<String> serializer = new SimpleSerializer<String>();
-    final RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, host, port , pwd, timeout, serializer);
+    final RedisAckQueue<String> redisAckQueue = new RedisAckQueue<String>(queuename, jedisPool, serializer);
     CountDownLatch countDownLatch = new CountDownLatch(60);
     Thread consumer = new Thread(new Runnable() {
       @Override

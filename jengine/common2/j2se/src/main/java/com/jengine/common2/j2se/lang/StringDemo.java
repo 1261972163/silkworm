@@ -31,10 +31,10 @@ public class StringDemo {
      */
     @Test
     public void strMatchesTest() {
-        String regex = "xingng-[a-z]-\\d{8}";
-        String s1 = "xingng-a-20160320";
+        String regex = "nouuid-[a-z]-\\d{8}";
+        String s1 = "nouuid-a-20160320";
         Assert.assertTrue(s1.matches(regex));
-        String s2 = "xingng-a-201603202";
+        String s2 = "nouuid-a-201603202";
         Assert.assertFalse(s2.matches(regex));
     }
 
@@ -57,9 +57,9 @@ public class StringDemo {
 
     @Test
     public void sub() {
-        String regex = "/bingo[a-z0-9A-Z/]*";
-//        String home = "/bingo/x/ /x/dd/ddd/ /d /////";
-        String home = "/bingo/////";
+        String regex = "/nouuid[a-z0-9A-Z/]*";
+//        String home = "/nouuid/x/ /x/dd/ddd/ /d /////";
+        String home = "/nouuid/////";
         home = home.trim();
 
         System.out.println(home.matches(regex));
@@ -77,8 +77,8 @@ public class StringDemo {
 //        }
 //
 //        home = home.trim();
-//        if (!home.startsWith("/bingo")) {
-//            home = "/bingo" + home;
+//        if (!home.startsWith("/nouuid")) {
+//            home = "/nouuid" + home;
 //        }
 //        while (home.endsWith("/")) {
 //            int endIndex = 0;

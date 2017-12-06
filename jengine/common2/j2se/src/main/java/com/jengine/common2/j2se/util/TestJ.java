@@ -58,7 +58,7 @@ public class TestJ {
 
     @Test
     public void test5() {
-        String fileName = "E:\\xingng_test\\8x.txt";
+        String fileName = "E:\\nouuid_test\\8x.txt";
         File file = new File(fileName);
         BufferedReader reader = null;
         try {
@@ -67,12 +67,12 @@ public class TestJ {
             String tempString = null;
             int line = 1;
             String[] tos = new String[6];
-            tos[0] = "xingng-es-prod-node-2";
-            tos[1] = "xingng-es-prod-node-3";
-            tos[2] = "xingng-es-prod-node-4";
-            tos[3] = "xingng-es-prod-node-5";
-            tos[4] = "xingng-es-prod-node-6";
-            tos[5] = "xingng-es-prod-node-7";
+            tos[0] = "nouuid-es-prod-node-2";
+            tos[1] = "nouuid-es-prod-node-3";
+            tos[2] = "nouuid-es-prod-node-4";
+            tos[3] = "nouuid-es-prod-node-5";
+            tos[4] = "nouuid-es-prod-node-6";
+            tos[5] = "nouuid-es-prod-node-7";
             List<String> tos2 = Arrays.asList(tos);
             while ((tempString = reader.readLine()) != null) {
                 String[] splits = tempString.split("\\t");

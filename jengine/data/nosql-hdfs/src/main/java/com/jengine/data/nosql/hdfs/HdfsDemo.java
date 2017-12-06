@@ -20,7 +20,7 @@ public class HdfsDemo {
   public void before() throws IOException {
     Configuration config = new Configuration();
 //        config.set("io.compression.codecs", "org.apache.hadoop.io.compress.SnappyCodec");
-    String hdfsPath = "hdfs://test-storm-master.800best.com:9000";
+    String hdfsPath = "hdfs://test-storm-master.nouuid.com:9000";
 //        String hdfsPath = "hdfs://127.0.0.1:9000";
     hdfsService = new HdfsService(hdfsPath, config);
   }
@@ -48,14 +48,14 @@ public class HdfsDemo {
 
   @org.junit.Test
   public void defaultCompressCreate() throws IOException {
-    String src = "E:\\xingng_test\\2gc-1104.log";
+    String src = "E:\\nouuid_test\\2gc-1104.log";
     String des = "/nouuid1";
     hdfsService.defaultCompressCreate(src, des);
   }
 
   @org.junit.Test
   public void compressCreate() throws Exception {
-    String src = "E:\\xingng_test\\2gc-1104.log";
+    String src = "E:\\nouuid_test\\2gc-1104.log";
     String des = "/a_snappy";
 //        String codecClassName = "org.apache.hadoop.io.compress.DefaultCodec";
 //        String codecClassName = "org.apache.hadoop.io.compress.GzipCodec";
@@ -110,10 +110,10 @@ public class HdfsDemo {
 //    public static void main(String[] args) throws Exception {
 ////        Configuration config = new Configuration();
 //////        config.set("io.compression.codecs", "org.apache.hadoop.io.compress.SnappyCodec");
-////        String hdfsPath = "hdfs://test-storm-master.800best.com:9000";
+////        String hdfsPath = "hdfs://test-storm-master.nouuid.com:9000";
 ////        HdfsService hdfsService = new HdfsService(hdfsPath, config);
 ////
-////        String src = "E:\\xingng_test\\2gc-1104.log";
+////        String src = "E:\\nouuid_test\\2gc-1104.log";
 ////        String des = "/a_snappy";
 ////        String codecClassName = "org.apache.hadoop.io.compress.SnappyCodec";
 ////        hdfsService.compressCreate(src, des, codecClassName);

@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2017 The BEST Authors
- */
-
 package com.jengine.common2.loggerDynamicLevel;
 
 import org.apache.commons.lang.StringUtils;

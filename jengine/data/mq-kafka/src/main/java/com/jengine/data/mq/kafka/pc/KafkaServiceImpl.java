@@ -21,7 +21,7 @@ public class KafkaServiceImpl implements KafkaService {
 
   @Override
   public void initProducer(Properties producerProps) {
-//        producerProps.put("bootstrap.servers", "xingng-test-kafka01.800best.com:9092,xingng-test-kafka02.800best.com:9092,xingng-test-kafka03.800best.com:9092,xingng-test-kafka04.800best.com:9092");
+//        producerProps.put("bootstrap.servers", "nouuid-test-kafka01.nouuid.com:9092,nouuid-test-kafka02.nouuid.com:9092,nouuid-test-kafka03.nouuid.com:9092,nouuid-test-kafka04.nouuid.com:9092");
 //        producerProps.put("acks", "all");
 //        producerProps.put("retries", 0);
 //        producerProps.put("batch.size", 10);
@@ -34,7 +34,7 @@ public class KafkaServiceImpl implements KafkaService {
 
   @Override
   public void initConsumer(Properties consumerProps) {
-//        consumerProps.put("bootstrap.servers", "xingng-test-kafka01.800best.com:9092,xingng-test-kafka02.800best.com:9092,xingng-test-kafka03.800best.com:9092,xingng-test-kafka04.800best.com:9092");
+//        consumerProps.put("bootstrap.servers", "nouuid-test-kafka01.nouuid.com:9092,nouuid-test-kafka02.nouuid.com:9092,nouuid-test-kafka03.nouuid.com:9092,nouuid-test-kafka04.nouuid.com:9092");
 //        consumerProps.put("group.id", "test");
 //        consumerProps.put("auto.offset.reset", "earliest");
 //        consumerProps.put("enable.auto.commit", "true");

@@ -1,8 +1,8 @@
 package com.jengine.data.elasticsearch.tools;
 
 
-import com.best.bingo.common.dataframe.Table;
-import com.best.bingo.common.dataframe.schema.TableStructure;
+import com.jengine.data.elasticsearch.mydataframe.Table;
+import com.jengine.data.elasticsearch.mydataframe.TableStructure;
 
 /**
  * @author nouuid

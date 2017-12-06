@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2017 The BEST Authors
- */
-
 package com.jengine.data.mq.kafka.kafkaConsumerMonitor.cache;
 
 import com.jengine.data.mq.kafka.kafkaConsumerMonitor.Metric;

@@ -193,7 +193,7 @@ public final class QuickLZ
                 fetch = (int)fast_read(source, src, 3);
 
                 int o, offset2;
-                int matchlen, k, m, best_k = 0;
+                int matchlen, k, m, nouuid_k = 0;
                 byte c;
                 int remaining = ((source.length - UNCOMPRESSED_END - src + 1 - 1) > 255 ? 255 : (source.length - UNCOMPRESSED_END - src + 1 - 1));
                 int hash = ((fetch >>> 12) ^ fetch) & (HASH_VALUES - 1);
@@ -213,7 +213,7 @@ public final class QuickLZ
                         {
                             offset2 = o;
                             matchlen = m;
-                            best_k = k;
+                            nouuid_k = k;
                         }
                     }
                 }

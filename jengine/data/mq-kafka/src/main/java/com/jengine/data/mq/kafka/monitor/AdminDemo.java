@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2017 The BEST Authors
- */
-
 package com.jengine.data.mq.kafka.monitor;
 
 import org.apache.kafka.common.Node;

@@ -1,7 +1,3 @@
-/**
- * Copyright (C) 2017 The BEST Authors
- */
-
 package com.jengine.data.nosql.redis.ackqueue;
 
 import org.apache.commons.logging.Log;

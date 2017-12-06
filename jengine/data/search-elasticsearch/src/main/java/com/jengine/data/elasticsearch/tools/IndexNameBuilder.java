@@ -1,8 +1,5 @@
 package com.jengine.data.elasticsearch.tools;
 
-import com.best.bingo.common.exception.BingoException;
-import com.best.bingo.common.utils.StringUtils;
-
 /**
  * @author nouuid
  * @date 8/11/2016
@@ -21,10 +18,10 @@ public class IndexNameBuilder {
 
   public IndexNameBuilder(String databaseName, String tableName) {
     if (StringUtils.isBlank(databaseName)) {
-      throw new BingoException("database name is blank");
+      throw new MyException("database name is blank");
     }
     if (StringUtils.isBlank(tableName)) {
-      throw new BingoException("table name is blank.");
+      throw new MyException("table name is blank.");
     }
     this.databaseName = databaseName;
     this.tableName = tableName;
@@ -52,7 +49,7 @@ public class IndexNameBuilder {
 
   public String build() {
     if (StringUtils.isBlank(databaseName) || StringUtils.isBlank(tableName)) {
-      throw new BingoException("database is blank or table is blank.");
+      throw new MyException("database is blank or table is blank.");
     }
     String indexName = databaseName + "-" + tableName;
     if (StringUtils.isNotBlank(tag)) {
@@ -66,7 +63,7 @@ public class IndexNameBuilder {
 
   public String buildMappingIndexName() {
     if (StringUtils.isBlank(databaseName) || StringUtils.isBlank(tableName)) {
-      throw new BingoException("database is blank or table is blank.");
+      throw new MyException("database is blank or table is blank.");
     }
     String indexName = databaseName + "-" + tableName;
     if (StringUtils.isNotBlank(tag)) {

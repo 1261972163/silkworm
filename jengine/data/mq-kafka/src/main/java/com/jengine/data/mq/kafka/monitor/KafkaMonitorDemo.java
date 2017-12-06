@@ -75,7 +75,7 @@ public class KafkaMonitorDemo {
   public void test2() throws InterruptedException {
     String bootstrapServers = "10.45.11.149:9092,10.45.11.150:9092";
     String group = "test";
-    String topic = "xingngLogTest2";
+    String topic = "nouuidLogTest2";
     KafkaMonitor kafkaMonitor2 = new KafkaMonitor(bootstrapServers, group);
     logger.info("------------------ in sleeping.");
     Thread.sleep(1000 * 60);

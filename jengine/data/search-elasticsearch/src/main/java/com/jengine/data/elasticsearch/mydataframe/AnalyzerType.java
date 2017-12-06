@@ -1,7 +1,6 @@
 package com.jengine.data.elasticsearch.mydataframe;
 
-import com.best.bingo.common.utils.StringUtils;
-
+import com.jengine.data.elasticsearch.tools.StringUtils;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonValue;
 

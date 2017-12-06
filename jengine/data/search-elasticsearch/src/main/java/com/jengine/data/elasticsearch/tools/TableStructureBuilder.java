@@ -1,7 +1,7 @@
 package com.jengine.data.elasticsearch.tools;
 
-import com.best.bingo.common.dataframe.schema.RecordType;
-import com.best.bingo.common.dataframe.schema.TableStructure;
+import com.jengine.data.elasticsearch.mydataframe.RecordType;
+import com.jengine.data.elasticsearch.mydataframe.TableStructure;
 
 import java.util.HashMap;
 import java.util.Map;
