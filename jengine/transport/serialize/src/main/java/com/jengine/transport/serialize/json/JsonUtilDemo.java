@@ -18,4 +18,32 @@ public class JsonUtilDemo {
         mdMap.put("weight", 10);
         System.out.println(JsonUtil.toJson(mdMap));
     }
+
+    @Test
+    public void test2() {
+        class Student{
+            private String name;
+            private int age;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public int getAge() {
+                return age;
+            }
+
+            public void setAge(int age) {
+                this.age = age;
+            }
+        }
+        Student student = new Student();
+        student.name = "name1";
+        student.age = 1;
+        System.out.println(JsonUtil.toJson(student));
+    }
 }
