@@ -30,7 +30,7 @@ public class C01_CopyOnWriteArrayList {
         ArrayList<String> arrayList = new ArrayList<String>();
         CountDownLatch countDownLatch = new CountDownLatch(1); // 保证下面10个线程同时运行
         ThreadGroup group = new ThreadGroup("mygroup");
-        for (int i=1; i<=100; i++) {
+        for (int i = 1; i <= 100; i++) {
             Thread thread = new Thread(group, new Runnable() {
                 @Override
                 public void run() {
@@ -39,13 +39,13 @@ public class C01_CopyOnWriteArrayList {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    for (int j=1; j<=1000; j++) {
+                    for (int j = 1; j <= 1000; j++) {
                         copyOnWriteArrayList.add(Thread.currentThread().getName());
 //                        // 使用ArrayList会抛错
 //                        arrayList.add(Thread.currentThread().getName());
                     }
                 }
-            }, "t"+i);
+            }, "t" + i);
             thread.start();
         }
         countDownLatch.countDown();
@@ -55,8 +55,6 @@ public class C01_CopyOnWriteArrayList {
         System.out.println(copyOnWriteArrayList.size());
         System.out.println(arrayList.size());
     }
-
-
 
 
     public void test1() throws InterruptedException {
@@ -76,13 +74,13 @@ public class C01_CopyOnWriteArrayList {
         thread3.start();
 
 
-        Thread.sleep(30*60*1000);
+        Thread.sleep(30 * 60 * 1000);
     }
 
     @org.junit.Test
     public void test2() {
         CopyOnWriteArrayList<String> copyOnWriteArrayList = new CopyOnWriteArrayList<String>();
-        for (int i=1; i<20; i++) {
+        for (int i = 1; i < 20; i++) {
             copyOnWriteArrayList.add("" + i);
         }
         boolean ok = false;

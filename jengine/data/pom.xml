@@ -37,6 +37,8 @@
     <module>stream-storm</module>
     <module>canal</module>
     <module>compress</module>
+    <module>trace-zipkin</module>
+    <module>trace-opencensus</module>
   </modules>
 
   <dependencies>
