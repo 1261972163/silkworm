@@ -36,13 +36,13 @@
     <module>stream-spark</module>
     <module>stream-storm</module>
     <module>canal</module>
-    <module>compress</module>
   </modules>
 
   <dependencies>
     <dependency>
       <groupId>com.jengine</groupId>
-      <artifactId>jengine-common</artifactId>
+      <artifactId>jengine-j2se-common2</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <!--
 <dependency>

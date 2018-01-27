@@ -5,7 +5,7 @@ import com.jengine.data.mq.kafka.kafkaConsumerMonitor.Metric;
 import java.util.List;
 
 /**
- * Created by weiyang on 10/30/17.
+ * Created by nouuid on 10/30/17.
  */
 public interface Sink {
 

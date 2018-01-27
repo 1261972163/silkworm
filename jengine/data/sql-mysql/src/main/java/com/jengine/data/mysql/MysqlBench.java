@@ -1,12 +1,13 @@
 package com.jengine.data.mysql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author nouuid
@@ -15,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class MysqlBench {
 
-  protected final Log logger = LogFactory.getLog(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
   // thread control
   final CountDownLatch startGate = new CountDownLatch(1);
   // config

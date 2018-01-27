@@ -1,8 +1,8 @@
 package com.jengine.transport.protocol.netty.httpserver;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * content
@@ -12,24 +12,24 @@ import org.junit.Test;
  * @since 0.1.0
  */
 public class Demo {
-    private static Log log = LogFactory.getLog(HttpServer.class);
+  public static final Logger logger = LoggerFactory.getLogger(Demo.class);
 
-    @Test
-    public void server() throws Exception {
-        HttpServer server = new HttpServer();
-        log.info("Http Server listening on 8844 ...");
-        server.start(8844);
-    }
+  @Test
+  public void server() throws Exception {
+    HttpServer server = new HttpServer();
+    logger.info("Http Server listening on 8844 ...");
+    server.start(8844);
+  }
 
-    @Test
-    public void client() throws Exception {
-        HttpClient client = new HttpClient();
-        client.connect("127.0.0.1", 8844);
-        client.send("1");
-        client.send("2");
+  @Test
+  public void client() throws Exception {
+    HttpClient client = new HttpClient();
+    client.connect("127.0.0.1", 8844);
+    client.send("1");
+    client.send("2");
 
-        Thread.sleep(5*60*1000);
+    Thread.sleep(5 * 60 * 1000);
 
-    }
+  }
 
 }

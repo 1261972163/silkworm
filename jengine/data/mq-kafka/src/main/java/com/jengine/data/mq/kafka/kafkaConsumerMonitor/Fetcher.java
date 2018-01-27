@@ -1,6 +1,6 @@
 package com.jengine.data.mq.kafka.kafkaConsumerMonitor;
 
-import com.jengine.common.utils.StringUtils;
+import com.jengine.common.javacommon.utils.StringUtils;
 import com.jengine.data.mq.kafka.kafkaConsumerMonitor.cache.CacheUtils;
 import com.jengine.data.mq.kafka.kafkaConsumerMonitor.sink.Sink;
 
@@ -14,7 +14,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * Created by weiyang on 10/29/17.
+ * Created by nouuid on 10/29/17.
  */
 public class Fetcher {
   private String bootstrapServers;

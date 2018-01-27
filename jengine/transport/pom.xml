@@ -21,17 +21,20 @@
 		<module>restful-jersey</module>
 		<!--<module>restful-springboot</module>-->
 		<module>rpc</module>
-		<module>serialize</module>
+
 		<module>server-jetty</module>
 		<module>server-grizzly</module>
 		<module>server-tomcat</module>
+		<module>cluster-api</module>
+		<module>cluster-other</module>
 	</modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.jengine</groupId>
-			<artifactId>jengine-common</artifactId>
-		</dependency>
-	</dependencies>
+	<!--<dependencies>-->
+		<!--<dependency>-->
+			<!--<groupId>com.jengine</groupId>-->
+			<!--<artifactId>jengine-common</artifactId>-->
+			<!--<version>${project.version}</version>-->
+		<!--</dependency>-->
+	<!--</dependencies>-->
 
 </project>

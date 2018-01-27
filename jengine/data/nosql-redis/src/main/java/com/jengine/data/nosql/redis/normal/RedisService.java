@@ -1,10 +1,10 @@
 package com.jengine.data.nosql.redis.normal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.After;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 public class RedisService {
 
-  private static final Log logger = LogFactory.getLog(RedisService.class);
+  private static final Logger logger = LoggerFactory.getLogger(RedisService.class);
   public static JedisPool redisPool;
 
   @Before

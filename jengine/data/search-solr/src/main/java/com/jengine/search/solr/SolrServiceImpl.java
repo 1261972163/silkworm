@@ -1,11 +1,5 @@
 package com.jengine.search.solr;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;
@@ -13,6 +7,13 @@ import org.apache.solr.client.solrj.request.CoreAdminRequest;
 import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.CoreAdminResponse;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by nouuid on 2015/5/8.
@@ -22,7 +23,7 @@ public class SolrServiceImpl implements SolrService {
   private static final String NOUUID_SOLR_PRE = "NOUUID-";
   private static SimpleDateFormat dayFormat = new SimpleDateFormat("yyyyMMdd");
   private static CloudSolrClient solrClient;
-  protected final Log logger = LogFactory.getLog(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
   private SolrConfig solrConfig;
 
   public SolrServiceImpl(SolrConfig solrConfig) {

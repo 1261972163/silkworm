@@ -5,8 +5,6 @@ import com.jengine.data.elasticsearch.mydataframe.Doc;
 import com.jengine.data.elasticsearch.mydataframe.PageShow;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -29,6 +27,8 @@ import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.InternalMappedTerms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class DocumentService {
 
-  private static final Log logger = LogFactory.getLog(DocumentService.class);
+  private static final Logger logger = LoggerFactory.getLogger(DocumentService.class);
 
   private TransportClient transportClient;
 

@@ -15,7 +15,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jengine</groupId>
-			<artifactId>jengine-protocal</artifactId>
+			<artifactId>jengine-network-http</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- Jersey -->
 		<dependency>

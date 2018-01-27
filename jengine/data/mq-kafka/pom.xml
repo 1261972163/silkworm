@@ -15,13 +15,19 @@
 
   <dependencies>
     <dependency>
-       <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>r08</version>
+      <groupId>com.jengine</groupId>
+      <artifactId>jengine-j2se-common2</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.jengine</groupId>
       <artifactId>jengine-serialize</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+       <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>r08</version>
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>

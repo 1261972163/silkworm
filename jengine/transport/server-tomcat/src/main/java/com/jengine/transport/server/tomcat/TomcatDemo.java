@@ -1,18 +1,20 @@
 package com.jengine.transport.server.tomcat;
 
-import com.jengine.common.utils.NetworkUtil;
+import com.jengine.common.javacommon.utils.NetworkUtil;
 import com.jengine.transport.serialize.xml.DOMReader;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
-import javax.management.ObjectName;
 import java.io.File;
 import java.util.Iterator;
 import java.util.Set;
+
+import javax.management.MBeanServer;
+import javax.management.MBeanServerFactory;
+import javax.management.ObjectName;
 
 /**
  * 放在tomcat中加载，可获取http端口号

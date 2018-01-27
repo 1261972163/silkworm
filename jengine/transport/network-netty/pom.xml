@@ -8,7 +8,7 @@
 	</parent>
 
 	<groupId>com.jengine</groupId>
-    <artifactId>jengine-protocal-netty</artifactId>
+    <artifactId>jengine-network-netty</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
 

@@ -1,14 +1,16 @@
 package com.jengine.data.mq.kafka.pc2;
 
 import com.jengine.transport.serialize.json.JsonUtil;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * content
@@ -19,7 +21,7 @@ import org.junit.Test;
  */
 public class KafkaConsumerDemo {
 
-  protected final Log logger = LogFactory.getLog(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   private KafkaConsumerService kafkaConsumerService;
 

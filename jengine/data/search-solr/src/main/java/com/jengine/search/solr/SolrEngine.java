@@ -1,10 +1,5 @@
 package com.jengine.search.solr;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -15,13 +10,19 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.SolrParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nouuid on 2015/5/7.
  */
 public class SolrEngine {
 
-  public static final Log logger = LogFactory.getLog(SolrEngine.class);
+  public static final Logger logger = LoggerFactory.getLogger(SolrEngine.class);
 
   private String urlStr = null;
   private SolrClient client = null;

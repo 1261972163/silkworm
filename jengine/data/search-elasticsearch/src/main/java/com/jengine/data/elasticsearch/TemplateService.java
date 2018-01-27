@@ -3,8 +3,6 @@ package com.jengine.data.elasticsearch;
 import com.jengine.data.elasticsearch.mydataframe.FieldsVersionType;
 import com.jengine.data.elasticsearch.mydataframe.RecordType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.elasticsearch.action.admin.indices.template.delete.DeleteIndexTemplateRequestBuilder;
 import org.elasticsearch.action.admin.indices.template.delete.DeleteIndexTemplateResponse;
 import org.elasticsearch.action.admin.indices.template.get.GetIndexTemplatesRequestBuilder;
@@ -16,6 +14,8 @@ import org.elasticsearch.cluster.metadata.IndexTemplateMetaData;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import java.util.Map;
  * @since 0.1.0
  */
 public class TemplateService {
-  private static final Log logger = LogFactory.getLog(TemplateService.class);
+  private static final Logger logger = LoggerFactory.getLogger(TemplateService.class);
 
   private TransportClient client;
 

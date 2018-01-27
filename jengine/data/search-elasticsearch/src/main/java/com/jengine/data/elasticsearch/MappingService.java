@@ -3,8 +3,6 @@ package com.jengine.data.elasticsearch;
 import com.jengine.data.elasticsearch.mydataframe.TableStructure;
 import com.jengine.transport.serialize.json.JsonUtil;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequestBuilder;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
@@ -13,6 +11,8 @@ import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class MappingService {
 
-  private static final Log logger = LogFactory.getLog(MappingService.class);
+  private static final Logger logger = LoggerFactory.getLogger(MappingService.class);
 
   private TransportClient client;
 

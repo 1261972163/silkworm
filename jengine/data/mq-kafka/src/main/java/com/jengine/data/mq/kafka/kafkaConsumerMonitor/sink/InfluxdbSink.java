@@ -1,7 +1,8 @@
 package com.jengine.data.mq.kafka.kafkaConsumerMonitor.sink;
 
-import com.jengine.common.utils.StringUtils;
+import com.jengine.common.javacommon.utils.StringUtils;
 import com.jengine.data.mq.kafka.kafkaConsumerMonitor.Metric;
+
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by weiyang on 10/30/17.
+ * Created by nouuid on 10/30/17.
  */
 public class InfluxdbSink implements Sink {
   private InfluxDB influxDB;

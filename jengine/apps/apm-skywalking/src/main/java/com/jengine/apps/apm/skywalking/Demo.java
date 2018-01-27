@@ -7,7 +7,7 @@ package com.jengine.apps.apm.skywalking;
 import org.apache.skywalking.apm.toolkit.trace.Trace;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class Demo {
   public static void main(String[] args) throws InterruptedException {

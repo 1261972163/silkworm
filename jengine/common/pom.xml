@@ -8,32 +8,27 @@
 	</parent>
 
 	<groupId>com.jengine</groupId>
-	<artifactId>jengine-common2</artifactId>
+	<artifactId>jengine-common</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
-	<description>The jengine-common2 module of jengine project</description>
+	<description>The jengine-common module of jengine project</description>
 	<url></url>
 
 	<modules>
-		<module>asm</module>
-		<module>guava08</module>
-		<module>guava18</module>
-		<module>j2se</module>
-		<module>javacommon</module>
-		<module>spring</module>
-		<module>logback</module>
-		<module>log4j</module>
 		<module>designPattern</module>
-		<module>loggerDynamicLevel</module>
-		<module>javaagent</module>
+		<module>j2se-asm</module>
+		<module>j2se-common</module>
+		<module>j2se-common2</module>
+		<module>j2se-javaagent</module>
+		<module>log-log4j</module>
+		<module>log-logback</module>
+		<module>log-loggerDynamicLevel</module>
+		<module>object-guava08</module>
+		<module>object-guava18</module>
+		<module>spring</module>
+		<module>transform-serialize</module>
+		<module>transform-compress</module>
 	</modules>
-
-	<dependencies>
-		<dependency>
-			<groupId>com.jengine</groupId>
-			<artifactId>jengine-common</artifactId>
-		</dependency>
-	</dependencies>
 
 </project>

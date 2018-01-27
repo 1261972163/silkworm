@@ -1,7 +1,7 @@
 package com.jengine.data.nosql.redis.ackqueue;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import redis.clients.jedis.JedisPool;
  */
 public class RedisAckQueue<T> {
 
-  private static final Log logger = LogFactory.getLog(RedisAckQueue.class);
+  private static final Logger logger = LoggerFactory.getLogger(RedisAckQueue.class);
 
   public JedisPool redisPool;
   private String queuename;

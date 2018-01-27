@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jengine</groupId>
     <artifactId>jengine-parent</artifactId>
-    <packaging>pom</packaging>
     <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>The parent project of jengine</description>
     <url></url>
@@ -49,10 +49,9 @@
     </repositories>
 
     <modules>
-        <module>common2</module>
+        <module>common</module>
         <module>transport</module>
         <module>data</module>
-        <module>cluster</module>
         <module>apps</module>
     </modules>
 
@@ -83,17 +82,22 @@
             <dependency>
                 <groupId>com.jengine</groupId>
                 <artifactId>jengine-common</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jengine</groupId>
-                <artifactId>jengine-protocal</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
+                <artifactId>jengine-data</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.jengine</groupId>
-                <artifactId>jengine-serialize</artifactId>
-                <version>0.1.0-SNAPSHOT</version>
+                <artifactId>jengine-transport</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jengine</groupId>
+                <artifactId>jengine-apps</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <!-- ########## Log libs ########## -->
             <!-- log -->

@@ -8,12 +8,14 @@ import com.mongodb.ServerAddress;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * @author nouuid
@@ -22,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class MongoService {
 
-  private static final Log logger = LogFactory.getLog(MongoService.class);
+  private static final Logger logger = LoggerFactory.getLogger(MongoService.class);
 
   private MongoConfig mongoConfig;
   private MongoClient mongoClient;

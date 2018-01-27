@@ -1,11 +1,12 @@
 package com.jengine.data.mq.kafka.pc2;
 
-import java.util.Properties;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Properties;
 
 /**
  * content
@@ -16,7 +17,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
  */
 public class KafkaProducerService {
 
-  protected final Log logger = LogFactory.getLog(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
 
   private Producer<byte[], byte[]> producer;
 

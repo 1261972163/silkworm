@@ -1,11 +1,12 @@
 package com.jengine.data.mysql;
 
+import com.jengine.common.javacommon.utils.StringUtils;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * @author nouuid

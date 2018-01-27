@@ -3,7 +3,7 @@ package com.jengine.common.pattern.creational.singleton;
 import java.io.*;
 
 /**
- * Created by weiyang on 4/9/16.
+ * Created by nouuid on 4/9/16.
  */
 public class SingletonRunner {
 

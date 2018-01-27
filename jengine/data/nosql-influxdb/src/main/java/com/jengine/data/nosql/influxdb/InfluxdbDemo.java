@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by weiyang on 10/30/17.
+ * Created by nouuid on 10/30/17.
  */
 public class InfluxdbDemo {
 

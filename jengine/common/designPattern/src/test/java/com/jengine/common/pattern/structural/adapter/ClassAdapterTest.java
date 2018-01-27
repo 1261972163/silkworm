@@ -1,7 +1,7 @@
 package com.jengine.common.pattern.structural.adapter;
 
 import com.jengine.common.pattern.structural.adapter.classadapter.Adapter;
-import com.jengine.pattern.structural.adapter.classadapter.Target;
+
 import org.junit.Test;
 
 /**
@@ -11,7 +11,7 @@ public class ClassAdapterTest {
 
     @Test
     public void test() {
-        Target target = new Adapter();
+        AdapterTarget target = new Adapter();
         target.request();
     }
 }

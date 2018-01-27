@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author bl07637
+ * @author nouuid
  */
 public class Client {
   public static void main(String[] args) {
