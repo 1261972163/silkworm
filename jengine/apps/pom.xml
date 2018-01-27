@@ -16,6 +16,7 @@
 	<url></url>
 
 	<modules>
+		<module>apm-servers</module>
 		<module>apm-skywalking</module>
 		<module>apm-opencensus</module>
 		<module>apm-zipkin</module>
