@@ -20,11 +20,13 @@
 		<module>guava08</module>
 		<module>guava18</module>
 		<module>j2se</module>
+		<module>javacommon</module>
 		<module>spring</module>
 		<module>logback</module>
 		<module>log4j</module>
 		<module>designPattern</module>
 		<module>loggerDynamicLevel</module>
+		<module>javaagent</module>
 	</modules>
 
 	<dependencies>

@@ -1,0 +1,41 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.jengine</groupId>
+    <artifactId>jengine-apps</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.jengine</groupId>
+  <artifactId>jengine-zipkin</artifactId>
+  <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <brave.version>4.13.3</brave.version>
+    <zipkin-reporter2.version>2.3.0</zipkin-reporter2.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.zipkin.brave</groupId>
+      <artifactId>brave</artifactId>
+      <version>${brave.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.zipkin.reporter2</groupId>
+      <artifactId>zipkin-sender-okhttp3</artifactId>
+      <version>${zipkin-reporter2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.zipkin.brave</groupId>
+      <artifactId>brave-context-log4j2</artifactId>
+      <version>${brave.version}</version>
+    </dependency>
+
+  </dependencies>
+
+</project>

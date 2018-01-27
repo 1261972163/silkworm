@@ -23,10 +23,13 @@ public class Demo {
     }
 
     @Test
-    public void clientGet() throws IOException {
-        MyClient myClient = new MyClient();
-        String res = myClient.execute("GET", "http://localhost:9998/helloworld", "");
-        System.out.println(res);
+    public void clientGet() throws IOException, InterruptedException {
+        while (true) {
+            MyClient myClient = new MyClient();
+            String res = myClient.execute("GET", "http://localhost:9998/helloworld", "");
+            System.out.println(res);
+            Thread.sleep(1000);
+        }
     }
 
     @Test

@@ -8,7 +8,7 @@
 	</parent>
 
 	<groupId>com.jengine</groupId>
-	<artifactId>jengine-transport</artifactId>
+	<artifactId>jengine-apps</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
@@ -16,22 +16,10 @@
 	<url></url>
 
 	<modules>
-		<module>network-http</module>
-		<module>network-netty</module>
-		<module>restful-jersey</module>
-		<!--<module>restful-springboot</module>-->
-		<module>rpc</module>
-		<module>serialize</module>
-		<module>server-jetty</module>
-		<module>server-grizzly</module>
-		<module>server-tomcat</module>
-	</modules>
+		<module>apm-skywalking</module>
+		<module>apm-opencensus</module>
+		<module>apm-zipkin</module>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.jengine</groupId>
-			<artifactId>jengine-common</artifactId>
-		</dependency>
-	</dependencies>
+	</modules>
 
 </project>

@@ -49,11 +49,11 @@
     </repositories>
 
     <modules>
-        <module>common</module>
         <module>common2</module>
         <module>transport</module>
         <module>data</module>
         <module>cluster</module>
+        <module>apps</module>
     </modules>
 
     <properties>

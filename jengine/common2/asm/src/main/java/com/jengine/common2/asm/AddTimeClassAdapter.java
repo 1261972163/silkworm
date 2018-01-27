@@ -10,14 +10,29 @@ import org.objectweb.asm.Opcodes;
 /**
  * 目标：
  *
+ * <pre>
  * package com.jengine.common2.asm;
- * public class C { public void m() throws InterruptedException{ Thread.sleep(100); } }
+ * public class C {
+ *  public void m() throws InterruptedException {
+ *    Thread.sleep(100);
+ *  }
+ * }
+ * </pre>
  *
  * 改为
  *
+ * <pre>
  * package com.jengine.common2.asm.test;
- * public class C { public static long timer; public void m() throws InterruptedException{ timer -=
- * System.currentTimeMillis(); Thread.sleep(100); timer += System.currentTimeMillis(); System.out.println("Hello World!");} }
+ * public class C {
+ *  public static long timer;
+ *  public void m() throws InterruptedException {
+ *    timer -= System.currentTimeMillis();
+ *    Thread.sleep(100);
+ *    timer += System.currentTimeMillis();
+ *    System.out.println("Hello World!");
+ *  }
+ * }
+ * </pre>
  *
  * @author nouuid
  */
