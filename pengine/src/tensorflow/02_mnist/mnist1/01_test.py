@@ -4,6 +4,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 # test
 mnist = input_data.read_data_sets("input_data/", one_hot=True)
 
+# 按python3.6规范修改语法错误
 print("Training data size: ", mnist.train.num_examples)
 print("Validating data size: ", mnist.validation.num_examples)
 print("Testing data size: ", mnist.test.num_examples)
